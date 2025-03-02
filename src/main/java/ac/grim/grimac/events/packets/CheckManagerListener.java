@@ -353,7 +353,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
 
     private boolean isMojangStupid(GrimPlayer player, PacketReceiveEvent event, WrapperPlayClientPlayerFlying flying) {
         // Teleports are not stupidity packets.
-        if (!player.packetStateData.lastPacketWasTeleport) return false;
+        if (player.packetStateData.lastPacketWasTeleport) return false;
         // Mojang has become less stupid!
         if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21)) return false;
 
