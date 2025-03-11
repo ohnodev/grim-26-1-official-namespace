@@ -425,6 +425,10 @@ public class MovementTicker {
                 doNormalMove(blockFriction);
             }
         }
+
+        if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_2)) {
+            Collisions.applyEffectsFromBlocks(player, new Vector3d(player.lastX, player.lastY, player.lastZ), new Vector3d(player.x, player.y, player.z));
+        }
     }
 
     public boolean canStandOnLava() {
