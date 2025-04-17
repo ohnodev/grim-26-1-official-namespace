@@ -7,12 +7,10 @@
 
 name: Gradle Package
 
-on:
-  [push, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,13 +26,11 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Validate gradle wrapper
-      uses: gradle/actions/wrapper-validation@v3
-
     - name: Build with Gradle
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         arguments: build
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
