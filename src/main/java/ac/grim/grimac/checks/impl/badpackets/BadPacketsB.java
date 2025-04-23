@@ -17,7 +17,7 @@ public class BadPacketsB extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (isTransaction(event.getPacketType())) {
             player.pendingRotations.removeIf(data -> {
-                if (data.getTransaction() + 1 > player.getLastTransactionReceived()) {
+                if (data.getTransaction() > player.getLastTransactionReceived()) {
                     if (!data.isAccepted()) {
                         flagAndAlert();
                     }

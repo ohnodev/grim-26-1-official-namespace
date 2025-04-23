@@ -454,9 +454,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 Collections.reverse(rotations);
 
                 for (RotationData data : rotations) {
-                    if (data.getYaw() == flying.getLocation().getYaw() && data.getPitch() == flying.getLocation().getPitch()
-                            && (data.getTransaction() == player.getLastTransactionReceived()
-                            || data.getTransaction() + 1 == player.getLastTransactionReceived())) {
+                    if (data.getYaw() == flying.getLocation().getYaw() && data.getPitch() == flying.getLocation().getPitch() && data.getTransaction() == player.getLastTransactionReceived()) {
                         player.packetStateData.lastPacketWasTeleport = true;
                         data.accept(); // we could be wrong (especially in vehicles), don't remove this
                         break;
