@@ -94,7 +94,7 @@ public class PacketOrderI extends Check implements PostPredictionCheck {
                     }
                     break;
                 case START_DIGGING:
-                    double damage = BlockBreakSpeed.getBlockDamage(player, packet.getBlockPosition());
+                    double damage = BlockBreakSpeed.getBlockDamage(player, player.compensatedWorld.getBlock(packet.getBlockPosition()));
                     if (damage >= 1 || damage <= 0 && player.gamemode == GameMode.CREATIVE) {
                         return;
                     }

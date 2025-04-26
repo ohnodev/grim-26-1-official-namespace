@@ -15,13 +15,6 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 
 @CheckData(name = "PacketOrderC")
 public class PacketOrderC extends Check implements PacketCheck {
-<<<<<<<< HEAD:src/main/java/ac/grim/grimac/checks/impl/packetorder/PacketOrderC.java
-    public PacketOrderC(final GrimPlayer player) {
-        super(player);
-    }
-
-========
->>>>>>>> refs/remotes/upstream/2.0:common/src/main/java/ac/grim/grimac/checks/impl/packetorder/PacketOrderC.java
     // 1.7 players do not send INTERACT_AT, so we cannot check them
     private final boolean exempt = player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_7_10);
     private boolean sentInteractAt = false;
