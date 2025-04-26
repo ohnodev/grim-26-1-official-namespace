@@ -1,4 +1,4 @@
-package ac.grim.grimac.platform.fabric.mc1611;
+package ac.grim.grimac.platform.fabric.mc1161;
 
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.fabric.AbstractFabricPlatformServer;
