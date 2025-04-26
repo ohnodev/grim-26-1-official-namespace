@@ -22,6 +22,6 @@ public class GrimVerbose implements BuildableCommand {
     }
 
     private void handleVerbose(@NonNull CommandContext<Sender> context) {
-        GrimAPI.INSTANCE.getAlertManager().toggleVerbose(context.sender().getPlatformPlayer());
+        GrimAPI.INSTANCE.getAlertManager().toggleVerbose(context.sender().getPlatformPlayer(), false);
     }
 }

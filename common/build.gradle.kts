@@ -40,9 +40,7 @@ dependencies {
     api(libs.adventure.text.minimessage)
     api(libs.jetbrains.annotations)
 
-    // Used for local testing:
-    // api("ac.grim.grimac:GrimAPI:1.0")
-    api("ac.grim.grimac:GrimAPI:any-9d6a0e6b7f")
+    api("ac.grim.grimac:GrimAPI:1.0.0-33f7e2b")
 
     compileOnly(libs.floodgate.api)
     compileOnly(libs.via.version.api)

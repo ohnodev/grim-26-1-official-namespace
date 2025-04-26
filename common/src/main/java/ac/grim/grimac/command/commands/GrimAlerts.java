@@ -24,6 +24,6 @@ public class GrimAlerts implements BuildableCommand {
 
     // Suppress warning as we've already checked sender is not console
     private void handleAlerts(@NonNull CommandContext<Sender> context) {
-        GrimAPI.INSTANCE.getAlertManager().toggleAlerts(context.sender().getPlatformPlayer());
+        GrimAPI.INSTANCE.getAlertManager().toggleAlerts(context.sender().getPlatformPlayer(), false);
     }
 }

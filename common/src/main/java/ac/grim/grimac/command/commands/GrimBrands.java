@@ -24,6 +24,6 @@ public class GrimBrands implements BuildableCommand {
 
     private void handleBrands(@NonNull CommandContext<Sender> context) {
         Sender sender = context.sender();
-        GrimAPI.INSTANCE.getAlertManager().toggleBrands(sender.getPlatformPlayer());
+        GrimAPI.INSTANCE.getAlertManager().toggleBrands(sender.getPlatformPlayer(), false);
     }
 }
