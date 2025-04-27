@@ -145,9 +145,9 @@ public class PunishmentManager implements ConfigReloadable {
                                     Component message = MessageUtil.miniMessage(cmd);
                                     if (testMode) { // secret test mode
                                         player.user.sendMessage(message);
-                                        continue;
+                                    } else {
+                                        GrimAPI.INSTANCE.getAlertManager().sendAlert(message);
                                     }
-                                    GrimAPI.INSTANCE.getAlertManager().sendAlert(message);
                                 }
                                 default -> GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () ->
                                         GrimAPI.INSTANCE.getPlatformServer().dispatchCommand(
