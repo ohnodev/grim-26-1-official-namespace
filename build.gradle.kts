@@ -14,6 +14,8 @@
 import versioning.BuildConfig
 import versioning.VersionUtil
 
+BuildConfig.init(project)
+
 val baseVersion = "2.3.72"
 group = "ac.grim.grimac"
 version = VersionUtil.computeVersion(baseVersion)

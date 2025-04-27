@@ -1,3 +1,5 @@
+import versioning.BuildConfig
+
 plugins {
     `maven-publish`
     grim.`base-conventions`
@@ -28,7 +30,11 @@ repositories {
 }
 
 dependencies {
-    api(libs.packetevents.api)
+    if (BuildConfig.shadePE) {
+        api(libs.packetevents.api)
+    } else {
+        compileOnly(libs.packetevents.api)
+    }
     api(libs.cloud.core)
     api("org.incendo:cloud-processors-requirements:1.0.0-rc.1")
     api("github.scarsz:configuralize:1.4.1:slim") {
