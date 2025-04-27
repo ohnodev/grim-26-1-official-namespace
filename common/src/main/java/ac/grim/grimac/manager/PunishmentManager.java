@@ -105,9 +105,8 @@ public class PunishmentManager implements ConfigReloadable {
                 .replace("%check_name%", check.getDisplayName())
                 .replace("%experimental%", check.isExperimental() ? experimentalSymbol : "")
                 .replace("%vl%", Integer.toString(vl))
-                .replace("%verbose%", verbose)
                 .replace("%description%", check.getDescription())
-        );
+        ).replace("%verbose%", verbose);
     }
 
     public boolean handleAlert(GrimPlayer player, String verbose, Check check) {
