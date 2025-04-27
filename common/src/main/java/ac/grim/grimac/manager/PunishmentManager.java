@@ -12,6 +12,7 @@ import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,7 +107,7 @@ public class PunishmentManager implements ConfigReloadable {
                 .replace("%experimental%", check.isExperimental() ? experimentalSymbol : "")
                 .replace("%vl%", Integer.toString(vl))
                 .replace("%description%", check.getDescription())
-        ).replace("%verbose%", verbose);
+        ).replace("%verbose%", MiniMessage.miniMessage().escapeTags(verbose));
     }
 
     public boolean handleAlert(GrimPlayer player, String verbose, Check check) {
