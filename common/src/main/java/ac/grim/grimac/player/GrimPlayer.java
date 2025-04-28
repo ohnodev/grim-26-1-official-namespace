@@ -125,7 +125,7 @@ public class GrimPlayer implements GrimUser {
     public SyncedTags tagManager;
     // End manager like classes
     public Vector3dm clientVelocity = new Vector3dm();
-    PacketTracker packetTracker;
+    PacketTracker viaPacketTracker;
     public final PacketOrderProcessor packetOrderProcessor = new PacketOrderProcessor(this);
     private long transactionPing = 0;
     public long lastTransSent = 0;
@@ -254,7 +254,7 @@ public class GrimPlayer implements GrimUser {
     public final List<List<Movement>> movementThisTick = new ObjectArrayList<>();
     public final List<Movement> finalMovementsThisTick = new ObjectArrayList<>();
     public final LongSet visitedBlocks = new LongOpenHashSet();
-    private @Nullable UserConnection userConnection;
+    private @Nullable UserConnection viaUserConnection;
 
     public GrimPlayer(@NonNull User user) {
         this.user = user;
@@ -385,7 +385,7 @@ public class GrimPlayer implements GrimUser {
 
         if (hasID) {
             // Transactions that we send don't count towards total limit
-            if (packetTracker != null) packetTracker.setIntervalPackets(packetTracker.getIntervalPackets() - 1);
+            if (viaPacketTracker != null) viaPacketTracker.setIntervalPackets(viaPacketTracker.getIntervalPackets() - 1);
 
             if (skipped > 0 && System.currentTimeMillis() - joinTime > 5000)
                 checkManager.getPacketCheck(TransactionOrder.class).flagAndAlert("skipped: " + skipped);
@@ -530,10 +530,10 @@ public class GrimPlayer implements GrimUser {
             GrimAPI.INSTANCE.getPlayerDataManager().remove(user);
         }
 
-        if (packetTracker == null && ViaVersionUtil.isAvailable() && uuid != null) {
+        if (viaPacketTracker == null && ViaVersionUtil.isAvailable() && uuid != null) {
             UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
-            packetTracker = connection != null ? connection.getPacketTracker() : null;
-            this.userConnection = connection;
+            viaPacketTracker = connection != null ? connection.getPacketTracker() : null;
+            this.viaUserConnection = connection;
         }
 
         if (uuid != null && this.platformPlayer == null) {
@@ -949,18 +949,21 @@ public class GrimPlayer implements GrimUser {
         return new Location(platformPlayer.getWorld(), this.x, this.y, this.z, this.xRot, this.yRot);
     }
 
-    public int getViaTranslatedBlockID(int blockStateID) {
-        final ProtocolVersion clientVersion = this.userConnection.getProtocolInfo().protocolVersion();
-        final ProtocolVersion serverVersion = this.userConnection.getProtocolInfo().serverProtocolVersion();
+    public int getViaTranslatedClientBlockID(int blockStateId) {
+        final ProtocolVersion clientVersion = this.viaUserConnection.getProtocolInfo().protocolVersion();
+        final ProtocolVersion serverVersion = this.viaUserConnection.getProtocolInfo().serverProtocolVersion();
 
-        List<ProtocolPathEntry> protocolPathEntries = Via.getManager().getProtocolManager().getProtocolPath(clientVersion, serverVersion);
-        if (protocolPathEntries == null) return blockStateID;
-        for (final ProtocolPathEntry entry : protocolPathEntries) {
-            final Protocol<?, ?, ?, ?> protocol = entry.protocol();
-            if (protocol.getMappingData() != null && protocol.getMappingData().getBlockMappings() != null) {
-                blockStateID = protocol.getMappingData().getNewBlockStateId(blockStateID);
+        final List<ProtocolPathEntry> protocolPath = Via.getManager().getProtocolManager().getProtocolPath(clientVersion, serverVersion);
+        if (protocolPath == null) {
+            return blockStateId;
+        }
+
+        for (int i = protocolPath.size() - 1; i >= 0; i--) {
+            final Protocol<?, ?, ?, ?> protocol = protocolPath.get(i).protocol();
+            if (protocol.getMappingData() != null && protocol.getMappingData().getBlockStateMappings() != null) {
+                blockStateId = protocol.getMappingData().getNewBlockStateId(blockStateId);
             }
         }
-        return blockStateID;
+        return blockStateId;
     }
 }
