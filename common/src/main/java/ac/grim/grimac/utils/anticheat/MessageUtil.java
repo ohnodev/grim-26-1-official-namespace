@@ -8,7 +8,6 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.chat.ChatUtil;
 import com.github.retrooper.packetevents.util.Vector3f;
 import com.github.retrooper.packetevents.util.Vector3i;
-import com.github.retrooper.packetevents.util.reflection.Reflection;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -24,6 +23,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class MessageUtil {
     private final Pattern HEX_PATTERN = Pattern.compile("([&§]#[A-Fa-f0-9]{6})|([&§]x([&§][A-Fa-f0-9]){6})");
+    private final char PLACEHOLDER_ESCAPE_CHAR = '\uFFFF'; // this specific character holds no significance
 
     public @NotNull String toUnlabledString(@Nullable Vector3i vec) {
         return vec == null ? "null" : vec.x + ", " + vec.y + ", " + vec.z;
@@ -40,11 +40,11 @@ public class MessageUtil {
 
         if (player != null) {
             for (Map.Entry<String, Function<GrimUser, String>> entry : GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements().entrySet()) {
-                string = string.replace(entry.getKey(), entry.getValue().apply(player));
+                string = string.replace(entry.getKey(), entry.getValue().apply(player).replace('%', PLACEHOLDER_ESCAPE_CHAR));
             }
         }
 
-        return replacePlaceholders(player == null ? null : player.platformPlayer, string);
+        return replacePlaceholders(player == null ? null : player.platformPlayer, string).replace(PLACEHOLDER_ESCAPE_CHAR, '%');
     }
 
     public @NotNull String replacePlaceholders(@Nullable Sender object, @NotNull String string) {
