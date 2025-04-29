@@ -1,6 +1,7 @@
 package ac.grim.grimac.utils.anticheat;
 
 import ac.grim.grimac.GrimAPI;
+import ac.grim.grimac.api.GrimUser;
 import ac.grim.grimac.platform.api.player.PlatformPlayer;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.player.GrimPlayer;
@@ -15,6 +16,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +34,18 @@ public class MessageUtil {
         return vec == null ? "null" : vec.x + ", " + vec.y + ", " + vec.z;
     }
 
-    public @NotNull String replacePlaceholders(@NotNull GrimPlayer player, @NotNull String string) {
-        return replacePlaceholders(player.platformPlayer, GrimAPI.INSTANCE.getExternalAPI().replaceVariables(player, string));
+    public @NotNull String replacePlaceholders(@Nullable GrimPlayer player, @NotNull String string) {
+        for (Map.Entry<String, String> entry : GrimAPI.INSTANCE.getExternalAPI().getStaticReplacements().entrySet()) {
+            string = string.replace(entry.getKey(), entry.getValue());
+        }
+
+        if (player != null) {
+            for (Map.Entry<String, Function<GrimUser, String>> entry : GrimAPI.INSTANCE.getExternalAPI().getVariableReplacements().entrySet()) {
+                string = string.replace(entry.getKey(), entry.getValue().apply(player));
+            }
+        }
+
+        return replacePlaceholders(player == null ? null : player.platformPlayer, string);
     }
 
     public @NotNull String replacePlaceholders(@Nullable Sender object, @NotNull String string) {
