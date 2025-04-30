@@ -388,7 +388,7 @@ public class GrimPlayer implements GrimUser {
             if (viaPacketTracker != null) viaPacketTracker.setIntervalPackets(viaPacketTracker.getIntervalPackets() - 1);
 
             if (skipped > 0 && System.currentTimeMillis() - joinTime > 5000)
-                checkManager.getPacketCheck(TransactionOrder.class).flagAndAlert("skipped: " + skipped);
+                checkManager.getCheck(TransactionOrder.class).flagAndAlert("skipped: " + skipped);
 
             do {
                 data = transactionsSent.poll();
