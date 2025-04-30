@@ -175,7 +175,7 @@ public class GrimPlayer implements GrimUser {
     public boolean wasGliding;
     public boolean isRiptidePose = false;
     public double fallDistance;
-    public SimpleCollisionBox boundingBox = GetBoundingBox.getBoundingBoxFromPosAndSizeRaw(x, y, z, 0.6f, 1.8f);;
+    public SimpleCollisionBox boundingBox = GetBoundingBox.getBoundingBoxFromPosAndSizeRaw(x, y, z, 0.6f, 1.8f);
     public Pose pose = Pose.STANDING;
     public Pose lastPose = Pose.STANDING;
     // Determining slow movement has to be done before pose is updated
@@ -248,6 +248,22 @@ public class GrimPlayer implements GrimUser {
     @Getter
     @Setter
     private ResyncHandler resyncHandler = new DefaultResyncHandler(this);
+    @Getter
+    private final FeatureManagerImpl featureManager = new FeatureManagerImpl(this);
+    // start config
+    private boolean debugPacketCancel = false;
+    private int spamThreshold = 100;
+    private int maxTransactionTime = 60;
+    @Getter private boolean ignoreDuplicatePacketRotation = false;
+    @Getter @Setter private boolean experimentalChecks = false;
+    @Getter private boolean cancelDuplicatePacket = true;
+    @Getter @Setter private boolean exemptElytra = false;
+    @Getter private boolean resetItemUsageOnAttack;
+    @Getter private boolean resetItemUsageOnItemUpdate;
+    @Getter private boolean resetItemUsageOnSlotChange;
+    // end config
+    public boolean noModifyPacketPermission = false;
+    public boolean noSetbackPermission = false;
     // This variable is for support with test servers that want to be able to disable grim
     // Grim disabler 2022 still working!
     public boolean disableGrim = false;
@@ -559,10 +575,7 @@ public class GrimPlayer implements GrimUser {
         }
     }
 
-    public boolean noModifyPacketPermission = false;
-    public boolean noSetbackPermission = false;
-
-    //TODO: Create a configurable timer for this
+    // TODO: Create a configurable timer for this
     @Override
     public void updatePermissions() {
         if (platformPlayer == null) return;
@@ -576,9 +589,6 @@ public class GrimPlayer implements GrimUser {
             }
         });
     }
-
-    private boolean debugPacketCancel = false;
-    private int spamThreshold = 100;
 
     public boolean isPointThree() {
         return getClientVersion().isOlderThan(ClientVersion.V_1_18_2);
@@ -843,18 +853,8 @@ public class GrimPlayer implements GrimUser {
     }
 
     public void runNettyTaskInMs(Runnable runnable, int ms) {
-        Channel channel = (Channel) user.getChannel();
-        channel.eventLoop().schedule(runnable, ms, TimeUnit.MILLISECONDS);
+        ((Channel) user.getChannel()).eventLoop().schedule(runnable, ms, TimeUnit.MILLISECONDS);
     }
-
-    private int maxTransactionTime = 60;
-    @Getter private boolean ignoreDuplicatePacketRotation = false;
-    @Getter @Setter private boolean experimentalChecks = false;
-    @Getter private boolean cancelDuplicatePacket = true;
-    @Getter @Setter private boolean exemptElytra = false;
-    @Getter private boolean resetItemUsageOnAttack;
-    @Getter private boolean resetItemUsageOnItemUpdate;
-    @Getter private boolean resetItemUsageOnSlotChange;
 
     @Override
     public void reload(ConfigManager config) {
@@ -876,13 +876,6 @@ public class GrimPlayer implements GrimUser {
     @Override
     public void reload() {
         reload(GrimAPI.INSTANCE.getConfigManager().getConfig());
-    }
-
-    private final FeatureManagerImpl featureManager = new FeatureManagerImpl(this);
-
-    @Override
-    public FeatureManager getFeatureManager() {
-        return featureManager;
     }
 
     @Override
@@ -916,12 +909,7 @@ public class GrimPlayer implements GrimUser {
                 GrimMath.ceil(box.maxX), GrimMath.ceil(box.maxY), GrimMath.ceil(box.maxZ));
     }
 
-    public static record Movement(Vector3d from, Vector3d to) {
-    }
-
-    public GameMode getGameMode() {
-        return platformPlayer.getGameMode();
-    }
+    public record Movement(Vector3d from, Vector3d to) {}
 
     // TODO (Cross-platform) keep track of world at packet level; do not rely on potentially non-lag-compensated platformPlayer.getWorld()
     public Location getLocation() {
@@ -943,6 +931,7 @@ public class GrimPlayer implements GrimUser {
                 blockStateId = protocol.getMappingData().getNewBlockStateId(blockStateId);
             }
         }
+
         return blockStateId;
     }
 }
