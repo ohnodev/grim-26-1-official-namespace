@@ -13,6 +13,7 @@ public class FabricTaskHandle implements TaskHandle {
 
     public FabricTaskHandle(Runnable cancellationTask, boolean isSync) {
         this.cancellationTask = cancellationTask;
+        this.isSync = isSync;
     }
 
     @Override
