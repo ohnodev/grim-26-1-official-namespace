@@ -4,7 +4,6 @@ import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.api.AbstractCheck;
 import ac.grim.grimac.api.GrimUser;
 import ac.grim.grimac.api.config.ConfigManager;
-import ac.grim.grimac.api.feature.FeatureManager;
 import ac.grim.grimac.api.handler.ResyncHandler;
 import ac.grim.grimac.checks.Check;
 import ac.grim.grimac.checks.impl.aim.processor.AimProcessor;
@@ -245,11 +244,8 @@ public class GrimPlayer implements GrimUser {
     public final Queue<BlockBreak> queuedBreaks = new LinkedBlockingQueue<>();
     public final PlayerBlockHistory blockHistory = new PlayerBlockHistory();
     public final ArrayDeque<RotationData> pendingRotations = new ArrayDeque<>();
-    @Getter
-    @Setter
-    private ResyncHandler resyncHandler = new DefaultResyncHandler(this);
-    @Getter
-    private final FeatureManagerImpl featureManager = new FeatureManagerImpl(this);
+    @Getter @Setter private ResyncHandler resyncHandler = new DefaultResyncHandler(this);
+    @Getter private final FeatureManagerImpl featureManager = new FeatureManagerImpl(this);
     // start config
     private boolean debugPacketCancel = false;
     private int spamThreshold = 100;
