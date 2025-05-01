@@ -121,7 +121,7 @@ public class GrimPlayer implements GrimUser {
     public final ActionManager actionManager;
     public final PunishmentManager punishmentManager;
     public final MovementCheckRunner movementCheckRunner;
-    public final SyncedTags tagManager = new SyncedTags(this);
+    public final SyncedTags tagManager;
     // End manager like classes
     public Vector3dm clientVelocity = new Vector3dm();
     private PacketTracker viaPacketTracker;
@@ -276,13 +276,13 @@ public class GrimPlayer implements GrimUser {
     public GrimPlayer(@NonNull User user) {
         this.user = user;
         this.uuid = user.getUUID();
-
         fireworks = new CompensatedFireworks(this); // Must be before checkmanager
 
         lastInstanceManager = new LastInstanceManager(this);
         actionManager = new ActionManager(this);
         checkManager = new CheckManager(this);
         punishmentManager = new PunishmentManager(this);
+        this.tagManager = new SyncedTags(this); // must be after this.user = user
         movementCheckRunner = new MovementCheckRunner(this);
 
         compensatedWorld = new CompensatedWorld(this);
