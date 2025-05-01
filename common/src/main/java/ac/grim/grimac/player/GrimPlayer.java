@@ -744,6 +744,7 @@ public class GrimPlayer implements GrimUser {
 
         final CompensatedInventory inventory = getInventory();
         // PacketEvents mappings are wrong
+        // TODO https://github.com/retrooper/packetevents/pull/1125
         return isGlider(inventory.getHelmet(), EquipmentSlot.CHEST_PLATE)
                 || isGlider(inventory.getChestplate(), EquipmentSlot.LEGGINGS)
                 || isGlider(inventory.getLeggings(), EquipmentSlot.BOOTS)
