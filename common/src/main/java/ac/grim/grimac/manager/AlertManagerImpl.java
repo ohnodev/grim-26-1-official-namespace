@@ -125,6 +125,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     public void setAlertsEnabled(@NonNull GrimUser player, boolean enabled, boolean silent) {
         // Let exceptions from requirePlatformPlayerFromUser propagate if called during set
         setPlayerStateAndNotify(player, enabled, silent, AlertType.NORMAL);
+        if (!enabled) setVerboseEnabled(player, false, silent);
     }
 
     @Override
@@ -134,6 +135,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
 
     @Override
     public void setVerboseEnabled(@NonNull GrimUser player, boolean enabled, boolean silent) {
+        if (enabled) setAlertsEnabled(player, true, silent);
         setPlayerStateAndNotify(player, enabled, silent, AlertType.VERBOSE);
     }
 
