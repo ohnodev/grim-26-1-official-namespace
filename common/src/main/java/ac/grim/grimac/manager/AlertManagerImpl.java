@@ -11,7 +11,6 @@ import ac.grim.grimac.platform.api.player.PlatformPlayer;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
-import lombok.experimental.Delegate;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -148,7 +147,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         // for compatibles sake lets just default to not sending alerts to these players
         if (grimPlayer.platformPlayer == null) return false;
 
-        return AlertType.BRAND.players.contains(requirePlatformPlayerFromUser(player));
+        return AlertType.BRAND.players.contains(grimPlayer.platformPlayer);
     }
 
     @Override
@@ -195,12 +194,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     // All internal code, will replace later
     private void setPlayerStateAndNotify(@NonNull PlatformPlayer platformPlayer, boolean enabled, boolean silent, @NonNull AlertType type) {
         Objects.requireNonNull(platformPlayer, "platformPlayer cannot be null");
-        boolean changed;
-        if (enabled) {
-            changed = type.players.add(platformPlayer);
-        } else {
-            changed = type.players.remove(platformPlayer);
-        }
+        boolean changed = enabled ? type.players.add(platformPlayer) : type.players.remove(platformPlayer);
 
         if (changed && !silent) {
             sendToggleMessage(platformPlayer, enabled, type);
