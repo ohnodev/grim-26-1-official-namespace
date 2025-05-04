@@ -41,12 +41,7 @@ import ac.grim.grimac.checks.impl.movement.NoSlow;
 import ac.grim.grimac.checks.impl.movement.PredictionRunner;
 import ac.grim.grimac.checks.impl.movement.SetbackBlocker;
 import ac.grim.grimac.checks.impl.movement.VehiclePredictionRunner;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsA;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsB;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsC;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsD;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsE;
-import ac.grim.grimac.checks.impl.multiactions.MultiActionsF;
+import ac.grim.grimac.checks.impl.multiactions.*;
 import ac.grim.grimac.checks.impl.packetorder.PacketOrderB;
 import ac.grim.grimac.checks.impl.packetorder.PacketOrderC;
 import ac.grim.grimac.checks.impl.packetorder.*;
@@ -166,6 +161,7 @@ public class CheckManager {
                 .put(MultiActionsC.class, new MultiActionsC(player))
                 .put(MultiActionsD.class, new MultiActionsD(player))
                 .put(MultiActionsE.class, new MultiActionsE(player))
+                .put(MultiActionsG.class, new MultiActionsG(player))
                 .put(PacketOrderB.class, new PacketOrderB(player))
                 .put(PacketOrderC.class, new PacketOrderC(player))
                 .put(PacketOrderD.class, new PacketOrderD(player))
