@@ -406,10 +406,16 @@ public class CheckManager {
         for (BlockBreakCheck check : blockBreakChecks.values()) {
             check.onBlockBreak(blockBreak);
         }
+        for (BlockPlaceCheck check : blockPlaceCheck.values()) {
+            check.onBlockBreak(blockBreak);
+        }
     }
 
     public void onPostFlyingBlockBreak(final BlockBreak blockBreak) {
         for (BlockBreakCheck check : blockBreakChecks.values()) {
+            check.onPostFlyingBlockBreak(blockBreak);
+        }
+        for (BlockPlaceCheck check : blockPlaceCheck.values()) {
             check.onPostFlyingBlockBreak(blockBreak);
         }
     }
