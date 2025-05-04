@@ -565,7 +565,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
             final DiggingAction action = packet.getAction();
 
             if (action == DiggingAction.START_DIGGING || action == DiggingAction.FINISHED_DIGGING || action == DiggingAction.CANCELLED_DIGGING) {
-                final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, player.compensatedWorld.getBlock(packet.getBlockPosition()));
+                final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, packet.getSequence(), player.compensatedWorld.getBlock(packet.getBlockPosition()));
 
                 player.checkManager.onBlockBreak(blockBreak);
 
