@@ -319,6 +319,11 @@ public class CheckManager {
         return (T) rotationCheck.get(check);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends BlockPlaceCheck> T getBlockPlaceCheck(Class<T> check) {
+        return (T) blockPlaceCheck.get(check);
+    }
+
     public void onPrePredictionReceivePacket(final PacketReceiveEvent packet) {
         for (PacketCheck check : prePredictionChecks.values()) {
             check.onPacketReceive(packet);

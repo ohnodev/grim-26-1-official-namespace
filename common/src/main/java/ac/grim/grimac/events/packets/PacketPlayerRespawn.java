@@ -175,7 +175,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
 
                 player.checkManager.getPacketCheck(BadPacketsE.class).handleRespawn(); // Reminder ticks reset
                 player.checkManager.getPacketCheck(BadPacketsG.class).handleRespawn();
-                player.checkManager.getPacketCheck(BadPacketsH.class).onWorldChange();
+                player.checkManager.getBlockPlaceCheck(BadPacketsH.class).onWorldChange();
 
                 // compensate for immediate respawn gamerule
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_15)) {
