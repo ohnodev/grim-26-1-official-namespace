@@ -597,13 +597,6 @@ public enum HitboxData implements HitBoxFactory {
         }
     }, StateTypes.FROGSPAWN),
 
-    PALE_HANGING_MOSS((player, heldItem, version, block, isTargetBlock, x, y, z)
-            -> block.isTip()
-            ? new HexCollisionBox(1.0, 2.0, 1.0, 15.0, 16.0, 15.0)
-            : new HexCollisionBox(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), StateTypes.PALE_HANGING_MOSS),
-
-    RESIN_CLUMP(new SimpleCollisionBox(0, 0, 0, 1, 0.0625, 1), StateTypes.RESIN_CLUMP),
-
     BUSH((player, heldItem, version, block, isTargetBlock, x, y, z)
             -> version.isNewerThan(ClientVersion.V_1_21_4)
             ? new SimpleCollisionBox(0, 0, 0, 1, 0.8125, 1)
@@ -636,7 +629,7 @@ public enum HitboxData implements HitBoxFactory {
     }, StateTypes.CACTUS_FLOWER),
 
     // always a fullblock hitbox. Via replacement is obsidian
-    SCULK_SHRIKER(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.SCULK_SHRIEKER);
+    SCULK_SHRIEKER(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.SCULK_SHRIEKER);
 
     private static final Map<StateType, HitboxData> lookup = new HashMap<>();
 
