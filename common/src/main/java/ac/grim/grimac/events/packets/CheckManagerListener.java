@@ -241,9 +241,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
                         || placedAgainst == StateTypes.IRON_DOOR || BlockTags.FENCES.contains(placedAgainst))
                         || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8) && BlockTags.CAULDRONS.contains(placedAgainst)
                         || Materials.isClientSideInteractable(placedAgainst)) {
-                    if (!player.inVehicle()) {
-                        player.checkManager.onPostFlyingBlockPlace(blockPlace);
-                    }
+                    player.checkManager.onPostFlyingBlockPlace(blockPlace);
                     Vector3i location = blockPlace.getPlacedAgainstBlockLocation();
                     player.compensatedWorld.tickOpenable(location.getX(), location.getY(), location.getZ());
                     return;
@@ -253,9 +251,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 // This method is for when the block doesn't always consume the click
                 // This causes a ton of desync's but mojang doesn't seem to care...
                 if (ConsumesBlockPlace.consumesPlace(player, player.compensatedWorld.getBlock(blockPlace.getPlacedAgainstBlockLocation()), blockPlace)) {
-                    if (!player.inVehicle()) {
-                        player.checkManager.onPostFlyingBlockPlace(blockPlace);
-                    }
+                    player.checkManager.onPostFlyingBlockPlace(blockPlace);
                     return;
                 }
             }
@@ -274,9 +270,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
 
             BlockPlace blockPlace = new BlockPlace(player, place.getHand(), blockPosition, place.getFaceId(), face, placedWith, WorldRayTrace.getNearestBlockHitResult(player, null, true, false, false), place.getSequence());
             // At this point, it is too late to cancel, so we can only flag, and cancel subsequent block places more aggressively
-            if (!player.inVehicle()) {
-                player.checkManager.onPostFlyingBlockPlace(blockPlace);
-            }
+            player.checkManager.onPostFlyingBlockPlace(blockPlace);
 
             blockPlace.setInside(place.getInsideBlock().orElse(false));
 
@@ -643,8 +637,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
                     }
                 }
 
-                if (!player.inVehicle())
-                    player.checkManager.onBlockPlace(blockPlace);
+                player.checkManager.onBlockPlace(blockPlace);
 
                 if (event.isCancelled() || blockPlace.isCancelled() || player.getSetbackTeleportUtil().shouldBlockMovement()) { // The player tried placing blocks in air/water
 
