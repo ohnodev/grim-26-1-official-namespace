@@ -612,22 +612,22 @@ public enum HitboxData implements HitBoxFactory {
             ? new SimpleCollisionBox(0.0625, 0, 0.0625, 0.9375, 1, 0.9375)
             : GRASS_FERN.dynamic.fetch(player, heldItem, version, block, isTargetBlock, x, y, z), StateTypes.TALL_DRY_GRASS),
 
-    NON_PINK_PETAL_FLOWERBED((player, item, version, data, isTargetBlock, x, y, z) -> {
-        if (version.isNewerThan(ClientVersion.V_1_21_4)) {
-            return getFlowerBedHitBox(data.getFlowerAmount(), data.getFacing().getHorizontalId());
-        } else {
-            // GLOW_LICHEN Facing Upwards
-            return new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-        }
-    }, StateTypes.LEAF_LITTER, StateTypes.WILDFLOWERS),
+    LEAF_LITTER((player, item, version, data, isTargetBlock, x, y, z)
+            -> version.isNewerThan(ClientVersion.V_1_21_4)
+            ? getFlowerBedHitBox(data.getSegmentAmount(), data.getFacing().getHorizontalId())
+            // GLOW_LICHEN Facing Upwards, can't call glow lichen dynamic because data has no isUp() key
+            : new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D), StateTypes.LEAF_LITTER),
 
-    CACTUS_FLOWER((player, item, version, data, isTargetBlock, x, y, z) -> {
-        if (version.isNewerThan(ClientVersion.V_1_21_4)) {
-            return new SimpleCollisionBox(0.0625, 0, 0.0625, 0.9375, 0.75, 0.9375);
-        } else {
-            return CORAL_FAN.box.copy();
-        }
-    }, StateTypes.CACTUS_FLOWER),
+    WILDFLOWERS((player, item, version, data, isTargetBlock, x, y, z)
+            -> version.isNewerThan(ClientVersion.V_1_21_4)
+            ? getFlowerBedHitBox(data.getFlowerAmount(), data.getFacing().getHorizontalId())
+            // GLOW_LICHEN Facing Upwards, can't call glow lichen dynamic because data has no isUp() key
+            : new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D), StateTypes.WILDFLOWERS),
+
+    CACTUS_FLOWER((player, item, version, data, isTargetBlock, x, y, z)
+            -> version.isNewerThan(ClientVersion.V_1_21_4)
+            ? new SimpleCollisionBox(0.0625, 0, 0.0625, 0.9375, 0.75, 0.9375)
+            : CORAL_FAN.box.copy(), StateTypes.CACTUS_FLOWER),
 
     // always a fullblock hitbox. Via replacement is obsidian
     SCULK_SHRIEKER(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.SCULK_SHRIEKER);
