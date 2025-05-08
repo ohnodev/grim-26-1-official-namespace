@@ -246,6 +246,7 @@ public class GrimPlayer implements GrimUser {
     public final ArrayDeque<RotationData> pendingRotations = new ArrayDeque<>();
     @Getter @Setter private ResyncHandler resyncHandler = new DefaultResyncHandler(this);
     @Getter private final FeatureManagerImpl featureManager = new FeatureManagerImpl(this);
+    public boolean serverOpenedInventoryThisTick;
     // start config
     private boolean debugPacketCancel = false;
     private int spamThreshold = 100;
