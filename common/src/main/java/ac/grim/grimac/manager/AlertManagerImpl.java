@@ -13,6 +13,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
 import java.util.Set;
@@ -23,10 +24,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Caches toggle messages for performance.
  */
 public final class AlertManagerImpl implements AlertManager, ConfigReloadable, StartableInitable {
-    private boolean consoleAlertsEnabled;
-    private boolean consoleVerboseEnabled;
-    private boolean consoleBrandsEnabled;
-
     private @NonNull PlatformServer platformServer;
 
     private enum AlertType {
@@ -34,6 +31,12 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         public String enableMessage;
         public String disableMessage;
         public final Set<PlatformPlayer> players = new CopyOnWriteArraySet<>();
+        public boolean console;
+
+        @Contract(pure = true)
+        public boolean hasListeners() {
+            return !players.isEmpty() || console;
+        }
     }
 
     @Override
@@ -44,9 +47,9 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
 
     @Override
     public void reload(ConfigManager config) {
-        this.consoleAlertsEnabled = config.getBooleanElse("alerts.print-to-console", true);
-        this.consoleVerboseEnabled = config.getBooleanElse("verbose.print-to-console", false);
-        this.consoleBrandsEnabled = false;
+        AlertType.NORMAL.console = setConsoleAlertsEnabled(config.getBooleanElse("alerts.print-to-console", true), true);
+        AlertType.VERBOSE.console = setConsoleVerboseEnabled(config.getBooleanElse("verbose.print-to-console", false), true);
+        AlertType.BRAND.console = false;
 
         AlertType.NORMAL.enableMessage = config.getStringElse("alerts-enabled", "%prefix% &fAlerts enabled");
         AlertType.NORMAL.disableMessage = config.getStringElse("alerts-disabled", "%prefix% &fAlerts disabled");
@@ -106,15 +109,6 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
         player.sendMessage(MessageUtil.miniMessage(messageWithPlaceholders));
     }
 
-    /** Gets the cached message, applies generic placeholders, and sends it to the Console Sender. */
-    private void sendToggleMessage(@NonNull Sender consoleSender, boolean enabled, @NonNull AlertType type) {
-        String rawMessage = getCachedToggleMessage(enabled, type);
-        if (rawMessage.isEmpty()) return;
-
-        String messageWithPlaceholders = MessageUtil.replacePlaceholders((PlatformPlayer) null, rawMessage);
-        consoleSender.sendMessage(MessageUtil.miniMessage(messageWithPlaceholders));
-    }
-
     @Override
     public boolean hasAlertsEnabled(@NonNull GrimUser player) {
         return AlertType.NORMAL.players.contains(requirePlatformPlayerFromUser(player));
@@ -171,24 +165,88 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     public boolean toggleConsoleAlerts() {
-        boolean newState = !this.consoleAlertsEnabled;
-        this.consoleAlertsEnabled = newState;
-        sendToggleMessage(platformServer.getConsoleSender(), newState, AlertType.NORMAL);
-        return newState;
+        return toggleConsoleAlerts(false);
+    }
+
+    public boolean toggleConsoleAlerts(boolean silent) {
+        return setConsoleAlertsEnabled(!hasConsoleAlertsEnabled(), silent);
+    }
+
+    @Contract("_ -> param1")
+    public boolean setConsoleAlertsEnabled(boolean enabled) {
+        return setConsoleAlertsEnabled(enabled, false);
+    }
+
+    @Contract("_, _ -> param1")
+    public boolean setConsoleAlertsEnabled(boolean enabled, boolean silent) {
+        setConsoleStateAndNotify(AlertType.NORMAL, enabled, silent);
+        if (!enabled) setConsoleVerboseEnabled(false, silent);
+        return enabled;
+    }
+
+    @Contract(pure = true)
+    public boolean hasConsoleAlertsEnabled() {
+        return AlertType.NORMAL.console;
     }
 
     public boolean toggleConsoleVerbose() {
-        boolean newState = !this.consoleVerboseEnabled;
-        this.consoleVerboseEnabled = newState;
-        sendToggleMessage(platformServer.getConsoleSender(), newState, AlertType.VERBOSE);
-        return newState;
+        return toggleConsoleVerbose(false);
+    }
+
+    public boolean toggleConsoleVerbose(boolean silent) {
+        return setConsoleVerboseEnabled(!hasConsoleVerboseEnabled(), silent);
+    }
+
+    @Contract("_ -> param1")
+    public boolean setConsoleVerboseEnabled(boolean enabled) {
+        return setConsoleVerboseEnabled(enabled, false);
+    }
+
+    @Contract("_, _ -> param1")
+    public boolean setConsoleVerboseEnabled(boolean enabled, boolean silent) {
+        if (enabled) setConsoleAlertsEnabled(true, silent);
+        return setConsoleStateAndNotify(AlertType.VERBOSE, enabled, silent);
+    }
+
+    @Contract(pure = true)
+    public boolean hasConsoleVerboseEnabled() {
+        return AlertType.VERBOSE.console;
     }
 
     public boolean toggleConsoleBrands() {
-        boolean newState = !this.consoleBrandsEnabled;
-        this.consoleBrandsEnabled = newState;
-        sendToggleMessage(platformServer.getConsoleSender(), newState, AlertType.BRAND);
-        return newState;
+        return toggleConsoleBrands(false);
+    }
+
+    public boolean toggleConsoleBrands(boolean silent) {
+        return setConsoleBrandsEnabled(!hasConsoleBrandsEnabled(), silent);
+    }
+
+    @Contract("_ -> param1")
+    public boolean setConsoleBrandsEnabled(boolean enabled) {
+        return setConsoleStateAndNotify(AlertType.BRAND, enabled, false);
+    }
+
+    @Contract("_, _ -> param1")
+    public boolean setConsoleBrandsEnabled(boolean enabled, boolean silent) {
+        return setConsoleStateAndNotify(AlertType.BRAND, enabled, silent);
+    }
+
+    @Contract(pure = true)
+    public boolean hasConsoleBrandsEnabled() {
+        return AlertType.BRAND.console;
+    }
+
+    @Contract("_, _, _ -> param2")
+    private boolean setConsoleStateAndNotify(@NonNull AlertType type, boolean enabled, boolean silent) {
+        if (type.console != enabled && !silent) {
+            String rawMessage = getCachedToggleMessage(enabled, type);
+            if (!rawMessage.isEmpty()) {
+                platformServer.getConsoleSender().sendMessage(MessageUtil.miniMessage(MessageUtil.replacePlaceholders((PlatformPlayer) null, rawMessage)));
+            }
+        }
+
+        type.console = enabled;
+        return enabled;
     }
 
     // All internal code, will replace later
@@ -228,7 +286,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
             platformPlayer.sendMessage(component);
         }
 
-        if (consoleBrandsEnabled) {
+        if (hasConsoleBrandsEnabled()) {
             platformServer.getConsoleSender().sendMessage(component);
         }
     }
@@ -238,7 +296,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
             platformPlayer.sendMessage(component);
         }
 
-        if (consoleVerboseEnabled) {
+        if (hasConsoleVerboseEnabled()) {
             platformServer.getConsoleSender().sendMessage(component);
         }
     }
@@ -248,16 +306,16 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
             platformPlayer.sendMessage(component);
         }
 
-        if (consoleAlertsEnabled) {
+        if (hasConsoleAlertsEnabled()) {
             platformServer.getConsoleSender().sendMessage(component);
         }
     }
 
     public boolean hasVerboseListeners() {
-        return !AlertType.VERBOSE.players.isEmpty() || consoleVerboseEnabled;
+        return AlertType.VERBOSE.hasListeners();
     }
 
     public boolean hasAlertListeners() {
-        return !AlertType.NORMAL.players.isEmpty() || consoleAlertsEnabled;
+        return AlertType.NORMAL.hasListeners();
     }
 }
