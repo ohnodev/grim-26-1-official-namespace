@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public abstract class TypedPacketEntity {
     private final EntityType type;
-    private final boolean isLiving, isMinecart, isHorse, isAgeable, isAnimal, isBoat;
+    private final boolean isLivingEntity, isMinecart, isHorse, isAgeable, isAnimal, isBoat;
 
     public TypedPacketEntity(EntityType type) {
         this.type = type;
-        this.isLiving = EntityTypes.isTypeInstanceOf(type, EntityTypes.LIVINGENTITY);
+        this.isLivingEntity = EntityTypes.isTypeInstanceOf(type, EntityTypes.LIVINGENTITY);
         this.isMinecart = EntityTypes.isTypeInstanceOf(type, EntityTypes.MINECART_ABSTRACT);
         this.isHorse = EntityTypes.isTypeInstanceOf(type, EntityTypes.ABSTRACT_HORSE);
         // isAgeable really means "is there a baby version of this mob" and is no longer the term used in modern Minecraft
@@ -30,6 +30,6 @@ public abstract class TypedPacketEntity {
         // Bats, parrots, and armor stands cannot
         if (type == EntityTypes.ARMOR_STAND || type == EntityTypes.BAT || type == EntityTypes.PARROT)
             return false;
-        return isLiving || isBoat || isMinecart;
+        return isLivingEntity || isBoat || isMinecart;
     }
 }
