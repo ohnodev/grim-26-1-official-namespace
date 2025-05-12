@@ -32,7 +32,7 @@ public class GrimLog implements BuildableCommand {
             } catch (Exception e) {
                 String message = MessageUtil.replacePlaceholders(sender, failure);
                 sender.sendMessage(MessageUtil.miniMessage(message));
-                e.printStackTrace();
+                LogUtil.error("Failed to send log", e);
             }
         });
     }

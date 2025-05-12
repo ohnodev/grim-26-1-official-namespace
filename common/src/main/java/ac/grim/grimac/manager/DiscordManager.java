@@ -11,7 +11,7 @@ import ac.grim.grimac.utils.webhook.EmbedField;
 import ac.grim.grimac.utils.webhook.EmbedFooter;
 import ac.grim.grimac.utils.webhook.WebhookMessage;
 
-import java.awt.Color;
+import java.awt.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -74,7 +74,7 @@ public class DiscordManager implements StartableInitable, ReloadableInitable {
             }
             staticContent = sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.error("Failed to load Discord webhook configuration", e);
         }
     }
 

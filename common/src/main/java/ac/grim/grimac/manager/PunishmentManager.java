@@ -91,8 +91,7 @@ public class PunishmentManager implements ConfigReloadable {
                 groups.add(new PunishGroup(checksList, parsed, removeViolationsAfter * 1000));
             }
         } catch (Exception e) {
-            LogUtil.error("Error while loading punishments.yml! This is likely your fault!");
-            e.printStackTrace();
+            LogUtil.error("Error while loading punishments.yml! This is likely your fault!", e);
         }
     }
 
