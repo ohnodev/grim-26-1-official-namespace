@@ -62,18 +62,12 @@ public final class GrimAPI {
         this.externalAPI = new GrimExternalAPI(this);
     }
 
+    // the order matters
     private static Platform detectPlatform() {
-        final Map<String, Platform> platforms = Map.of(
-                "io.papermc.paper.threadedregions.RegionizedServer", Platform.FOLIA,
-                "org.bukkit.Bukkit", Platform.BUKKIT,
-                "net.fabricmc.loader.api.FabricLoader", Platform.FABRIC
-        );
-
-        return platforms.entrySet().stream()
-                .filter(entry -> ReflectionUtils.hasClass(entry.getKey()))
-                .map(Map.Entry::getValue)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Unknown platform!"));
+        if (ReflectionUtils.hasClass("io.papermc.paper.threadedregions.RegionizedServer")) return Platform.FOLIA;
+        if (ReflectionUtils.hasClass("org.bukkit.Bukkit")) return Platform.BUKKIT;
+        if (ReflectionUtils.hasClass("net.fabricmc.loader.api.FabricLoader")) return Platform.FABRIC;
+        throw new IllegalStateException("Unknown platform!");
     }
 
     public void load(PlatformLoader platformLoader, Initable... platformSpecificInitables) {
