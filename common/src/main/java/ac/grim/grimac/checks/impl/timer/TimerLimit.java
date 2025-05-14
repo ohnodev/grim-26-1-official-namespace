@@ -47,6 +47,9 @@ public class TimerLimit extends Timer {
     @Override
     public void onReload(ConfigManager config) {
         super.onReload(config);
-        limitAbuseOverPing = (long) (config.getDoubleElse(getConfigName() + ".ping-abuse-limit-threshold", 1000) * 1e6);
+        limitAbuseOverPing = config.getLongElse(getConfigName() + ".ping-abuse-limit-threshold", 1000L);
+        if (limitAbuseOverPing != -1) {
+            limitAbuseOverPing *= (long) 1e6;
+        }
     }
 }
