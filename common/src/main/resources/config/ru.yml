@@ -141,7 +141,7 @@ NegativeTimer:
     drift: 1200
 
 # Тот же метод проверки, что и у TimerA, но для транспортных средств
-TimerVehicle:
+VehicleTimer:
     # Цель 1.005 таймер
     setbackvl: 10
 

@@ -143,7 +143,7 @@ NegativeTimer:
     drift: 1200
 
 # Mesmo método usado no TimerA, mas para veículos.
-TimerVehicle:
+VehicleTimer:
     # Detecta até 1.005 de timer.
     setbackvl: 10
 

@@ -140,7 +140,7 @@ NegativeTimer:
     drift: 1200
 
     # TimerA ile aynı kontrol yöntemi, ancak araçlar için
-TimerVehicle:
+VehicleTimer:
     # Hedef 1.005 timer
     setbackvl: 10
 

@@ -141,7 +141,7 @@ NegativeTimer:
     drift: 1200
 
 # Même méthode de vérification que TimerA, mais pour les véhicules.
-TimerVehicle:
+VehicleTimer:
     # Cibler un chronomètre de 1,005.
     setbackvl: 10
 

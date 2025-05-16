@@ -131,7 +131,7 @@ NegativeTimer:
     # Millisecondi persi prima di rilevare il timer negativo
     drift: 1200
 
-TimerVehicle:
+VehicleTimer:
     # Livello di violazione per il timer dei veicoli
     setbackvl: 10
 

@@ -145,7 +145,7 @@ NegativeTimer:
     drift: 1200
 
 # TimerAと同じチェック方法ですが、乗り物操作に適用されます
-TimerVehicle:
+VehicleTimer:
     # 目標タイマー値は1.005です
     setbackvl: 10
 
