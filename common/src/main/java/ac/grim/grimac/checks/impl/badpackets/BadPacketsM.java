@@ -8,8 +8,10 @@ import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.player.Combat;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClientStatus;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCombatEvent;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerDeathCombatEvent;
 
 @CheckData(name = "BadPacketsM", description = "Tried to respawn while alive", experimental = true)
@@ -46,8 +48,15 @@ public class BadPacketsM extends Check implements PacketCheck {
             player.addRealTimeTaskNow(() -> exempt++);
         }
 
-        if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT) {
+        if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
             if (new WrapperPlayServerDeathCombatEvent(event).getPlayerId() == player.entityID) {
+                player.addRealTimeTaskNow(() -> exempt++);
+            }
+        }
+
+        if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) {
+            WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
+            if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {
                 player.addRealTimeTaskNow(() -> exempt++);
             }
         }
