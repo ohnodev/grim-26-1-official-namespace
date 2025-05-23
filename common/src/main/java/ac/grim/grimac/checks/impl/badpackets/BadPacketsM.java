@@ -10,6 +10,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClientStatus;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerDeathCombatEvent;
 
 @CheckData(name = "BadPacketsM", description = "Tried to respawn while alive", experimental = true)
 public class BadPacketsM extends Check implements PacketCheck {
@@ -17,13 +18,15 @@ public class BadPacketsM extends Check implements PacketCheck {
         super(player);
     }
 
-    private boolean wonGame;
+    // not a boolean because the server could send packets that cause
+    // the client to send a respawn packet before it receives the first
+    private int exempt;
 
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.CLIENT_STATUS && new WrapperPlayClientClientStatus(event).getAction() == WrapperPlayClientClientStatus.Action.PERFORM_RESPAWN) {
-            if (wonGame) {
-                wonGame = false;
+            if (exempt > 0) {
+                exempt--;
                 return;
             }
 
@@ -40,7 +43,13 @@ public class BadPacketsM extends Check implements PacketCheck {
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.CHANGE_GAME_STATE && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
                 && new WrapperPlayServerChangeGameState(event).getReason() == WrapperPlayServerChangeGameState.Reason.WIN_GAME) {
-            player.addRealTimeTaskNow(() -> wonGame = true);
+            player.addRealTimeTaskNow(() -> exempt++);
+        }
+
+        if (event.getPacketType() == PacketType.Play.Server.DEATH_COMBAT_EVENT) {
+            if (new WrapperPlayServerDeathCombatEvent(event).getPlayerId() == player.entityID) {
+                player.addRealTimeTaskNow(() -> exempt++);
+            }
         }
     }
 }
