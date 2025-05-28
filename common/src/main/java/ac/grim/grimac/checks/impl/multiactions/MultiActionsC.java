@@ -16,7 +16,7 @@ public class MultiActionsC extends Check implements PacketCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.CLICK_WINDOW) {
-            if (player.isSprinting && !player.isSwimming && !player.serverOpenedInventoryThisTick && flagAndAlert() && shouldModifyPackets()) {
+            if (player.isSprinting && (!player.isSwimming || !player.clientClaimsLastOnGround) && !player.serverOpenedInventoryThisTick && flagAndAlert() && shouldModifyPackets()) {
                 event.setCancelled(true);
                 player.onPacketCancel();
             }
