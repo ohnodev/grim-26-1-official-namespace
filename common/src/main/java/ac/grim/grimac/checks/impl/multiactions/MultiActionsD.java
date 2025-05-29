@@ -6,6 +6,7 @@ import ac.grim.grimac.checks.type.PacketCheck;
 import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 
 import java.util.StringJoiner;
 
@@ -21,6 +22,10 @@ public class MultiActionsD extends Check implements PacketCheck {
             StringJoiner verbose = new StringJoiner(", ");
             if (player.isSprinting && (!player.isSwimming || !player.clientClaimsLastOnGround)) {
                 verbose.add("sprinting");
+            }
+
+            if (player.isSneaking && player.getClientVersion().isOlderThan(ClientVersion.V_1_15)) {
+                verbose.add("sneaking");
             }
 
             if (player.packetStateData.knownInput.forward() || player.packetStateData.knownInput.backward()
