@@ -5,7 +5,9 @@ import ac.grim.grimac.checks.impl.badpackets.BadPacketsE;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsF;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsG;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsH;
+import ac.grim.grimac.checks.impl.elytra.ElytraB;
 import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.utils.data.KnownInput;
 import ac.grim.grimac.utils.data.TrackerData;
 import ac.grim.grimac.utils.data.packetentity.PacketEntitySelf;
 import ac.grim.grimac.utils.enums.Pose;
@@ -149,6 +151,7 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 }
 
                 player.lastOnGround = false;
+                player.clientClaimsLastOnGround = false;
                 player.onGround = false;
                 player.isInBed = false;
                 player.packetStateData.setSlowedByUsingItem(false);
@@ -165,6 +168,8 @@ public class PacketPlayerRespawn extends PacketListenerAbstract {
                 }
 
                 if (!keepTrackedData) {
+                    player.packetStateData.knownInput = new KnownInput(false, false, false, false, false, false, false);
+
                     // 1.19.4 uses current sprinting, older versions use last sprinting
                     if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_19_4)) {
                         player.isSprinting = false;
