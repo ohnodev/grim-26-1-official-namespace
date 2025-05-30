@@ -5,7 +5,6 @@ import ac.grim.grimac.checks.impl.badpackets.BadPacketsE;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsF;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsG;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsH;
-import ac.grim.grimac.checks.impl.elytra.ElytraB;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.data.KnownInput;
 import ac.grim.grimac.utils.data.TrackerData;
