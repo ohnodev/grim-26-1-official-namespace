@@ -7,6 +7,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
 
 @CheckData(name = "BadPacketsR", decay = 0.25, experimental = true)
 public class BadPacketsR extends Check implements PacketCheck {
@@ -30,6 +31,7 @@ public class BadPacketsR extends Check implements PacketCheck {
                 } else {
                     reward();
                 }
+                player.compensatedEntities.entitiesRemovedThisTick.clear();
                 player.compensatedWorld.removeInvalidPistonLikeStuff(oldTransId);
                 positions = 0;
                 clock = player.getPlayerClockAtLeast();

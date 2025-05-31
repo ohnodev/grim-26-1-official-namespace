@@ -33,7 +33,9 @@ public class PacketPlayerAttack extends PacketListenerAbstract {
             if (player == null) return;
 
             // The entity does not exist
-            if (!player.compensatedEntities.entityMap.containsKey(interact.getEntityId()) && !player.compensatedEntities.serverPositionsMap.containsKey(interact.getEntityId())) {
+            if (!player.compensatedEntities.entityMap.containsKey(interact.getEntityId()) && !player.compensatedEntities.serverPositionsMap.containsKey(interact.getEntityId())
+                    // the list of entities used to raytrace isn't the same as the list of entities in the world in pre-1.14 (wtf mojang)
+                    && (!player.compensatedEntities.entitiesRemovedThisTick.contains(interact.getEntityId()) || player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14))) {
                 final BadPacketsW badPacketsW = player.checkManager.getCheck(BadPacketsW.class);
                 if (badPacketsW.flagAndAlert("entityId=" + interact.getEntityId()) && badPacketsW.shouldModifyPackets()) {
                     event.setCancelled(true);

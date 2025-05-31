@@ -87,7 +87,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         // Teleports don't interpolate, duplicate 1.17 packets don't interpolate
         if (!isTickPacket(event.getPacketType())) return;
-
+        player.compensatedEntities.entitiesRemovedThisTick.clear();
         boolean isTickingReliably = player.isTickingReliablyFor(3);
 
         PacketEntity playerVehicle = player.compensatedEntities.self.getRiding();
@@ -376,6 +376,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 for (int integer : destroyEntityIds) {
                     player.compensatedEntities.removeEntity(integer);
                     player.fireworks.removeFirework(integer);
+                    player.compensatedEntities.entitiesRemovedThisTick.add(integer);
                 }
             });
 
