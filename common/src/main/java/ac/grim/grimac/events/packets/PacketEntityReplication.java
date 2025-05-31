@@ -252,7 +252,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             }
 
             if (status.getStatus() >= 24 && status.getStatus() <= 28 && status.getEntityId() == player.entityID) {
-                player.compensatedEntities.self.setOpLevel(status.getStatus() - 24);
+                player.compensatedEntities.self.opLevel = status.getStatus() - 24;
             }
         } else if (event.getPacketType() == PacketType.Play.Server.SET_SLOT) {
             WrapperPlayServerSetSlot slot = new WrapperPlayServerSetSlot(event);
@@ -497,7 +497,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             if (entity == null) return;
             if (entity instanceof PacketEntityTrackXRot xRotEntity && yaw != null) {
                 xRotEntity.packetYaw = yaw;
-                xRotEntity.steps = entity.isBoat() ? 10 : 3;
+                xRotEntity.steps = entity.isBoat ? 10 : 3;
             }
 
             entity.onFirstTransaction(isRelative, hasPos, deltaX, deltaY, deltaZ, player);

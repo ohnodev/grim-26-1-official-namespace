@@ -231,7 +231,7 @@ public class CompensatedEntities {
         PacketEntity entity = player.compensatedEntities.getEntity(entityID);
         if (entity == null) return;
 
-        if (entity.isAgeable()) {
+        if (entity.isAgeable) {
             int id;
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
                 id = 12;
@@ -326,7 +326,7 @@ public class CompensatedEntities {
         if (entity instanceof PacketEntityRideable rideable) {
             int offset = 0;
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_8_8)) {
-                if (entity.getType() == EntityTypes.PIG) {
+                if (entity.type == EntityTypes.PIG) {
                     EntityData<?> pigSaddle = WatchableIndexUtil.getIndex(watchableObjects, 16);
                     if (pigSaddle != null) {
                         rideable.hasSaddle = ((byte) pigSaddle.getValue()) != 0;
@@ -342,7 +342,7 @@ public class CompensatedEntities {
                 offset = 1;
             }
 
-            if (entity.getType() == EntityTypes.PIG) {
+            if (entity.type == EntityTypes.PIG) {
                 if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_5))
                     offset = 1;
 
@@ -436,7 +436,7 @@ public class CompensatedEntities {
             }
         }
 
-        if (entity.getType() == EntityTypes.FIREWORK_ROCKET) {
+        if (entity.type == EntityTypes.FIREWORK_ROCKET) {
             int offset = 0;
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2)) {
                 offset = 2;

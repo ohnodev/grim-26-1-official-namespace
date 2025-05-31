@@ -16,17 +16,13 @@ import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.potion.PotionType;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 
 public class PacketEntitySelf extends PacketEntity {
 
     private final GrimPlayer player;
-    @Getter
-    @Setter
-    int opLevel;
+    public int opLevel;
 
     public PacketEntitySelf(GrimPlayer player) {
         super(player, EntityTypes.PLAYER);
