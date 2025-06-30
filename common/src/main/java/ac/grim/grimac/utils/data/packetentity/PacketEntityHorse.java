@@ -8,6 +8,7 @@ import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.player.EquipmentSlot;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class PacketEntityHorse extends PacketEntityTrackXRot {
 
     public PacketEntityHorse(GrimPlayer player, UUID uuid, EntityType type, double x, double y, double z, float xRot) {
         super(player, uuid, type, x, y, z, xRot);
+        this.trackEntityEquipment = true;
         setAttribute(Attributes.STEP_HEIGHT, 1.0f);
 
         final boolean preAttribute = player.getClientVersion().isOlderThan(ClientVersion.V_1_20_5);
@@ -45,12 +47,12 @@ public class PacketEntityHorse extends PacketEntityTrackXRot {
     }
 
     private static final boolean HAS_SADDLE_SENT_BY_SERVER = PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_21_4);
-    public boolean hasSaddle(GrimPlayer player) {
+    public boolean hasSaddle() {
         if (HAS_SADDLE_SENT_BY_SERVER) {
             return this.hasSaddle;
         }
 
-        return true; // return true for now, until we track horse inventory
+        return hasItemInSlot(EquipmentSlot.SADDLE);
     }
 
 }

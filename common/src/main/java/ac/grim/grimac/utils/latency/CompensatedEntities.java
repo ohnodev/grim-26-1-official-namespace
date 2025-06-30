@@ -17,6 +17,7 @@ import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.player.Equipment;
 import com.github.retrooper.packetevents.protocol.player.UserProfile;
 import com.github.retrooper.packetevents.protocol.potion.PotionType;
 import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
@@ -526,4 +527,14 @@ public class CompensatedEntities {
             }
         }
     }
+
+    public void updateEntityEquipment(int entityId, List<Equipment> equipment) {
+        PacketEntity entity = player.compensatedEntities.getEntity(entityId);
+        if (entity == null || !entity.trackEntityEquipment) return;
+
+        for (Equipment equipmentItem : equipment) {
+            entity.setItemBySlot(equipmentItem.getSlot(), equipmentItem.getItem());
+        }
+    }
+
 }
