@@ -44,7 +44,9 @@ import ac.grim.grimac.utils.math.Location;
 import ac.grim.grimac.utils.math.TrigHandler;
 import ac.grim.grimac.utils.math.Vector3dm;
 import ac.grim.grimac.utils.nmsutil.BlockProperties;
+import ac.grim.grimac.utils.nmsutil.Collisions;
 import ac.grim.grimac.utils.nmsutil.GetBoundingBox;
+import ac.grim.grimac.utils.nmsutil.Materials;
 import ac.grim.grimac.utils.reflection.ViaVersionUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
@@ -266,8 +268,7 @@ public class GrimPlayer implements GrimUser {
     // This variable is for support with test servers that want to be able to disable grim
     // Grim disabler 2022 still working!
     public boolean disableGrim = false;
-    // TODO: teleport clear this?
-    public final List<List<Movement>> movementThisTick = new ObjectArrayList<>();
+    public final ArrayDeque<Movement> movementThisTick = new ArrayDeque<>(8);
     public final List<Movement> finalMovementsThisTick = new ObjectArrayList<>();
     public final LongSet visitedBlocks = new LongOpenHashSet();
     private @Nullable UserConnection viaUserConnection;
@@ -438,7 +439,7 @@ public class GrimPlayer implements GrimUser {
         final PacketEntity riding = self.getRiding();
         if (riding == null) return (float) self.getAttributeValue(Attributes.STEP_HEIGHT);
 
-        if (riding.isBoat) {
+        if (riding.isBoat || riding.isHappyGhast) {
             return 0f;
         }
 
@@ -774,6 +775,10 @@ public class GrimPlayer implements GrimUser {
         return getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_10) || (gamemode == GameMode.CREATIVE && compensatedEntities.self.opLevel >= 2);
     }
 
+    public boolean isInWaterOrRain() {
+        return compensatedWorld.isRaining || Collisions.hasMaterial(this, boundingBox.copy().expand(0.1f), (block) -> Materials.isWater(CompensatedWorld.blockVersion, block.first()));
+    }
+
     @Contract(pure = true)
     public boolean supportsEndTick() {
         // TODO: Bypass viaversion
@@ -912,7 +917,18 @@ public class GrimPlayer implements GrimUser {
                 GrimMath.ceil(box.maxX), GrimMath.ceil(box.maxY), GrimMath.ceil(box.maxZ));
     }
 
-    public record Movement(Vector3d from, Vector3d to) {}
+    public void addMovementThisTick(GrimPlayer.Movement movement) {
+        if (this.movementThisTick.size() >= 100) {
+            GrimPlayer.Movement movement1 = this.movementThisTick.removeFirst();
+            GrimPlayer.Movement movement2 = this.movementThisTick.removeFirst();
+            GrimPlayer.Movement movement3 = new GrimPlayer.Movement(movement1.from(), movement2.to(), false);
+            this.movementThisTick.addFirst(movement3);
+        }
+
+        this.movementThisTick.add(movement);
+    }
+
+    public record Movement(Vector3d from, Vector3d to, boolean axisIndependant) {}
 
     // TODO (Cross-platform) keep track of world at packet level; do not rely on potentially non-lag-compensated platformPlayer.getWorld()
     public Location getLocation() {

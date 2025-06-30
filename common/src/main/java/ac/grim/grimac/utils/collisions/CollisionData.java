@@ -1029,6 +1029,15 @@ public enum CollisionData implements CollisionFactory {
         default -> NoCollisionBox.INSTANCE;
     }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
 
+    DRIED_GHAST((player, version, data, x, y, z) -> {
+        // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
+        // not sure how to handle this properly?
+        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_5)) {
+            return CHORUS_PLANT.fetch(player, version, data, x, y, z);
+        }
+        return new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0);
+    }, StateTypes.DRIED_GHAST),
+
     DEFAULT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.STONE);
 
     // This should be an array... but a hashmap will do for now...
