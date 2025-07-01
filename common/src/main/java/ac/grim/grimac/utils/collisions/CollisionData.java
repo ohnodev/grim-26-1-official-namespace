@@ -1030,12 +1030,22 @@ public enum CollisionData implements CollisionFactory {
     }, BlockTags.WALL_HANGING_SIGNS.getStates().toArray(new StateType[0])),
 
     DRIED_GHAST((player, version, data, x, y, z) -> {
+        if (player.getClientVersion().isNewerThan(ClientVersion.V_1_21_5)) {
+            return new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0);
         // ViaVersion replacement block - chorus plant (down: true, up: false, east: false, south: false, west: false)
-        // not sure how to handle this properly?
-        if (player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_21_5)) {
-            return CHORUS_PLANT.fetch(player, version, data, x, y, z);
+        } else if (player.getClientVersion().isNewerThan(ClientVersion.V_1_12_2)) {
+            // While the 2nd SimpleCollisionBox clearly encompasses the first, it's unclear if Mojang's collision code on any version
+            // May give a different result if the vanilla boxes aren't replicated perfectly, even the inefficinies like the code below
+            return new ComplexCollisionBox(2,
+                    new SimpleCollisionBox(0.1875, 0.1875, 0.1875, 0.8125, 0.8125, 0.8125),
+                    new SimpleCollisionBox(0.1875, 0, 0.1875, 0.8125, 0.8125, 0.8125)
+            );
+        } else if (player.getClientVersion().isNewerThan(ClientVersion.V_1_8)) {
+            return new SimpleCollisionBox(0.1875F, 0.0F, 0.1875F, 0.8125F, 0.8125F, 0.8125F);
+        } else {
+            // ViaVersion replacement block (Purple wool)
+            return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
         }
-        return new HexCollisionBox(3.0, 0.0, 3.0, 13.0, 10.0, 13.0);
     }, StateTypes.DRIED_GHAST),
 
     DEFAULT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.STONE);

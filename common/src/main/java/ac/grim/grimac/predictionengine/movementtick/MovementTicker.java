@@ -31,9 +31,7 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.viaversion.viaversion.api.Via;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.List;
 
 public class MovementTicker {
     public final GrimPlayer player;
