@@ -441,7 +441,7 @@ public class CompensatedInventory extends Check implements PacketCheck {
 
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                 // The server sent a packet for the player's inventory when they had another inventory open - revert.
-                if (updatedValue.get() && menu instanceof NotImplementedMenu) {
+                if (updatedValue.get() && !menu.equals(inventory)) {
                     isPacketInventoryActive = false;
                 }
             });
