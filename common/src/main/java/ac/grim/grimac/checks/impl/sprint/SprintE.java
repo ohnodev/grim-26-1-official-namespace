@@ -32,7 +32,7 @@ public class SprintE extends Check implements PostPredictionCheck {
         if (!predictionComplete.isChecked()) return;
 
         if (wasHardHorizontalCollision && !startedSprintingThisTick && !player.uncertaintyHandler.isNearGlitchyBlock
-                && (!player.wasTouchingWater || player.getClientVersion().isOlderThan(ClientVersion.V_1_13))) {
+                && !player.inVehicle() && (!player.wasTouchingWater || player.getClientVersion().isOlderThan(ClientVersion.V_1_13))) {
             if (player.isSprinting) {
                 flagAndAlertWithSetback();
             } else reward();
