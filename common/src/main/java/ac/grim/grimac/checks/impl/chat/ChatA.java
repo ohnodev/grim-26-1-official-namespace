@@ -13,8 +13,8 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientTa
 @CheckData(name = "ChatA", experimental = true)
 public class ChatA extends Check implements PacketCheck {
 
-    public ChatA(GrimPlayer playerData) {
-        super(playerData);
+    public ChatA(GrimPlayer player) {
+        super(player);
     }
 
     @Override

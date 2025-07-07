@@ -16,8 +16,8 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientCh
 // happen unless they're trying to flag, or if the server is set up badly
 @CheckData(name = "ChatB", description = "Invalid chat message")
 public class ChatB extends Check implements PacketCheck {
-    public ChatB(GrimPlayer playerData) {
-        super(playerData);
+    public ChatB(GrimPlayer player) {
+        super(player);
     }
 
     @Override
