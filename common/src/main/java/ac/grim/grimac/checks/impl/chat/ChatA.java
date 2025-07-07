@@ -1,4 +1,4 @@
-package ac.grim.grimac.checks.impl.exploit;
+package ac.grim.grimac.checks.impl.chat;
 
 import ac.grim.grimac.checks.Check;
 import ac.grim.grimac.checks.CheckData;
@@ -10,10 +10,10 @@ import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientTabComplete;
 
-@CheckData(name = "ExploitA", experimental = true)
-public class ExploitA extends Check implements PacketCheck {
+@CheckData(name = "ChatA", experimental = true)
+public class ChatA extends Check implements PacketCheck {
 
-    public ExploitA(GrimPlayer playerData) {
+    public ChatA(GrimPlayer playerData) {
         super(playerData);
     }
 
@@ -30,5 +30,4 @@ public class ExploitA extends Check implements PacketCheck {
             }
         }
     }
-
 }
