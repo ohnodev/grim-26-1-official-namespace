@@ -8,7 +8,6 @@ import ac.grim.grimac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 
-
 public class PacketManager implements StartableInitable {
     @Override
     public void start() {
