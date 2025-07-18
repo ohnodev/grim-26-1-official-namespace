@@ -87,6 +87,10 @@ public class CheckManager {
                 .put(PacketOrderProcessor.class, player.packetOrderProcessor)
                 .put(ExploitA.class, new ExploitA(player))
                 .put(ExploitB.class, new ExploitB(player))
+                .put(ChatA.class, new ChatA(player))
+                .put(ChatB.class, new ChatB(player))
+                .put(ChatC.class, new ChatC(player))
+                .put(ChatD.class, new ChatD(player))
                 .put(PacketOrderB.class, new PacketOrderB(player))
                 .put(PacketOrderC.class, new PacketOrderC(player))
                 .put(PacketOrderD.class, new PacketOrderD(player))
@@ -137,10 +141,6 @@ public class CheckManager {
                 .put(TeamHandler.class, new TeamHandler(player))
                 .put(ClientBrand.class, new ClientBrand(player))
                 .put(NoFall.class, new NoFall(player))
-                .put(ChatA.class, new ChatA(player))
-                .put(ChatB.class, new ChatB(player))
-                .put(ChatC.class, new ChatC(player))
-                .put(ChatD.class, new ChatD(player))
                 .put(CrashD.class, new CrashD(player))
                 .put(SetbackBlocker.class, new SetbackBlocker(player)) // Must be last class otherwise we can't check while blocking packets
                 .build();
