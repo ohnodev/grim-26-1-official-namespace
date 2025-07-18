@@ -311,9 +311,6 @@ public class CheckManager {
         for (BlockPlaceCheck check : blockPlaceChecks.values()) {
             check.onPacketReceive(packet);
         }
-        for (BlockBreakCheck check : blockBreakChecks.values()) {
-            check.onPacketReceive(packet);
-        }
     }
 
     public void onPreViaPacketReceive(final PacketReceiveEvent packet) {
@@ -321,6 +318,9 @@ public class CheckManager {
             check.onPacketReceive(packet);
         }
         for (PacketCheck check : preViaPostPredictionChecks.values()) {
+            check.onPacketReceive(packet);
+        }
+        for (PacketCheck check : blockBreakChecks.values()) {
             check.onPacketReceive(packet);
         }
     }
@@ -338,9 +338,6 @@ public class CheckManager {
         for (BlockPlaceCheck check : blockPlaceChecks.values()) {
             check.onPacketSend(packet);
         }
-        for (BlockBreakCheck check : blockBreakChecks.values()) {
-            check.onPacketSend(packet);
-        }
     }
 
     public void onPreViaPacketSend(final PacketSendEvent packet) {
@@ -348,6 +345,9 @@ public class CheckManager {
             check.onPacketSend(packet);
         }
         for (PacketCheck check : preViaPostPredictionChecks.values()) {
+            check.onPacketSend(packet);
+        }
+        for (PacketCheck check : blockBreakChecks.values()) {
             check.onPacketSend(packet);
         }
     }

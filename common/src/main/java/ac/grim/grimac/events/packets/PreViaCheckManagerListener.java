@@ -2,15 +2,17 @@ package ac.grim.grimac.events.packets;
 
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.player.GrimPlayer;
-import ac.grim.grimac.utils.anticheat.update.PositionUpdate;
-import ac.grim.grimac.utils.anticheat.update.PredictionComplete;
-import ac.grim.grimac.utils.anticheat.update.RotationUpdate;
+import ac.grim.grimac.utils.anticheat.update.*;
+import ac.grim.grimac.utils.change.BlockModification;
 import ac.grim.grimac.utils.data.HeadRotation;
 import ac.grim.grimac.utils.data.RotationData;
 import ac.grim.grimac.utils.data.TeleportAcceptData;
 import ac.grim.grimac.utils.data.VelocityData;
+import ac.grim.grimac.utils.latency.CompensatedWorld;
 import ac.grim.grimac.utils.math.VectorUtils;
+import ac.grim.grimac.utils.nmsutil.BlockBreakSpeed;
 import ac.grim.grimac.utils.nmsutil.Collisions;
+import ac.grim.grimac.utils.nmsutil.Materials;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
@@ -19,16 +21,25 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.player.DiggingAction;
 import com.github.retrooper.packetevents.protocol.world.Location;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientVehicleMove;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 public class PreViaCheckManagerListener extends PacketListenerAbstract {
+    // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
+    private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
+
     public PreViaCheckManagerListener() {
         super(PacketListenerPriority.LOW);
     }
@@ -42,6 +53,10 @@ public class PreViaCheckManagerListener extends PacketListenerAbstract {
     public void onPacketReceive(PacketReceiveEvent event) {
         GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
         if (player == null) return;
+
+        if (event.getPacketType() == PacketType.Play.Server.OPEN_WINDOW) {
+            player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> player.serverOpenedInventoryThisTick = true);
+        }
 
         // Determine if teleport BEFORE we call the pre-prediction vehicle
         if (event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE) {
@@ -115,6 +130,32 @@ public class PreViaCheckManagerListener extends PacketListenerAbstract {
             Location pos = flying.getLocation();
             boolean ignoreRotation = player.packetStateData.lastPacketWasOnePointSeventeenDuplicate && player.isIgnoreDuplicatePacketRotation();
             handleFlying(player, pos.getX(), pos.getY(), pos.getZ(), ignoreRotation ? 0 : pos.getYaw(), ignoreRotation ? 0 : pos.getPitch(), flying.hasPositionChanged(), flying.hasRotationChanged() && !ignoreRotation, flying.isOnGround(), teleportData, event);
+        }
+
+        if (event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE && player.inVehicle()) {
+            WrapperPlayClientVehicleMove move = new WrapperPlayClientVehicleMove(event);
+            Vector3d position = move.getPosition();
+
+            player.lastX = player.x;
+            player.lastY = player.y;
+            player.lastZ = player.z;
+
+            Vector3d clamp = VectorUtils.clampVector(position);
+            player.x = clamp.getX();
+            player.y = clamp.getY();
+            player.z = clamp.getZ();
+
+            player.xRot = move.getYaw();
+            player.yRot = move.getPitch();
+
+            final VehiclePositionUpdate update = new VehiclePositionUpdate(clamp, position, move.getYaw(), move.getPitch(), player.packetStateData.lastPacketWasTeleport);
+            player.checkManager.onVehiclePositionUpdate(update);
+
+            player.packetStateData.receivedSteerVehicle = false;
+        }
+
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+            handleDigging(player, event);
         }
 
         player.checkManager.onPreViaPacketReceive(event);
@@ -292,5 +333,65 @@ public class PreViaCheckManagerListener extends PacketListenerAbstract {
         }
 
         player.packetStateData.horseInteractCausedForcedRotation = false;
+    }
+
+    private void handleDigging(GrimPlayer player, PacketReceiveEvent event) {
+        player.lastBlockBreak = System.currentTimeMillis();
+
+        final WrapperPlayClientPlayerDigging packet = new WrapperPlayClientPlayerDigging(event);
+        final DiggingAction action = packet.getAction();
+
+        if (action != DiggingAction.START_DIGGING
+                && action != DiggingAction.FINISHED_DIGGING
+                && action != DiggingAction.CANCELLED_DIGGING) {
+            return;
+        }
+
+        final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, packet.getSequence(), player.compensatedWorld.getBlock(packet.getBlockPosition()));
+
+        player.checkManager.onBlockBreak(blockBreak);
+
+        if (blockBreak.isCancelled()) {
+            event.setCancelled(true);
+            player.onPacketCancel();
+            player.resyncPosition(blockBreak.position, packet.getSequence());
+            return;
+        }
+
+        player.queuedBreaks.add(blockBreak);
+
+        if (action == DiggingAction.FINISHED_DIGGING && BREAKABLE.apply(blockBreak.block.getType())) {
+            player.compensatedWorld.startPredicting();
+            player.compensatedWorld.updateBlock(blockBreak.position.x, blockBreak.position.y, blockBreak.position.z, 0);
+            player.compensatedWorld.stopPredicting(packet);
+        }
+
+        if (action == DiggingAction.START_DIGGING) {
+            double damage = BlockBreakSpeed.getBlockDamage(player, blockBreak.block);
+
+            // Instant breaking, no damage means it is unbreakable by creative players (with swords)
+            if (damage >= 1) {
+                player.compensatedWorld.startPredicting();
+                player.blockHistory.add(
+                        new BlockModification(
+                                player.compensatedWorld.getBlock(blockBreak.position),
+                                WrappedBlockState.getByGlobalId(0),
+                                blockBreak.position,
+                                GrimAPI.INSTANCE.getTickManager().currentTick,
+                                BlockModification.Cause.START_DIGGING
+                        )
+                );
+                if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13) && Materials.isWaterSource(player.getClientVersion(), blockBreak.block)) {
+                    // Vanilla uses a method to grab water flowing, but as you can't break flowing water
+                    // We can simply treat all waterlogged blocks or source blocks as source blocks
+                    player.compensatedWorld.updateBlock(blockBreak.position, StateTypes.WATER.createBlockState(CompensatedWorld.blockVersion));
+                } else {
+                    player.compensatedWorld.updateBlock(blockBreak.position.x, blockBreak.position.y, blockBreak.position.z, 0);
+                }
+                player.compensatedWorld.stopPredicting(packet);
+            }
+        }
+
+        player.compensatedWorld.handleBlockBreakPrediction(packet);
     }
 }

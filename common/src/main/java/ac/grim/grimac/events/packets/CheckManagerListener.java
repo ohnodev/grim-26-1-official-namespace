@@ -49,9 +49,6 @@ import java.util.function.Function;
 
 public class CheckManagerListener extends PacketListenerAbstract {
 
-    // Manual filter on FINISH_DIGGING to prevent clients setting non-breakable blocks to air
-    private static final Function<StateType, Boolean> BREAKABLE = type -> !type.isAir() && type.getHardness() != -1.0f && type != StateTypes.WATER && type != StateTypes.LAVA;
-
     public CheckManagerListener() {
         super(PacketListenerPriority.LOW);
     }
@@ -392,87 +389,6 @@ public class CheckManagerListener extends PacketListenerAbstract {
             if (event.getConnectionState() != ConnectionState.CONFIGURATION) return;
             player.checkManager.onPacketReceive(event);
             return;
-        }
-
-        if (event.getPacketType() == PacketType.Play.Server.OPEN_WINDOW) {
-            player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> player.serverOpenedInventoryThisTick = true);
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.VEHICLE_MOVE && player.inVehicle()) {
-            WrapperPlayClientVehicleMove move = new WrapperPlayClientVehicleMove(event);
-            Vector3d position = move.getPosition();
-
-            player.lastX = player.x;
-            player.lastY = player.y;
-            player.lastZ = player.z;
-
-            Vector3d clamp = VectorUtils.clampVector(position);
-            player.x = clamp.getX();
-            player.y = clamp.getY();
-            player.z = clamp.getZ();
-
-            player.xRot = move.getYaw();
-            player.yRot = move.getPitch();
-
-            final VehiclePositionUpdate update = new VehiclePositionUpdate(clamp, position, move.getYaw(), move.getPitch(), player.packetStateData.lastPacketWasTeleport);
-            player.checkManager.onVehiclePositionUpdate(update);
-
-            player.packetStateData.receivedSteerVehicle = false;
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
-            player.lastBlockBreak = System.currentTimeMillis();
-
-            final WrapperPlayClientPlayerDigging packet = new WrapperPlayClientPlayerDigging(event);
-            final DiggingAction action = packet.getAction();
-
-            if (action == DiggingAction.START_DIGGING || action == DiggingAction.FINISHED_DIGGING || action == DiggingAction.CANCELLED_DIGGING) {
-                final BlockBreak blockBreak = new BlockBreak(player, packet.getBlockPosition(), packet.getBlockFace(), packet.getBlockFaceId(), action, packet.getSequence(), player.compensatedWorld.getBlock(packet.getBlockPosition()));
-
-                player.checkManager.onBlockBreak(blockBreak);
-
-                if (blockBreak.isCancelled()) {
-                    event.setCancelled(true);
-                    player.onPacketCancel();
-                    player.resyncPosition(blockBreak.position, packet.getSequence());
-                } else {
-                    player.queuedBreaks.add(blockBreak);
-
-                    if (action == DiggingAction.FINISHED_DIGGING && BREAKABLE.apply(blockBreak.block.getType())) {
-                        player.compensatedWorld.startPredicting();
-                        player.compensatedWorld.updateBlock(blockBreak.position.x, blockBreak.position.y, blockBreak.position.z, 0);
-                        player.compensatedWorld.stopPredicting(packet);
-                    }
-
-                    if (action == DiggingAction.START_DIGGING) {
-                        double damage = BlockBreakSpeed.getBlockDamage(player, blockBreak.block);
-
-                        // Instant breaking, no damage means it is unbreakable by creative players (with swords)
-                        if (damage >= 1) {
-                            player.compensatedWorld.startPredicting();
-                            player.blockHistory.add(
-                                    new BlockModification(
-                                            player.compensatedWorld.getBlock(blockBreak.position),
-                                            WrappedBlockState.getByGlobalId(0),
-                                            blockBreak.position,
-                                            GrimAPI.INSTANCE.getTickManager().currentTick,
-                                            BlockModification.Cause.START_DIGGING
-                                    )
-                            );
-                            if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_13) && Materials.isWaterSource(player.getClientVersion(), blockBreak.block)) {
-                                // Vanilla uses a method to grab water flowing, but as you can't break flowing water
-                                // We can simply treat all waterlogged blocks or source blocks as source blocks
-                                player.compensatedWorld.updateBlock(blockBreak.position, StateTypes.WATER.createBlockState(CompensatedWorld.blockVersion));
-                            } else {
-                                player.compensatedWorld.updateBlock(blockBreak.position.x, blockBreak.position.y, blockBreak.position.z, 0);
-                            }
-                            player.compensatedWorld.stopPredicting(packet);
-                        }
-                    }
-
-                    player.compensatedWorld.handleBlockBreakPrediction(packet);
-                }
-            }
         }
 
         if (event.getPacketType() == PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT) {
