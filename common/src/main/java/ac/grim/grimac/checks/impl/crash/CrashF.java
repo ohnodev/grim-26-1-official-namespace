@@ -35,8 +35,6 @@ public class CrashF extends Check implements PacketCheck {
                     player.onPacketCancel();
                 }
             }
-
         }
     }
-
 }
