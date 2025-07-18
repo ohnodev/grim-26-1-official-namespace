@@ -263,6 +263,7 @@ public class CheckManager {
                 .putAll(positionChecks)
                 .putAll(rotationChecks)
                 .putAll(vehicleChecks)
+                .putAll(preViaPostPredictionChecks)
                 .putAll(postPredictionChecks)
                 .putAll(blockPlaceChecks)
                 .putAll(prePredictionChecks)
