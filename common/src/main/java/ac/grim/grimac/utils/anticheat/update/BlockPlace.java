@@ -412,7 +412,7 @@ public class BlockPlace {
         for (BlockFace face : BY_3D) {
             Vector3i modified = placed.add(face.getModX(), face.getModY(), face.getModZ());
 
-            // A block next to the player is providing power.  Therefore the block is powered
+            // A block next to the player is providing power. Therefore the block is powered
             if (player.compensatedWorld.getRawPowerAtState(face, modified.getX(), modified.getY(), modified.getZ()) > 0) {
                 return true;
             }

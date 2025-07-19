@@ -146,7 +146,7 @@ public class CorrectingPlayerInventoryStorage extends InventoryStorage {
 
         // Every five ticks, we pull a new item for the player
         // This means no desync will last longer than 10 seconds
-        // (Required as mojang has screwed up some things with inventories that we can't easily fix.
+        // (Required as mojang has screwed up some things with inventories that we can't easily fix)
         // Don't spam this as it could cause lag (I was getting 0.3 ms to query this, this is done async though)
         if (tickID % 5 == 0) {
             int slotToCheck = (tickID / 5) % getSize();

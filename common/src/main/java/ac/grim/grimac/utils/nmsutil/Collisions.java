@@ -121,7 +121,7 @@ public class Collisions {
             Vector3dm collisionResult = collideBoundingBoxLegacy(new Vector3dm(desiredX, desiredY, desiredZ), player.boundingBox, desiredMovementCollisionBoxes, order);
 
             // While running up stairs and holding space, the player activates the "lastOnGround" part without otherwise being able to step
-            // 0.03 movement must compensate for stepping elsewhere.  Too much of a hack to include in this met5hod.
+            // 0.03 movement must compensate for stepping elsewhere.  Too much of a hack to include in this method.
             boolean movingIntoGroundReal = player.pointThreeEstimator.closeEnoughToGroundToStepWithPointThree(data, clientVelY) || collisionResult.getY() != desiredY && (desiredY < 0 || clientVelY < 0);
             boolean movingIntoGround = player.lastOnGround || movingIntoGroundReal;
 
@@ -600,7 +600,7 @@ public class Collisions {
         } else {
             LongSet alreadyVisited = player.getClientVersion().isOlderThan(ClientVersion.V_1_21_5) ? null : new LongOpenHashSet();
             Set<Vector3i> traversedBlocks = new ObjectLinkedOpenHashSet<>();
-            Vector3d boxMinPosition = boundingBox.getMinPosition();
+            Vector3d boxMinPosition = boundingBox.min();
             Vector3d subtractedMinPosition = boxMinPosition.subtract(direction);
             addCollisionsAlongTravel(alreadyVisited, traversedBlocks, subtractedMinPosition, boxMinPosition, boundingBox);
 

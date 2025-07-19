@@ -2,6 +2,7 @@ package ac.grim.grimac.utils.math;
 
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.util.Vector3f;
+import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,7 @@ public class Vector3dm implements Cloneable, Serializable {
     private static final long serialVersionUID = -2657651106777219169L;
     private static final Random random = new Random();
     public static final double epsilon = 1.0E-6;
+    @Getter
     protected double x;
     protected double y;
     protected double z;
@@ -237,10 +239,6 @@ public class Vector3dm implements Cloneable, Serializable {
         double x = angleCos * this.getX() - angleSin * this.getY();
         double y = angleSin * this.getX() + angleCos * this.getY();
         return this.setX(x).setY(y);
-    }
-
-    public double getX() {
-        return this.x;
     }
 
     public @NotNull Vector3dm setX(int x) {

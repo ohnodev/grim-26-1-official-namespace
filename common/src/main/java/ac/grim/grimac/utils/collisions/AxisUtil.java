@@ -35,7 +35,7 @@ public enum AxisUtil {
         this.select = select;
     }
 
-    // I couldn't figure out what Mojang was doing but I think this looks nice
+    // I couldn't figure out what Mojang was doing, but I think this looks nice
     // Bounding boxes just have to be put into the modification thing before into this to be for faces
     public static SimpleCollisionBox combine(SimpleCollisionBox base, SimpleCollisionBox toMerge) {
         boolean insideX = toMerge.minX <= base.minX && toMerge.maxX >= base.maxX;

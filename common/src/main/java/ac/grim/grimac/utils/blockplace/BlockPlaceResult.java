@@ -411,7 +411,7 @@ public enum BlockPlaceResult {
     CROP((player, place) -> {
         WrappedBlockState below = place.getBelowState();
         if (below.getType() == StateTypes.FARMLAND) {
-            // This is wrong and depends on lighting, but the server resync's anyways plus this isn't a solid block so I don't care.
+            // This is wrong and depends on lighting, but the server resyncs anyways plus this isn't a solid block so I don't care.
             place.set();
         }
     }, ItemTypes.CARROT, ItemTypes.BEETROOT, ItemTypes.POTATO,
@@ -1054,7 +1054,7 @@ public enum BlockPlaceResult {
             place.set();
         } else if (place.isFullFace(BlockFace.DOWN)) { // TODO: Check occluding
             Vector3i placedPos = place.getPlacedBlockPos();
-            // This is wrong and depends on lighting, but the server resync's anyways plus this isn't a solid block. so I don't care.
+            // This is wrong and depends on lighting, but the server resyncs anyways plus this isn't a solid block. so I don't care.
             place.set();
         }
     }, ItemTypes.BROWN_MUSHROOM, ItemTypes.RED_MUSHROOM),
