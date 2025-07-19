@@ -14,6 +14,8 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.google.common.base.Preconditions;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
+
 
 public class PacketPlayerJoinQuit extends PacketListenerAbstract {
 
@@ -36,8 +38,7 @@ public class PacketPlayerJoinQuit extends PacketListenerAbstract {
 
     @Override
     public void onUserLogin(UserLoginEvent event) {
-        Object nativePlayerObject = event.getPlayer();
-        Preconditions.checkArgument(nativePlayerObject != null);
+        Object nativePlayerObject = Objects.requireNonNull(event.getPlayer());
 
         // This will never throw a NPE because code is run in OnUserConnect -> onPacketSend -> OnUserLogin order
         // And the user will be added to the map before the getPlayer() method call

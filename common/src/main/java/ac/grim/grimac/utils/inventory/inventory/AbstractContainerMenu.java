@@ -206,7 +206,9 @@ public abstract class AbstractContainerMenu {
                     return;
                 }
 
-                for (ItemStack itemstack9 = this.quickMoveStack(slotID); !itemstack9.isEmpty() && ItemStack.isSameItemSameTags(stack.getItem(), itemstack9); itemstack9 = this.quickMoveStack(slotID)) {
+                ItemStack itemstack9 = this.quickMoveStack(slotID);
+                while (!itemstack9.isEmpty() && ItemStack.isSameItemSameTags(stack.getItem(), itemstack9)) {
+                    itemstack9 = this.quickMoveStack(slotID);
                 }
             } else {
                 if (slotID < 0) return;

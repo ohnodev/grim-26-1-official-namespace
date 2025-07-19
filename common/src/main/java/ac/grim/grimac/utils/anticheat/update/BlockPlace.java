@@ -81,7 +81,7 @@ public class BlockPlace {
     Vector3f cursor;
     public final int sequence;
 
-    public BlockPlace(GrimPlayer player, InteractionHand hand, Vector3i blockPosition, int faceId, BlockFace face, ItemStack itemStack, HitData hitData, int sequence) {
+    public BlockPlace(GrimPlayer player, InteractionHand hand, Vector3i blockPosition, int faceId, BlockFace face, ItemStack itemStack, @Nullable HitData hitData, int sequence) {
         this.player = player;
         this.hand = hand;
         this.blockPosition = blockPosition;
@@ -502,6 +502,7 @@ public class BlockPlace {
     }
 
     // Copied from vanilla nms
+    @SuppressWarnings("StatementWithEmptyBody")
     public List<BlockFace> getNearestPlacingDirections() {
         BlockFace[] faces = getNearestLookingDirections().toArray(new BlockFace[0]);
 
@@ -509,9 +510,8 @@ public class BlockPlace {
             BlockFace direction = getDirection();
 
             // Blame mojang for this code, not me
-            int i;
-            for (i = 0; i < faces.length && faces[i] != direction.getOppositeFace(); ++i) {
-            }
+            int i = 0;
+            while (i < faces.length && faces[i++] != direction.getOppositeFace());
 
             if (i > 0) {
                 System.arraycopy(faces, 0, faces, 1, i);

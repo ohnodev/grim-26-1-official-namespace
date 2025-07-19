@@ -600,7 +600,7 @@ public class Collisions {
         } else {
             LongSet alreadyVisited = player.getClientVersion().isOlderThan(ClientVersion.V_1_21_5) ? null : new LongOpenHashSet();
             Set<Vector3i> traversedBlocks = new ObjectLinkedOpenHashSet<>();
-            Vector3d boxMinPosition = boundingBox.min();
+            Vector3d boxMinPosition = boundingBox.min().toVector3d();
             Vector3d subtractedMinPosition = boxMinPosition.subtract(direction);
             addCollisionsAlongTravel(alreadyVisited, traversedBlocks, subtractedMinPosition, boxMinPosition, boundingBox);
 

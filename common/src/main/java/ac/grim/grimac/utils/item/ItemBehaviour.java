@@ -11,6 +11,7 @@ import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.player.InteractionHand;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemBehaviour {
 
@@ -44,5 +45,4 @@ public class ItemBehaviour {
         FoodProperties foodProperties = item.getComponentOr(ComponentTypes.FOOD, null);
         return foodProperties != null ? foodProperties.isCanAlwaysEat() || player.food < 20 || player.gamemode == GameMode.CREATIVE : true;
     }
-
 }

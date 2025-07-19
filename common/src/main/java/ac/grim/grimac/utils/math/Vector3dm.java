@@ -17,7 +17,9 @@ public class Vector3dm implements Cloneable, Serializable {
     public static final double epsilon = 1.0E-6;
     @Getter
     protected double x;
+    @Getter
     protected double y;
+    @Getter
     protected double z;
 
     @Contract(pure = true)
@@ -49,13 +51,13 @@ public class Vector3dm implements Cloneable, Serializable {
     }
 
     @Contract("_, _ -> new")
-    public static @NotNull Vector3dm getMinimum(@NotNull Vector3dm v1, @NotNull Vector3dm v2) {
-        return new Vector3dm(Math.min(v1.x, v2.x), Math.min(v1.y, v2.y), Math.min(v1.z, v2.z));
+    public static @NotNull Vector3dm min(@NotNull Vector3dm a, @NotNull Vector3dm b) {
+        return new Vector3dm(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
     }
 
     @Contract("_, _ -> new")
-    public static @NotNull Vector3dm getMaximum(@NotNull Vector3dm v1, @NotNull Vector3dm v2) {
-        return new Vector3dm(Math.max(v1.x, v2.x), Math.max(v1.y, v2.y), Math.max(v1.z, v2.z));
+    public static @NotNull Vector3dm max(@NotNull Vector3dm a, @NotNull Vector3dm b) {
+        return new Vector3dm(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
     }
 
     @Contract(" -> new")
@@ -260,10 +262,6 @@ public class Vector3dm implements Cloneable, Serializable {
         return GrimMath.mojangFloor(this.x);
     }
 
-    public double getY() {
-        return this.y;
-    }
-
     public @NotNull Vector3dm setY(int y) {
         this.y = y;
         return this;
@@ -281,10 +279,6 @@ public class Vector3dm implements Cloneable, Serializable {
 
     public int getBlockY() {
         return GrimMath.mojangFloor(this.y);
-    }
-
-    public double getZ() {
-        return this.z;
     }
 
     public @NotNull Vector3dm setZ(int z) {

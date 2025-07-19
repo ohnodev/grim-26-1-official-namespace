@@ -4,6 +4,7 @@ import ac.grim.grimac.platform.api.player.OfflinePlatformPlayer;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class BukkitOfflinePlatformPlayer implements OfflinePlatformPlayer {
@@ -20,7 +21,7 @@ public class BukkitOfflinePlatformPlayer implements OfflinePlatformPlayer {
 
     @Override
     public @NotNull String getName() {
-        return offlinePlayer.getName();
+        return Objects.requireNonNull(offlinePlayer.getName());
     }
 
     @Override
@@ -30,9 +31,6 @@ public class BukkitOfflinePlatformPlayer implements OfflinePlatformPlayer {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof OfflinePlatformPlayer offlinePlatformPlayer) {
-            return this.getUniqueId().equals(offlinePlatformPlayer.getUniqueId());
-        }
-        return false;
+        return o instanceof OfflinePlatformPlayer player && this.getUniqueId().equals(player.getUniqueId());
     }
 }
