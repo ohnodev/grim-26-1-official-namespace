@@ -21,7 +21,7 @@ public class PacketOrderO extends Check implements PacketCheck {
             flying = false;
         }
 
-        if (isFlying(event.getPacketType()) && player.supportsEndTickPreVia()) {
+        if (isFlying(event.getPacketType()) && player.supportsEndTickPreVia() && !player.packetStateData.lastPacketWasTeleport) {
             flying = true;
             return;
         }
