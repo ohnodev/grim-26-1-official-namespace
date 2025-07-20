@@ -4,7 +4,7 @@ import ac.grim.grimac.utils.math.Vector3dm;
 
 public class BoundingBox {
 
-    public float minX, minY, minZ, maxX, maxY, maxZ;
+    public final float minX, minY, minZ, maxX, maxY, maxZ;
 
     public BoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         this.minX = minX;

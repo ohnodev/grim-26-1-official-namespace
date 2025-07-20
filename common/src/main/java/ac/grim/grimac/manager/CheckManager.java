@@ -68,7 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CheckManager {
     private static final AtomicBoolean initedAtomic = new AtomicBoolean(false);
     private static boolean inited;
-    public ClassToInstanceMap<AbstractCheck> allChecks;
+    public final ClassToInstanceMap<AbstractCheck> allChecks;
     private final ClassToInstanceMap<PacketCheck> packetChecks;
     private final ClassToInstanceMap<PacketCheck> preViaPacketChecks;
     private final ClassToInstanceMap<PositionCheck> positionChecks;

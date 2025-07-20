@@ -58,7 +58,7 @@ public class AirLiquidPlace extends BlockPlaceCheck {
     public void onBlockPlace(final BlockPlace place) {
         if (player.gamemode == GameMode.CREATIVE) return;
 
-        Vector3i blockPos = place.getPlacedAgainstBlockLocation();
+        Vector3i blockPos = place.position;
         StateType placeAgainst = player.compensatedWorld.getBlockType(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
         int currentTick = GrimAPI.INSTANCE.getTickManager().currentTick;

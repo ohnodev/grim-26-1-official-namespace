@@ -88,9 +88,9 @@ public class GrimVersion implements BuildableCommand {
             };
             updateMessage.set(msg);
             sender.sendMessage(msg);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
             sender.sendMessage(Component.text("Failed to check latest version.").color(NamedTextColor.RED));
-            LogUtil.error("Failed to check latest GrimAC version.", ignored);
+            LogUtil.error("Failed to check latest GrimAC version.", e);
         }
     }
 

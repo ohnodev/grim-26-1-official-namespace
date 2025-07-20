@@ -142,7 +142,7 @@ public class GrimPlayer implements GrimUser {
     public VectorData predictedVelocity = new VectorData(new Vector3dm(), VectorData.VectorType.Normal);
     public Vector3dm actualMovement = new Vector3dm();
     public Vector3dm stuckSpeedMultiplier = new Vector3dm(1, 1, 1);
-    public UncertaintyHandler uncertaintyHandler;
+    public final UncertaintyHandler uncertaintyHandler;
     public double gravity;
     public float friction;
     public double speed;

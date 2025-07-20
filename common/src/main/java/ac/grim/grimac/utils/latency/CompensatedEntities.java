@@ -50,7 +50,7 @@ public class CompensatedEntities {
     public boolean hasSprintingAttributeEnabled = false;
     public TrackerData selfTrackedEntity;
     public PacketEntitySelf self;
-    GrimPlayer player;
+    private final GrimPlayer player;
 
     public CompensatedEntities(GrimPlayer player) {
         this.player = player;

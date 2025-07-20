@@ -70,8 +70,8 @@ public class CompensatedWorld {
     public final GrimPlayer player;
     public final Long2ObjectMap<Column> chunks;
     // Packet locations for blocks
-    public Set<PistonData> activePistons = new HashSet<>();
-    public Set<ShulkerData> openShulkerBoxes = new HashSet<>();
+    public final Set<PistonData> activePistons = new HashSet<>();
+    public final Set<ShulkerData> openShulkerBoxes = new HashSet<>();
     // 1.17 with datapacks, and 1.18, have negative world offset values
     @Getter
     private int minHeight = 0;

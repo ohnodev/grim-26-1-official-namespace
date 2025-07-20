@@ -7,12 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
+@lombok.RequiredArgsConstructor
 public class BukkitOfflinePlatformPlayer implements OfflinePlatformPlayer {
     private final OfflinePlayer offlinePlayer;
-
-    public BukkitOfflinePlatformPlayer(OfflinePlayer offlinePlayer) {
-        this.offlinePlayer = offlinePlayer;
-    }
 
     @Override
     public boolean isOnline() {
