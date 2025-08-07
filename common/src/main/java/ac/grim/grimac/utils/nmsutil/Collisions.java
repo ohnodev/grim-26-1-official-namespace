@@ -42,7 +42,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class Collisions {
+public final class Collisions {
     private static final double COLLISION_EPSILON = 1.0E-7;
 
     private static final boolean IS_FOURTEEN; // Optimization for chunks with empty block count
@@ -127,24 +127,27 @@ public class Collisions {
 
             // If the player has x or z collision, is going in the downwards direction in the last or this tick, and can step up
             // If not, just return the collisions without stepping up that we calculated earlier
-            if (stepUpHeight > 0.0F && movingIntoGround && (collisionResult.getX() != desiredX || collisionResult.getZ() != desiredZ)) {
+
+            // At high ping, if you get setback, then you can reach the ground in time. When you are teleported back up by the setback, the game allows you to step up legitimately. By disallowing stepping we prevent a step exploit.
+            final boolean disallowStepping = player.getSetbackTeleportUtil().getRequiredSetBack() != null && player.getSetbackTeleportUtil().getRequiredSetBack().getTicksComplete() == 1;
+            if (!disallowStepping && stepUpHeight > 0.0F && movingIntoGround && (collisionResult.getX() != desiredX || collisionResult.getZ() != desiredZ)) {
                 player.uncertaintyHandler.isStepMovement = true;
                 // 1.21 significantly refactored this
                 if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21)) {
-                    SimpleCollisionBox box2 = movingIntoGroundReal ? player.boundingBox.copy().offset(0.0, collisionResult.getY(), 0.0) : player.boundingBox.copy();
-                    SimpleCollisionBox box3 = box2.copy().expandToCoordinate(desiredX, stepUpHeight, desiredZ);
+                    SimpleCollisionBox startingOffsetBox = movingIntoGroundReal ? player.boundingBox.copy().offset(0.0, collisionResult.getY(), 0.0) : player.boundingBox.copy();
+                    SimpleCollisionBox offsetByHorizAndStepBox = startingOffsetBox.copy().expandToCoordinate(desiredX, stepUpHeight, desiredZ);
                     if (!movingIntoGroundReal) {
-                        box3 = box3.copy().expandToCoordinate(0.0, -1.0E-5F, 0.0);
+                        offsetByHorizAndStepBox = offsetByHorizAndStepBox.copy().expandToCoordinate(0.0, -1.0E-5F, 0.0);
                     }
 
-                    final List<SimpleCollisionBox> list2 = new ArrayList<>();
-                    getCollisionBoxes(player, box3, list2, false);
-                    final float[] stepHeights = collectStepHeights(box2, list2, (float) stepUpHeight, (float) collisionResult.getY());
+                    final List<SimpleCollisionBox> stepCollisions = new ArrayList<>();
+                    getCollisionBoxes(player, offsetByHorizAndStepBox, stepCollisions, false);
+                    final float[] stepHeights = collectStepHeights(startingOffsetBox, stepCollisions, (float) stepUpHeight, (float) collisionResult.getY());
 
                     for (float stepHeight : stepHeights) {
-                        Vector3dm vec3d2 = collideBoundingBoxLegacy(new Vector3dm(desiredX, stepHeight, desiredZ), box2, list2, order);
+                        Vector3dm vec3d2 = collideBoundingBoxLegacy(new Vector3dm(desiredX, stepHeight, desiredZ), startingOffsetBox, stepCollisions, order);
                         if (getHorizontalDistanceSqr(vec3d2) > getHorizontalDistanceSqr(collisionResult)) {
-                            final double d = player.boundingBox.minY - box2.minY;
+                            final double d = player.boundingBox.minY - startingOffsetBox.minY;
                             collisionResult = vec3d2.add(new Vector3dm(0.0, -d, 0.0));
                             break;
                         }
