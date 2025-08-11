@@ -8,12 +8,13 @@ import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+
+import static com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying.isFlying;
 
 // Class from https://github.com/Tecnio/AntiCheatBase/blob/master/src/main/java/me/tecnio/anticheat/check/Check.java
 @Getter
@@ -174,10 +175,6 @@ public class Check extends GrimProcessor implements AbstractCheck {
     public boolean isTransaction(PacketTypeCommon packetType) {
         return packetType == PacketType.Play.Client.PONG ||
                 packetType == PacketType.Play.Client.WINDOW_CONFIRMATION;
-    }
-
-    public boolean isFlying(PacketTypeCommon packetType) {
-        return WrapperPlayClientPlayerFlying.isFlying(packetType);
     }
 
     public boolean isUpdate(PacketTypeCommon packetType) {

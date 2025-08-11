@@ -8,6 +8,8 @@ import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 
+import static com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying.isFlying;
+
 @CheckData(name = "PacketOrderO", experimental = true)
 public class PacketOrderO extends Check implements PacketCheck {
     public PacketOrderO(final GrimPlayer player) {
