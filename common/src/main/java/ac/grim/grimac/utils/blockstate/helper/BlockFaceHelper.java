@@ -46,11 +46,4 @@ public class BlockFaceHelper {
             default -> BlockFace.NORTH;
         };
     }
-
-    public Vector3dm offset(@NotNull Vector3dm toOffset, @NotNull BlockFace face) {
-        toOffset.setX(toOffset.getX() + face.getModX());
-        toOffset.setY(toOffset.getY() + face.getModY());
-        toOffset.setZ(toOffset.getZ() + face.getModZ());
-        return toOffset;
-    }
 }
