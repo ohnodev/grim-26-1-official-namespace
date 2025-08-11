@@ -108,11 +108,16 @@ jobs:
     - name: Prepare Final Changelog for Modrinth
       if: github.event_name == 'push'
       id: changelog
+      env:
+          CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
       run: |
-          NOTES='${{ steps.git-cliff.outputs.content }}'
+          # Read the content from the environment variable. This is safe.
+          NOTES="$CHANGELOG_CONTENT"
+          
           if [ -z "$NOTES" ]; then
             NOTES="* No new code changes in this build."
           fi
+          
           {
             echo "notes<<EOF"
             echo "$NOTES"
