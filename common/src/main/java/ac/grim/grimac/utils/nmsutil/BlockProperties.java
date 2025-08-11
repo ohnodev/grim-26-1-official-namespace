@@ -16,7 +16,9 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.util.Vector3i;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class BlockProperties {
     public static float getFrictionInfluencedSpeed(float f, GrimPlayer player) {
         if (player.lastOnGround) {

@@ -24,11 +24,13 @@ import com.github.retrooper.packetevents.protocol.world.states.type.StateType;
 import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.google.common.collect.Sets;
+import lombok.experimental.UtilityClass;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 
+@UtilityClass
 public class BlockBreakSpeed {
     // temporary hardcode to workaround PE bug https://github.com/retrooper/packetevents/issues/1217; see https://github.com/GrimAnticheat/Grim/issues/2117
     private static final Set<StateType> HARVESTABLE_TYPES_1_21_4 = Sets.newHashSet(

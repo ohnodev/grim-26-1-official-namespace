@@ -2,10 +2,12 @@ package ac.grim.grimac.utils.blockstate.helper;
 
 import ac.grim.grimac.utils.math.Vector3dm;
 import com.github.retrooper.packetevents.protocol.world.BlockFace;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@UtilityClass
 public class BlockFaceHelper {
     @Contract(pure = true)
     public static boolean isFaceVertical(@Nullable BlockFace face) {

@@ -3,11 +3,13 @@ package ac.grim.grimac.utils.reflection;
 import ac.grim.grimac.utils.anticheat.LogUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.util.reflection.Reflection;
+import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+@UtilityClass
 public class GeyserUtil {
     private static boolean CHECKED_FOR_GEYSER = false;
     private static boolean GEYSER_PRESENT = false;

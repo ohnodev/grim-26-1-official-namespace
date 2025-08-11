@@ -7,7 +7,9 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class Riptide {
     public static Vector3dm getRiptideVelocity(GrimPlayer player) {
         ItemStack main = player.getInventory().getHeldItem();
