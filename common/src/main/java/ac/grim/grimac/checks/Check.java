@@ -172,7 +172,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
         return offset > 0.001 ? String.format("%.5f", offset) : String.format("%.2E", offset);
     }
 
-    public boolean isTransaction(PacketTypeCommon packetType) {
+    public static boolean isTransaction(PacketTypeCommon packetType) {
         return packetType == PacketType.Play.Client.PONG ||
                 packetType == PacketType.Play.Client.WINDOW_CONFIRMATION;
     }
