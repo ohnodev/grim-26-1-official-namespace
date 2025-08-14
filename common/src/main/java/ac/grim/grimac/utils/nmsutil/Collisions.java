@@ -482,18 +482,18 @@ public final class Collisions {
             if (player.compensatedEntities.hasPotionEffect(PotionTypes.WEAVING)) {
                 player.stuckSpeedMultiplier = new Vector3dm(0.5, 0.25, 0.5);
             } else {
-                player.stuckSpeedMultiplier = new Vector3dm(0.25, 0.05000000074505806, 0.25);
+                player.stuckSpeedMultiplier = new Vector3dm(0.25, 0.05f, 0.25);
             }
         }
 
         if (blockType == StateTypes.SWEET_BERRY_BUSH
                 && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
-            player.stuckSpeedMultiplier = new Vector3dm(0.800000011920929, 0.75, 0.800000011920929);
+            player.stuckSpeedMultiplier = new Vector3dm(0.8f, 0.75, 0.8f);
         }
 
         if (blockType == StateTypes.POWDER_SNOW && blockX == Math.floor(player.x) && blockY == Math.floor(player.y) && blockZ == Math.floor(player.z)
                 && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_17)) {
-            player.stuckSpeedMultiplier = new Vector3dm(0.8999999761581421, 1.5, 0.8999999761581421);
+            player.stuckSpeedMultiplier = new Vector3dm(0.9f, 1.5, 0.9f);
         }
 
         if (blockType == StateTypes.SOUL_SAND && player.getClientVersion().isOlderThan(ClientVersion.V_1_15)) {
