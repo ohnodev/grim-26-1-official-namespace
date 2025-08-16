@@ -739,6 +739,8 @@ public class GrimPlayer implements GrimUser {
     }
 
     public void handleDismountVehicle(PacketSendEvent event) {
+        EntityType entityType = getVehicleType();
+
         // Help prevent transaction split
         sendTransaction();
 
@@ -756,8 +758,9 @@ public class GrimPlayer implements GrimUser {
         latencyUtils.addRealTimeTask(lastTransactionSent.get(), () -> {
             this.vehicleData.wasVehicleSwitch = true;
             // Pre-1.14 players desync sprinting attribute when in vehicle to be false, sprinting itself doesn't change
-            // 1.21.5 introduced this again!
-            if (getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_14) || getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5)) {
+            // 1.21.5 introduced this again! (only in minecarts?)
+            if (getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_14) ||
+                    (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_5) && EntityTypes.MINECART == entityType)) {
                 compensatedEntities.hasSprintingAttributeEnabled = false;
             }
         });
