@@ -57,17 +57,14 @@ public class PredictionEngineElytra extends PredictionEngine {
     @Override
     public List<VectorData> applyInputsToVelocityPossibilities(GrimPlayer player, Set<VectorData> possibleVectors, float speed) {
         List<VectorData> results = new ArrayList<>();
-        Vector3dm currentLook = ReachUtils.getLook(player, player.xRot, player.yRot);
-        player.trigHandler.toggleShitMath();
-        Vector3dm shitmathLook = ReachUtils.getLook(player, player.xRot, player.yRot);
-        player.trigHandler.toggleShitMath();
 
-        for (VectorData data : possibleVectors) {
-            // We must bruteforce Optifine ShitMath
-            for (int shitmath = 0; shitmath <= 1; shitmath++, player.trigHandler.toggleShitMath()) {
-                for (int applyStuckSpeed = 1; applyStuckSpeed >= 0; applyStuckSpeed--) {
-                    if (applyStuckSpeed == 0 && player.isForceStuckSpeed()) break;
-                    Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), shitmath == 1 ? shitmathLook : currentLook);
+        // We must bruteforce Optifine ShitMath
+        for (int shitmath = 0; shitmath <= 1; shitmath++, player.trigHandler.toggleShitMath()) {
+            Vector3dm currentLook = ReachUtils.getLook(player, player.xRot, player.yRot);
+            for (int applyStuckSpeed = 1; applyStuckSpeed >= 0; applyStuckSpeed--) {
+                if (applyStuckSpeed == 0 && player.isForceStuckSpeed()) break;
+                for (VectorData data : possibleVectors) {
+                    Vector3dm elytraResult = getElytraMovement(player, data.vector.clone(), currentLook);
                     if (applyStuckSpeed != 0) elytraResult.multiply(player.stuckSpeedMultiplier);
                     elytraResult.multiply(new Vector3dm(0.99F, 0.98F, 0.99F));
                     VectorData modified = data.returnNewModified(elytraResult, VectorData.VectorType.InputResult);
