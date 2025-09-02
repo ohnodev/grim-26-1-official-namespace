@@ -29,6 +29,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientUseItem;
+import org.jetbrains.annotations.NotNull;
 
 public class PacketPlayerDigging extends PacketListenerAbstract {
 
@@ -44,7 +45,9 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
     private static final boolean RELIABLE_COMPONENT_SYSTEM = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21_4);
     private static final boolean SERVER_HAS_OFFHAND = PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_9);
 
-    public static void handleUseItem(GrimPlayer player, ItemStack item, InteractionHand hand) {
+    public static void handleUseItem(@NotNull GrimPlayer player, @NotNull InteractionHand hand) {
+        ItemStack item = player.getInventory().getItemInHand(hand);
+
         if (item == null) {
             player.packetStateData.setSlowedByUsingItem(false);
             return;
@@ -250,20 +253,17 @@ public class PacketPlayerDigging extends PacketListenerAbstract {
             final GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
 
-            final InteractionHand hand = SERVER_HAS_OFFHAND && event.getPacketType() == PacketType.Play.Client.USE_ITEM
-                    ? new WrapperPlayClientUseItem(event).getHand()
-                    : InteractionHand.MAIN_HAND;
-
             if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_8)
                     && player.gamemode == GameMode.SPECTATOR)
                 return;
 
+            final InteractionHand hand = SERVER_HAS_OFFHAND && event.getPacketType() == PacketType.Play.Client.USE_ITEM
+                    ? new WrapperPlayClientUseItem(event).getHand()
+                    : InteractionHand.MAIN_HAND;
+
             player.packetStateData.slowedByUsingItemTransaction = player.lastTransactionReceived.get();
 
-            final ItemStack item = hand == InteractionHand.MAIN_HAND ?
-                    player.getInventory().getHeldItem() : player.getInventory().getOffHand();
-
-            handleUseItem(player, item, hand);
+            handleUseItem(player, hand);
         }
     }
 }

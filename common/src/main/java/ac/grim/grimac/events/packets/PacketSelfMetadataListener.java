@@ -196,13 +196,11 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
 
                             // Player has gotten this packet
                             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get() + 1, () -> {
-                                ItemStack item = isOffhand ? player.getInventory().getOffHand() : player.getInventory().getHeldItem();
-
                                 // If the player hasn't overridden this packet by using or stopping using an item
                                 // Vanilla update order: Receive this -> process new interacts
                                 // Grim update order: Process new interacts -> receive this
                                 if (player.packetStateData.slowedByUsingItemTransaction < markedTransaction) {
-                                    PacketPlayerDigging.handleUseItem(player, item, isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
+                                    PacketPlayerDigging.handleUseItem(player, isOffhand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
                                     // The above line is a hack to fake activate use item
                                     player.packetStateData.setSlowedByUsingItem(isActive);
 
