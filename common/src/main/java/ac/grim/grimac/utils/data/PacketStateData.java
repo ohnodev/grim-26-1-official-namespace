@@ -12,7 +12,7 @@ public class PacketStateData {
     public boolean cancelDuplicatePacket, lastPacketWasOnePointSeventeenDuplicate = false;
     public boolean lastTransactionPacketWasValid = false;
     public int lastSlotSelected;
-    public InteractionHand eatingHand = InteractionHand.MAIN_HAND;
+    public InteractionHand itemInUseHand = InteractionHand.MAIN_HAND;
     public long lastRiptide = 0;
     public boolean tryingToRiptide = false;
     public int slowedByUsingItemTransaction = Integer.MIN_VALUE;

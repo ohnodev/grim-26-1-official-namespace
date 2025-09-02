@@ -267,7 +267,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                             !player.getInventory().getHeldItem().is(slot.getItem().getType()) || player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_8)
                     ) || slot.getSlot() == 45 && !player.getInventory().getOffHand().is(slot.getItem().getType())) {
                         InteractionHand hand = slot.getSlot() == 45 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-                        if (hand == player.packetStateData.eatingHand) {
+                        if (hand == player.packetStateData.itemInUseHand) {
                             player.packetStateData.setSlowedByUsingItem(false);
                         }
 
@@ -292,7 +292,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                         }
                     } else {
                         if (items.getItems().size() > 45 && !player.getInventory().getOffHand().is(items.getItems().get(45).getType())) {
-                            if (player.packetStateData.eatingHand == InteractionHand.OFF_HAND) {
+                            if (player.packetStateData.itemInUseHand == InteractionHand.OFF_HAND) {
                                 player.packetStateData.setSlowedByUsingItem(false);
                             }
 
@@ -302,7 +302,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                         }
 
                         if (!player.getInventory().getHeldItem().is(items.getItems().get(player.packetStateData.lastSlotSelected + 36).getType())) {
-                            if (player.packetStateData.eatingHand == InteractionHand.MAIN_HAND) {
+                            if (player.packetStateData.itemInUseHand == InteractionHand.MAIN_HAND) {
                                 player.packetStateData.setSlowedByUsingItem(false);
                             }
 
