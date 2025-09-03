@@ -473,7 +473,7 @@ public class GrimPlayer implements GrimUser {
             }
 
             if (async) {
-                ChannelHelper.runInEventLoop(user.getChannel(), () -> {
+                runSafely(() -> {
                     addTransactionSend(transactionID);
                     user.writePacket(packet);
                 });

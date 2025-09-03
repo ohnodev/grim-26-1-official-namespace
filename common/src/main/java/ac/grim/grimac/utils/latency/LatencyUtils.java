@@ -35,7 +35,7 @@ public class LatencyUtils {
     public void addRealTimeTask(int transaction, boolean async, Runnable runnable) {
         if (player.lastTransactionReceived.get() >= transaction) { // If the player already responded to this transaction
             if (async) {
-                ChannelHelper.runInEventLoop(player.user.getChannel(), runnable); // Run it sync to player channel
+                player.runSafely(runnable);
             } else {
                 runnable.run();
             }

@@ -211,7 +211,7 @@ public class CompensatedWorld {
             // no need to support Folia on this one because Folia is 1.19+ only
             GrimAPI.INSTANCE.getScheduler().getGlobalRegionScheduler().run(GrimAPI.INSTANCE.getGrimPlugin(), () -> {
                 // And then we jump back to the netty thread to simulate that Via sent the confirmation
-                ChannelHelper.runInEventLoop(player.user.getChannel(), () -> applyBlockChanges(toApplyBlocks));
+                player.runSafely(() -> applyBlockChanges(toApplyBlocks));
             });
         }
     }

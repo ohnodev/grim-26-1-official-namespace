@@ -183,8 +183,8 @@ public class GrimExternalAPI implements GrimAbstractAPI, ConfigReloadObserver, S
         // Don't reload players if the plugin hasn't started yet
         if (!started) return;
         // Reload checks for all players
-        for (GrimPlayer grimPlayer : GrimAPI.INSTANCE.getPlayerDataManager().getEntries()) {
-            ChannelHelper.runInEventLoop(grimPlayer.user.getChannel(), () -> grimPlayer.reload(configManager));
+        for (GrimPlayer player : GrimAPI.INSTANCE.getPlayerDataManager().getEntries()) {
+            player.runSafely(() -> player.reload(configManager));
         }
     }
 

@@ -90,7 +90,7 @@ public class DefaultResyncHandler implements ResyncHandler {
                                 }
 
                                 WrapperPlayServerMultiBlockChange packet = new WrapperPlayServerMultiBlockChange(new Vector3i(currChunkX, currChunkY, currChunkZ), true, encodedBlocks);
-                                ChannelHelper.runInEventLoop(player.user.getChannel(), () -> player.user.sendPacket(packet));
+                                player.runSafely(() -> player.user.sendPacket(packet));
                             }
                         }
                     }
