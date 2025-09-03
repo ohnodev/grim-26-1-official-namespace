@@ -59,7 +59,7 @@ public class BlockBreakSpeed {
     public static double getBlockDamage(GrimPlayer player, WrappedBlockState block) {
         // GET destroy speed
         // Starts with itemstack get destroy speed
-        ItemStack tool = player.getInventory().getHeldItem();
+        ItemStack tool = player.inventory.getHeldItem();
         ItemType toolType = tool.getType();
 
         if (player.gamemode == GameMode.CREATIVE) {
@@ -252,7 +252,7 @@ public class BlockBreakSpeed {
             if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21) && PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_21)) {
                 speedMultiplier *= (float) player.compensatedEntities.self.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED);
             } else {
-                if (EnchantmentHelper.getMaximumEnchantLevel(player.getInventory(), EnchantmentTypes.AQUA_AFFINITY) == 0) {
+                if (EnchantmentHelper.getMaximumEnchantLevel(player.inventory, EnchantmentTypes.AQUA_AFFINITY) == 0) {
                     speedMultiplier /= 5;
                 }
             }

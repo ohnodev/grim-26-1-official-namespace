@@ -915,7 +915,7 @@ public enum CollisionData implements CollisionFactory {
                     : new SimpleCollisionBox(0.0, 0.0, 0.0, 1.0, 0.9, 1.0, false);
         }
 
-        ItemStack boots = player.getInventory().getBoots();
+        ItemStack boots = player.inventory.getBoots();
         if (player.lastY > y + 1 - 1e-5 && boots != null && boots.getType() == ItemTypes.LEATHER_BOOTS && !player.isSneaking && !player.inVehicle())
             return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
 

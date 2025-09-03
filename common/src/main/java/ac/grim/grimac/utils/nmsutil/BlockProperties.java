@@ -181,7 +181,7 @@ public class BlockProperties {
         // This is the 1.16.0 and 1.16.1 method for detecting if the player is on soul speed
         if (player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16) && player.getClientVersion().isOlderThanOrEquals(ClientVersion.V_1_16_1)) {
             StateType onBlock = BlockProperties.getOnBlock(player, pos.getX(), pos.getY(), pos.getZ());
-            if (onBlock == StateTypes.SOUL_SAND && player.getInventory().getBoots().getEnchantmentLevel(EnchantmentTypes.SOUL_SPEED) > 0)
+            if (onBlock == StateTypes.SOUL_SAND && player.inventory.getBoots().getEnchantmentLevel(EnchantmentTypes.SOUL_SPEED) > 0)
                 return 1.0f;
         }
 
@@ -201,7 +201,7 @@ public class BlockProperties {
             // On 1.21, let attributes handle this
             if (player.getClientVersion().isOlderThan(ClientVersion.V_1_21)
                     && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_16_2)
-                    && player.getInventory().getBoots().getEnchantmentLevel(EnchantmentTypes.SOUL_SPEED) > 0)
+                    && player.inventory.getBoots().getEnchantmentLevel(EnchantmentTypes.SOUL_SPEED) > 0)
                 return 1.0f;
             return 0.4f;
         }
