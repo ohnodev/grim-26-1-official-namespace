@@ -540,7 +540,7 @@ public enum CollisionData implements CollisionFactory {
         int layers = data.getLayers();
         if (layers == 1 && version.isNewerThanOrEquals(ClientVersion.V_1_13)) {
             if (PacketEvents.getAPI().getServerManager().getVersion().isNewerThanOrEquals(ServerVersion.V_1_13)
-                    || !ViaVersionUtil.isAvailable() || !Via.getConfig().isSnowCollisionFix()) {
+                    || !ViaVersionUtil.isAvailable || !Via.getConfig().isSnowCollisionFix()) {
                 return NoCollisionBox.INSTANCE;
             }
 

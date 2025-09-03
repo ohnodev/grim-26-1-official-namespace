@@ -542,7 +542,7 @@ public class GrimPlayer implements GrimUser {
             GrimAPI.INSTANCE.getPlayerDataManager().remove(user);
         }
 
-        if (viaPacketTracker == null && ViaVersionUtil.isAvailable() && uuid != null) {
+        if (viaPacketTracker == null && ViaVersionUtil.isAvailable && uuid != null) {
             UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
             viaPacketTracker = connection != null ? connection.getPacketTracker() : null;
             this.viaUserConnection = connection;
