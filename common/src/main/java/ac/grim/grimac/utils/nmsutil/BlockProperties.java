@@ -5,7 +5,6 @@ import ac.grim.grimac.utils.data.MainSupportingBlockData;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityHorse;
 import ac.grim.grimac.utils.data.packetentity.PacketEntityStrider;
 import ac.grim.grimac.utils.math.GrimMath;
-import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.enchantment.type.EnchantmentTypes;
@@ -126,7 +125,7 @@ public class BlockProperties {
     }
 
     private static Vector3i getOnPos(GrimPlayer player, Vector3d playerPos, MainSupportingBlockData mainSupportingBlockData, float searchBelowPlayer) {
-        Vector3i mainBlockPos = mainSupportingBlockData.getBlockPos();
+        Vector3i mainBlockPos = mainSupportingBlockData.blockPos();
         if (mainBlockPos != null) {
             StateType blockstate = player.compensatedWorld.getBlockType(mainBlockPos.x, mainBlockPos.y, mainBlockPos.z);
 
