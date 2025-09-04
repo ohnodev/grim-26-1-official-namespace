@@ -639,11 +639,6 @@ public class GrimPlayer implements GrimUser {
         return inVehicle() ? getVehicle().type : null;
     }
 
-    @Deprecated(forRemoval = true)
-    public CompensatedInventory getInventory() {
-        return inventory;
-    }
-
     public double[] getPossibleEyeHeights() { // We don't return sleeping eye height
         // 1.8 Players once again ruin my clean switch-case
         if (this.getClientVersion().isOlderThan(ClientVersion.V_1_9)) {
