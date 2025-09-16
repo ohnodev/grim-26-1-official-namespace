@@ -1,13 +1,13 @@
 name: Gradle Package
 
+
 on:
-    # Only apply for branches we care
+    workflow_dispatch:
     push:
         branches:
             - '2.0'
             - 'dev'
             - 'release/**'
-    workflow_dispatch:
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v4 # Handles Gradle wrapper validation and basic caching
       with:
           # Allow cache writes on main and dev branch
-          cache-read-only: ${{ github.ref != 'refs/heads/2.0' && github.ref != 'refs/heads/dev' }}
+          cache-read-only: ${{ github.ref_name != '2.0' && github.ref_name != 'dev' }}
 
     - name: Cache Gradle Loom Cache
       uses: actions/cache@v4
