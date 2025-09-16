@@ -1,20 +1,12 @@
 name: Gradle Package
 
 on:
-    # Only apply for branches we care about and if logic actually changes
+    # Only apply for branches we care
     push:
         branches:
             - '2.0'
             - 'dev'
             - 'release/**'
-        paths:
-            - '**.java'
-            - '**.kt'
-            - '**.kts'
-            - '**.gradle'
-            - '**.properties'
-            - '**.yml'
-            - '**.toml'
     workflow_dispatch:
 
 jobs:
