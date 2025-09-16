@@ -199,7 +199,7 @@ jobs:
         #  Publish version to the API
         #------------------------------------------------------------------
     - name: Publish to API
-      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || startsWith(github.ref_name, 'release/')) && secrets.BUILD_UPDATE_URL != ''
+      if: github.event_name == 'push' && (github.ref_name == '2.0' || github.ref_name == 'dev' || startsWith(github.ref_name, 'release/'))
       uses: fjogeleit/http-request-action@v1
       with:
           url: ${{ secrets.BUILD_UPDATE_URL }}
