@@ -91,20 +91,26 @@ object VersionUtil {
             .replace(Regex("^[ ._-]+|[ ._-]+$"), "")
             .replace(Regex("^heads_"), "")
 
+        val mainBranch = System.getenv("GRIM_MAIN_BRANCH") ?: "2.0"
+
         return when (branch) {
-            "main", "2.0", BuildConfig.mainBranch -> null                    // ← ignore these branches
+            "main", mainBranch -> null                    // ← ignore these branches
             else           -> branch
         }
     }
 
     fun getGitUser(): String {
-        val stdout = ByteArrayOutputStream()
-        ProcessBuilder("git", "config", "user.name")
-            .redirectErrorStream(true)
-            .start()
-            .apply { waitFor() }
-            .inputStream.use { stdout.writeBytes(it.readAllBytes()) }
-        return stdout.toString().trim()
+        try {
+            val stdout = ByteArrayOutputStream()
+            ProcessBuilder("git", "config", "user.name")
+                .redirectErrorStream(true)
+                .start()
+                .apply { waitFor() }
+                .inputStream.use { stdout.writeBytes(it.readAllBytes()) }
+            return stdout.toString().trim()
+        } catch (e: Exception) {
+            return "unknown"
+        }
     }
 
 }

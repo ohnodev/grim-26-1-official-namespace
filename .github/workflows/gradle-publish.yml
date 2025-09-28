@@ -2,6 +2,8 @@ name: Gradle Package
 
 on:
     workflow_dispatch:
+    release:
+        types: [published]
     push:
         branches:
             - 'main'
@@ -27,7 +29,8 @@ jobs:
       packages: write
 
     env:
-      IS_PUBLISH_BRANCH: ${{ github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/')) }}
+      GRIM_MAIN_BRANCH: ${{ github.event.repository.default_branch }}
+      IS_PUBLISH_BRANCH: ${{ github.repository == 'GrimAnticheat/Grim' && (github.ref_name == github.event.repository.default_branch || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/')) }}
 
     steps:
     - name: Checkout repository with full history
@@ -35,6 +38,7 @@ jobs:
       with:
           # Required to fetch commit history for git-cliff to analyze and generate changelog
           # Limited to last 200 commits
+          persist-credentials: false
           fetch-depth: 200
 
     - name: Set up JDK 21
@@ -49,7 +53,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v4 # Handles Gradle wrapper validation and basic caching
       with:
           # Allow cache writes on main and dev branch
-          cache-read-only: ${{ github.ref_name != '2.0' && github.ref_name != 'dev' && github.ref_name != 'main'}}
+          cache-read-only: ${{ github.ref_name != github.event.repository.default_branch && github.ref_name != 'dev' && github.ref_name != 'main'}}
 
     - name: Cache Gradle Loom Cache
       uses: actions/cache@v4
@@ -193,12 +197,12 @@ jobs:
         #------------------------------------------------------------------
         #  Publish version to the API
         #------------------------------------------------------------------
-    -   name: Publish to API
-        if: ${{ env.IS_PUBLISH_BRANCH == true }}
-        run: |
-            curl -X POST \
-                 -H "Content-Type: application/json" \
-                 -H "User-Agent: GrimACBuilder/v1" \
-                 -H "Authorization: Bearer ${{ secrets.BUILD_UPDATE_TOKEN }}" \
-                 -d '{"org": "${{ github.repository_owner }}", "repository": "${{ github.event.repository.name }}", "branch": "${{ github.ref_name }}", "version": "${{ env.MAIN_VERSION }}"}' \
-                 "${{ secrets.BUILD_UPDATE_URL }}"
+    - name: Publish to API
+      if: ${{ env.IS_PUBLISH_BRANCH == true && secrets.BUILD_UPDATE_URL != '' }}
+      run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "User-Agent: GrimACBuilder/v1" \
+            -H "Authorization: Bearer ${{ secrets.BUILD_UPDATE_TOKEN }}" \
+            -d '{"org": "${{ github.repository_owner }}", "repository": "${{ github.event.repository.name }}", "branch": "${{ github.ref_name }}", "version": "${{ env.MAIN_VERSION }}"}' \
+            "${{ secrets.BUILD_UPDATE_URL }}"

@@ -3,7 +3,6 @@ package versioning
 import org.gradle.api.Project
 import org.gradle.internal.extensions.stdlib.toDefaultLowerCase
 import versioning.BuildConfig.init
-import versioning.BuildConfig.mainBranch
 import versioning.BuildConfig.mavenLocalOverride
 import versioning.BuildConfig.release
 import versioning.BuildConfig.relocate
@@ -59,7 +58,6 @@ object BuildConfig {
         _relocate = resolveBool(project, "relocate", altKey = "RELOCATE_JAR", default = true)
         _release = resolveBool(project, "release", default = false)
         _mavenLocalOverride = resolveBool(project, "mavenLocalOverride", default = false)
-        _mainBranch = resolveRaw(project, "mainBranch") ?: "2.0"
     }
 
     // Unified resolution logic (System > Gradle > Env)
@@ -89,7 +87,6 @@ object BuildConfig {
     private var _relocate: Boolean? = null
     private var _release: Boolean? = null
     private var _mavenLocalOverride: Boolean? = null
-    private var _mainBranch: String? = null
 
     /** If true, shades PacketEvents into the jar. Default: true. */
     val shadePE: Boolean get() = _shadePE
@@ -106,6 +103,4 @@ object BuildConfig {
     val mavenLocalOverride: Boolean get() = _mavenLocalOverride
         ?: error("BuildConfig.release accessed before init() was called")
 
-    val mainBranch: String get() = _mainBranch
-        ?: error("BuildConfig.mainBranch accessed before init() was called")
 }
