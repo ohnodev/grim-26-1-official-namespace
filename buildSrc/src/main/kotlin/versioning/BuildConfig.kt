@@ -42,7 +42,6 @@ import versioning.BuildConfig.shadePE
  * @property relocate If true, relocates shaded dependencies to avoid conflicts. Default: true.
  * @property release  If true, omits commit hash and modifiers from version string. Default: false.
  * @property mavenLocalOverride If true, will make artifacts in mavenLocal() will be used instead of their remote counterparts for this build. Default: false
- * @property mainBranch The branch to consider as the main branch. Default: "2.0"
  */
 object BuildConfig {
 
