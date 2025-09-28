@@ -198,7 +198,7 @@ jobs:
         #  Publish version to the API
         #------------------------------------------------------------------
     - name: Publish to API
-      if: ${{ env.IS_PUBLISH_BRANCH == true && secrets.BUILD_UPDATE_URL != '' }}
+      if: ${{ env.IS_PUBLISH_BRANCH == true }}
       run: |
           curl -X POST \
             -H "Content-Type: application/json" \
