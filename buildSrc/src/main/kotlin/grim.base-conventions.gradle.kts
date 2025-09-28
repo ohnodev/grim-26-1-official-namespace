@@ -55,7 +55,7 @@ tasks {
     processResources {
         val properties = mapOf(
             "timestamp" to rootProject.ext["timestamp"],
-            "version" to project.version,
+            "version" to project.version.toString(),
             "git_commit" to rootProject.ext["git_commit"],
             "git_branch" to rootProject.ext["git_branch"],
             "git_repo" to rootProject.ext["git_repo"],

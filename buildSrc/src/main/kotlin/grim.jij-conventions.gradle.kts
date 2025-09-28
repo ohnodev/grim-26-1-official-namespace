@@ -300,7 +300,7 @@ project.afterEvaluate {
     val allEmbeddedDependencies = mutableMapOf<DependencyIdentifier, File>()
     val actuallyIncludedDependencies = mutableSetOf<DependencyIdentifier>()
 
-    fun collectAllEmbeddedDependencies(dependencies: Set<ResolvedDependency>) {
+    fun collectAllEmbeddedDependenciesForAfterEvaluate(dependencies: Set<ResolvedDependency>) {
         dependencies.forEach { dep ->
             val classifier = dep.moduleArtifacts.firstOrNull()?.classifier ?: ""
             val depKey = "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}${if (classifier.isNotEmpty()) ":$classifier" else ""}"
@@ -318,13 +318,13 @@ project.afterEvaluate {
                         )
                     }
                 }
-                collectAllEmbeddedDependencies(dep.children)
+                collectAllEmbeddedDependenciesForAfterEvaluate(dep.children)
             }
         }
     }
 
     processed.clear()
-    collectAllEmbeddedDependencies(resolvedDependencies)
+    collectAllEmbeddedDependenciesForAfterEvaluate(resolvedDependencies)
 
     processed.clear()
     processDependencies(
@@ -345,7 +345,7 @@ tasks.withType<Jar>().configureEach {
         val allEmbeddedDependencies = mutableMapOf<DependencyIdentifier, File>()
         val actuallyIncludedDependencies = mutableSetOf<DependencyIdentifier>()
 
-        fun collectAllEmbeddedDependencies(dependencies: Set<ResolvedDependency>) {
+        fun collectAllEmbeddedDependenciesForJar(dependencies: Set<ResolvedDependency>) {
             dependencies.forEach { dep ->
                 val depKey = "${dep.moduleGroup}:${dep.moduleName}:${dep.moduleVersion}"
                 if (!processed.contains(depKey)) {
@@ -362,13 +362,13 @@ tasks.withType<Jar>().configureEach {
                             )
                         }
                     }
-                    collectAllEmbeddedDependencies(dep.children)
+                    collectAllEmbeddedDependenciesForJar(dep.children)
                 }
             }
         }
 
         processed.clear()
-        collectAllEmbeddedDependencies(resolvedDependencies)
+        collectAllEmbeddedDependenciesForJar(resolvedDependencies)
 
         processed.clear()
 
