@@ -593,7 +593,7 @@ public enum HitboxData implements HitBoxFactory {
 
     PINK_PETALS_BLOCK((player, item, version, data, isTargetBlock, x, y, z) -> {
         if (version.isNewerThan(ClientVersion.V_1_20_2)) {
-            return getFlowerBedHitBox(data.getFlowerAmount(), data.getFacing().getHorizontalId());
+            return getSegmentedHitBox(data.getFlowerAmount(), data.getFacing(), 3);
         } else if (version.isNewerThan(ClientVersion.V_1_19_3)) {
             return new HexCollisionBox(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
         } else if (version.isNewerThan(ClientVersion.V_1_12_2)) {
@@ -635,13 +635,13 @@ public enum HitboxData implements HitBoxFactory {
 
     LEAF_LITTER((player, item, version, data, isTargetBlock, x, y, z)
             -> version.isNewerThan(ClientVersion.V_1_21_4)
-            ? getFlowerBedHitBox(data.getSegmentAmount(), data.getFacing().getHorizontalId())
+            ? getSegmentedHitBox(data.getSegmentAmount(), data.getFacing(), 1)
             // GLOW_LICHEN Facing Upwards, can't call glow lichen dynamic because data has no isUp() key
             : new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D), StateTypes.LEAF_LITTER),
 
     WILDFLOWERS((player, item, version, data, isTargetBlock, x, y, z)
             -> version.isNewerThan(ClientVersion.V_1_21_4)
-            ? getFlowerBedHitBox(data.getFlowerAmount(), data.getFacing().getHorizontalId())
+            ? getSegmentedHitBox(data.getFlowerAmount(), data.getFacing(), 3)
             // GLOW_LICHEN Facing Upwards, can't call glow lichen dynamic because data has no isUp() key
             : new HexCollisionBox(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D), StateTypes.WILDFLOWERS),
 
@@ -729,21 +729,21 @@ public enum HitboxData implements HitBoxFactory {
         }
     }
 
-    // Pre-defined collision boxes for each quadrant
-    private static final HexCollisionBox[] flowerBedHitboxes = new HexCollisionBox[]{
-            new HexCollisionBox(8, 0, 8, 16, 3, 16),  // SE
-            new HexCollisionBox(8, 0, 0, 16, 3, 8),   // NE
-            new HexCollisionBox(0, 0, 0, 8, 3, 8),    // NW
-            new HexCollisionBox(0, 0, 8, 8, 3, 16)    // SW
-    };
     // TODO, optimize? We don't have to return a CCB and will never return NCB, use SCB.encompass()?
-    private static CollisionBox getFlowerBedHitBox(int flowerAmount, int horizontalIndex) {
-        CollisionBox result = flowerAmount < 2 ? NoCollisionBox.INSTANCE : new ComplexCollisionBox(flowerAmount);
+    private static CollisionBox getSegmentedHitBox(int segments, BlockFace facing, int height) {
+        int horizontalIndex = facing.getHorizontalId();
+        CollisionBox result = segments < 2 ? NoCollisionBox.INSTANCE : new ComplexCollisionBox(segments);
 
         // Add boxes based on flower amount and facing
-        for (int i = 0; i < flowerAmount; i++) {
+        for (int i = 0; i < segments; i++) {
             int index = Math.floorMod(i - horizontalIndex, 4);
-            result = result.union(flowerBedHitboxes[index]);
+            result = result.union(switch (index) {
+                case 0 -> new HexCollisionBox(8, 0, 8, 16, height, 16); // SE
+                case 1 -> new HexCollisionBox(8, 0, 0, 16, height, 8);  // NE
+                case 2 -> new HexCollisionBox(0, 0, 0, 8, height, 8);   // NW
+                case 3 -> new HexCollisionBox(0, 0, 8, 8, height, 16);  // SW
+                default -> throw new IllegalStateException("Unexpected value: " + index);
+            });
         }
         return result;
     }
