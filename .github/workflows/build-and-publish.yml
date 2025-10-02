@@ -101,7 +101,7 @@ jobs:
               if: ${{ inputs.run-build-scan == true }}
               run: |
                   # Search the log file for the build scan URL and extract it
-                  SCAN_URL=$(grep -o 'https://gradle.com/s/[^ ]*' build-output.log | head -n 1)
+                  SCAN_URL=$(grep -o 'https://gradle.com/s/[^ ]*' build-output.log | head -n 1 || true)
                   
                   if [[ -n "$SCAN_URL" ]]; then
                     echo "Found build scan URL: $SCAN_URL"
