@@ -1,9 +1,7 @@
-name: Gradle Package
+name: Gradle Package (Development)
 
 on:
     workflow_dispatch:
-    release:
-        types: [published]
     push:
         branches:
             - 'main'
@@ -22,187 +20,14 @@ on:
             - '**.toml'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    env:
-      GRIM_MAIN_BRANCH: ${{ github.event.repository.default_branch }}
-      IS_PUBLISH_BRANCH: ${{ github.event_name != 'pull_request' && github.repository == 'GrimAnticheat/Grim' && (github.ref_name == github.event.repository.default_branch || github.ref_name == 'dev' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/')) }}
-
-    steps:
-    - name: Checkout repository with full history
-      uses: actions/checkout@v5
-      with:
-          # Required to fetch commit history for git-cliff to analyze and generate changelog
-          # Limited to last 200 commits
-          persist-credentials: false
-          fetch-depth: 200
-
-    - name: Set up JDK 21
-      uses: actions/setup-java@v5
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4 # Handles Gradle wrapper validation and basic caching
-      with:
-          # Allow cache writes on main and dev branch
-          cache-read-only: ${{ github.ref_name != github.event.repository.default_branch && github.ref_name != 'dev' && github.ref_name != 'main'}}
-
-    - name: Cache Gradle Loom Cache
-      uses: actions/cache@v4
-      with:
-        path: .gradle/loom-cache # Path to Loom cache relative to workspace root
-        key: loom-cache-${{ runner.os }}-${{ hashFiles('**/libs.versions.toml', 'fabric/**/build.gradle.kts') }}
-        restore-keys: |
-          loom-cache-${{ runner.os }}
-
-    -   name: Set Git Environment Variables
-        run: |
-            echo "GRIM_GIT_REPO=${{ github.event.repository.name }}" >> $GITHUB_ENV
-            echo "GRIM_GIT_ORG=${{ github.repository_owner }}" >> $GITHUB_ENV
-    
-    - name: Compute MAIN version and Build with Gradle
-      id: build_with_version
-      run: |
-          VERSION=$(./gradlew -q printVersion build | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
-          echo "main_version=$VERSION" >> $GITHUB_OUTPUT
-          echo "MAIN_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Main version: $VERSION"
-
-    - name: Upload Bukkit Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: grimac-bukkit
-        # Adding if-no-files-found for robustness
-        path: ${{ github.workspace }}/bukkit/build/libs/grimac-bukkit-${{ env.MAIN_VERSION }}.jar
-        if-no-files-found: error
-
-    - name: Upload Fabric Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: grimac-fabric
-        # Adding if-no-files-found for robustness
-        path: ${{ github.workspace }}/fabric/build/libs/grimac-fabric-${{ env.MAIN_VERSION }}.jar
-        if-no-files-found: error
-
-        #------------------------------------------------------------------
-        #  Generate Changelog
-        #------------------------------------------------------------------
-    - name: Generate Changelog with git-cliff
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      id: git-cliff
-      uses: orhun/git-cliff-action@v4
-      with:
-          config: cliff.toml
-          args: --verbose ${{ github.event.before }}..${{ github.event.after }}
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Debug Changelog Output
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      run: |
-        echo "File output path: ${{ steps.git-cliff.outputs.changelog }}"
-        echo "Content output: ${{ steps.git-cliff.outputs.content }}"
-        if [[ -f "${{ steps.git-cliff.outputs.changelog }}" ]]; then
-          echo "File content:"
-            cat "${{ steps.git-cliff.outputs.changelog }}"
-        fi
-
-    - name: Prepare Final Changelog for Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      id: changelog
-      env:
-          CHANGELOG_CONTENT: ${{ steps.git-cliff.outputs.content }}
-      run: |
-          # Read the content from the environment variable. This is safe.
-          NOTES="$CHANGELOG_CONTENT"
-          
-          if [ -z "$NOTES" ]; then
-            NOTES="* No new code changes in this build."
-          fi
-          
-          {
-            echo "notes<<EOF"
-            echo "$NOTES"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-    #------------------------------------------------------------------
-    #  Publish Bukkit to Modrinth
-    #------------------------------------------------------------------
-    - name: Publish Bukkit to Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      uses: Kir-Antipov/mc-publish@v3.3
-      with:
-          modrinth-id:    ${{ secrets.MODRINTH_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-featured: true
-
-          # Upload Bukkit jars
-          files: |
-              bukkit/build/libs/grimac-bukkit-${{ env.MAIN_VERSION }}.jar
-
-          name: Grim Anticheat (Bukkit) ${{ env.MAIN_VERSION }}
-          version: ${{ env.MAIN_VERSION }}
-          version-type: alpha
-          changelog: ${{ steps.changelog.outputs.notes || 'No changelog generated for this build.' }}
-
-          # Loaders for the Bukkit version
-          loaders: |
-              bukkit
-              spigot
-              paper
-              folia
-              purpur
-
-          game-versions: |
-              >=1.7 <=1.21.8
-
-    #------------------------------------------------------------------
-    #  Publish Fabric to Modrinth
-    #------------------------------------------------------------------
-    - name: Publish Fabric to Modrinth
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      uses: Kir-Antipov/mc-publish@v3.3
-      with:
-          modrinth-id:    ${{ vars.MODRINTH_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-featured: true
-
-          # Upload ONLY the Fabric jar
-          files: fabric/build/libs/grimac-fabric-${{ env.MAIN_VERSION }}.jar
-
-          name: Grim Anticheat (Fabric) ${{ env.MAIN_VERSION }}
-          version: ${{ env.MAIN_VERSION }}
-          version-type: alpha
-          changelog: ${{ steps.changelog.outputs.notes || 'No changelog generated for this build.' }}
-
-          # Loader for the Fabric version
-          loaders: |
-              fabric
-
-          game-versions: |
-              >=1.16.1 <=1.21.8
-
-          dependencies: |
-              fabric-api
-
-        #------------------------------------------------------------------
-        #  Publish version to the API
-        #------------------------------------------------------------------
-    - name: Publish to API
-      if: ${{ env.IS_PUBLISH_BRANCH == 'true' }}
-      run: |
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -H "User-Agent: GrimACBuilder/v1" \
-            -H "Authorization: Bearer ${{ secrets.BUILD_UPDATE_TOKEN }}" \
-            -d '{"org": "${{ github.repository_owner }}", "repository": "${{ github.event.repository.name }}", "branch": "${{ github.ref_name }}", "version": "${{ env.MAIN_VERSION }}"}' \
-            "${{ secrets.BUILD_UPDATE_URL }}"
+    call-build-workflow:
+        # Only publish on pushes to the main repo, not on forks
+        if: github.event_name != 'pull_request' && github.repository == 'GrimAnticheat/Grim'
+        uses: ./.github/workflows/build-and-publish.yml
+        with:
+            is-release-build: false
+            release-version-type: alpha # Dev builds are always 'alpha'
+        secrets:
+            MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+            BUILD_UPDATE_TOKEN: ${{ secrets.BUILD_UPDATE_TOKEN }}
+            BUILD_UPDATE_URL: ${{ secrets.BUILD_UPDATE_URL }}
