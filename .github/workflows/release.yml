@@ -15,6 +15,7 @@ jobs:
             run-build-scan: false
             publish-artifacts: true
         secrets:
+            MODRINTH_ID: ${{ secrets.MODRINTH_ID }}
             MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
             BUILD_UPDATE_TOKEN: ${{ secrets.BUILD_UPDATE_TOKEN }}
             BUILD_UPDATE_URL: ${{ secrets.BUILD_UPDATE_URL }}

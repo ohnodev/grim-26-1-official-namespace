@@ -40,6 +40,7 @@ jobs:
             run-build-scan: ${{ github.event.inputs.run-build-scan == 'true' }}
             publish-artifacts: ${{ github.event.inputs.publish-artifacts != 'false' }}
         secrets:
+            MODRINTH_ID: ${{ secrets.MODRINTH_ID }}
             MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
             BUILD_UPDATE_TOKEN: ${{ secrets.BUILD_UPDATE_TOKEN }}
             BUILD_UPDATE_URL: ${{ secrets.BUILD_UPDATE_URL }}
