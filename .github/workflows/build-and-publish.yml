@@ -25,6 +25,8 @@ on:
                 required: true
                 type: boolean
         secrets:
+            MODRINTH_ID:
+                required: true
             MODRINTH_TOKEN:
                 required: true
             BUILD_UPDATE_TOKEN:
