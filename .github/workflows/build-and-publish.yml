@@ -186,7 +186,12 @@ jobs:
                   version: ${{ env.BUILD_VERSION }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
-                  loaders: 'bukkit,spigot,paper,folia,purpur'
+                  loaders: |
+                    bukkit
+                    spigot
+                    paper
+                    folia
+                    purpur
                   game-versions: '>=1.7 <=1.21.8'
 
             - name: Publish Fabric to Modrinth
@@ -202,7 +207,8 @@ jobs:
                   version: ${{ env.BUILD_VERSION }}
                   version-type: ${{ inputs.release-version-type }}
                   changelog: ${{ steps.changelog.outputs.notes }}
-                  loaders: 'fabric'
+                  loaders: |
+                      fabric
                   game-versions: '>=1.16.1 <=1.21.8'
                   dependencies: 'fabric-api'
 
