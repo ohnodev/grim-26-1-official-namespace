@@ -255,6 +255,7 @@ public class GrimPlayer implements GrimUser {
     @Getter private boolean resetItemUsageOnAttack;
     @Getter private boolean resetItemUsageOnItemUpdate;
     @Getter private boolean resetItemUsageOnSlotChange;
+    @Getter private boolean resetItemUsageOnItemUse;
     // end config
     public boolean noModifyPacketPermission = false;
     public boolean noSetbackPermission = false;
@@ -893,6 +894,7 @@ public class GrimPlayer implements GrimUser {
         resetItemUsageOnAttack = config.getBooleanElse("reset-item-usage-on-attack", true);
         resetItemUsageOnItemUpdate = config.getBooleanElse("reset-item-usage-on-item-update", true);
         resetItemUsageOnSlotChange = config.getBooleanElse("reset-item-usage-on-slot-change", true);
+        resetItemUsageOnItemUse = config.getBooleanElse("reset-item-usage-on-item-use", true);
         // reload all checks
         for (AbstractCheck value : checkManager.allChecks.values()) value.reload();
         // reload punishment manager
