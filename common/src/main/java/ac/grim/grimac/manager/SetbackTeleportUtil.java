@@ -425,7 +425,7 @@ public class SetbackTeleportUtil extends Check implements PostPredictionCheck {
     @Getter
     @Setter
     public static class SetbackPosWithVector {
-        private Vector3d pos;
+        private final Vector3d pos;
         private Vector3dm vector;
     }
 }
