@@ -15,7 +15,6 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -51,7 +50,7 @@ public final class SuperDebug extends Check implements PostPredictionCheck {
     public void onPredictionComplete(final PredictionComplete predictionComplete) {
         if (!predictionComplete.isChecked()) return;
 
-        Location location = new Location(player.x, player.y, player.z, player.xRot, player.yRot, player.platformPlayer == null ? "null" : player.platformPlayer.getWorld().getName());
+        Location location = new Location(player.x, player.y, player.z, player.yaw, player.pitch, player.platformPlayer == null ? "null" : player.platformPlayer.getWorld().getName());
 
         for (Iterator<Object2IntMap.Entry<StringBuilder>> it = continuedDebug.object2IntEntrySet().iterator(); it.hasNext(); ) {
             Map.Entry<StringBuilder, Integer> debug = it.next();

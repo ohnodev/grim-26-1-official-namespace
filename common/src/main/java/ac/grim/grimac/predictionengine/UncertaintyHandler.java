@@ -177,8 +177,8 @@ public class UncertaintyHandler {
 
         fireworksBox = new SimpleCollisionBox();
 
-        Vector3dm currentLook = ReachUtils.getLook(player, player.xRot, player.yRot);
-        Vector3dm lastLook = ReachUtils.getLook(player, player.lastXRot, player.lastYRot);
+        Vector3dm currentLook = ReachUtils.getLook(player, player.yaw, player.pitch);
+        Vector3dm lastLook = ReachUtils.getLook(player, player.lastYaw, player.lastPitch);
 
         double antiTickSkipping = player.isPointThree() ? 0 : 0.05; // With 0.03, let that handle tick skipping
 

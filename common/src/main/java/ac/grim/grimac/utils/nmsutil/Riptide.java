@@ -23,8 +23,8 @@ public class Riptide {
             return new Vector3dm(); // Can't riptide
         }
 
-        float yaw = GrimMath.radians(player.xRot);
-        float pitch = GrimMath.radians(player.yRot);
+        float yaw = GrimMath.radians(player.yaw);
+        float pitch = GrimMath.radians(player.pitch);
         float pitchCos = player.trigHandler.cos(pitch);
         float f1 = -player.trigHandler.sin(yaw) * pitchCos;
         float f2 = -player.trigHandler.sin(pitch);

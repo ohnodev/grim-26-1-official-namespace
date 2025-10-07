@@ -27,7 +27,7 @@ public class JumpPower {
         vector.setY(player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2) ? jumpPower : Math.max(jumpPower, vector.getY()));
 
         if (player.isSprinting) {
-            float radRotation = GrimMath.radians(player.xRot);
+            float radRotation = GrimMath.radians(player.yaw);
             vector.add(new Vector3dm(-player.trigHandler.sin(radRotation) * 0.2, 0.0, player.trigHandler.cos(radRotation) * 0.2));
         }
     }

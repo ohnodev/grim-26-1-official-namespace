@@ -41,12 +41,12 @@ public class BadPacketsJ extends Check implements PacketCheck {
             // due to tick skipping, the rotations sent could be last tick's
             boolean allowLast = player.canSkipTicks() && (event.getPacketType() == PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION || event.getPacketType() == PacketType.Play.Client.PLAYER_ROTATION);
             for (HeadRotation rotation : rotations) {
-                if (rotation.yaw() == player.xRot && rotation.pitch() == player.yRot) {
+                if (rotation.yaw() == player.yaw && rotation.pitch() == player.pitch) {
                     allowLast = false;
                     continue;
                 }
 
-                if (rotation.yaw() == player.lastXRot && rotation.pitch() == player.lastYRot && allowLast) {
+                if (rotation.yaw() == player.lastYaw && rotation.pitch() == player.lastPitch && allowLast) {
                     continue;
                 }
 

@@ -428,8 +428,8 @@ public class BlockPlace {
     }
 
     private List<BlockFace> getNearestLookingDirections() {
-        float f = player.yRot * ((float) Math.PI / 180F);
-        float f1 = -player.xRot * ((float) Math.PI / 180F);
+        float f = player.pitch * ((float) Math.PI / 180F);
+        float f1 = -player.yaw * ((float) Math.PI / 180F);
         float f2 = player.trigHandler.sin(f);
         float f3 = player.trigHandler.cos(f);
         float f4 = player.trigHandler.sin(f1);
@@ -463,11 +463,10 @@ public class BlockPlace {
     }
 
     public BlockFace getNearestVerticalDirection() {
-        return player.yRot < 0.0F ? BlockFace.UP : BlockFace.DOWN;
+        return player.pitch < 0.0F ? BlockFace.UP : BlockFace.DOWN;
     }
 
     // Copied from vanilla nms
-    @SuppressWarnings("StatementWithEmptyBody")
     public List<BlockFace> getNearestPlacingDirections() {
         BlockFace[] faces = getNearestLookingDirections().toArray(new BlockFace[0]);
 
@@ -634,7 +633,7 @@ public class BlockPlace {
     // another damn desync added... maybe next decade it will get fixed and double the amount of issues.
     public Vector3dm getClickedLocation() {
         SimpleCollisionBox box = new SimpleCollisionBox(position);
-        Vector3dm look = ReachUtils.getLook(player, player.xRot, player.yRot);
+        Vector3dm look = ReachUtils.getLook(player, player.yaw, player.pitch);
 
         final double distance = player.compensatedEntities.self.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE) + 3;
         Vector3dm eyePos = new Vector3dm(player.x, player.y + player.getEyeHeight(), player.z);
@@ -654,7 +653,7 @@ public class BlockPlace {
 
     // Remember to use the next tick's look, which we handle elsewhere
     public BlockFace getPlayerFacing() {
-        return BY_2D[GrimMath.floor(player.xRot / 90.0D + 0.5D) & 3];
+        return BY_2D[GrimMath.floor(player.yaw / 90.0D + 0.5D) & 3];
     }
 
     public void set() {
