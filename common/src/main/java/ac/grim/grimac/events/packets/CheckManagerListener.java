@@ -104,7 +104,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
             player.z = player.packetStateData.lastClaimedPosition.getZ();
 
             boolean lastSneaking = player.isSneaking;
-            player.isSneaking = snapshot.isSneaking();
+            player.isSneaking = snapshot.sneaking();
 
             if (player.inVehicle()) {
                 Vector3d posFromVehicle = BoundingBoxSize.getRidingOffsetFromVehicle(player.compensatedEntities.self.getRiding(), player);
@@ -122,8 +122,8 @@ public class CheckManagerListener extends PacketListenerAbstract {
             }
 
             player.compensatedWorld.startPredicting();
-            handleBlockPlaceOrUseItem(snapshot.getWrapper(), player);
-            player.compensatedWorld.stopPredicting(snapshot.getWrapper());
+            handleBlockPlaceOrUseItem(snapshot.wrapper(), player);
+            player.compensatedWorld.stopPredicting(snapshot.wrapper());
 
             player.x = lastX;
             player.y = lastY;
