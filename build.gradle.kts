@@ -1,12 +1,10 @@
 /**
- * ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
- * ┃        GrimAC Build Configuration     ┃
- * ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ *          GrimAC Build Configuration
  *
- * 🔧 Build Flags:
- * -PshadePE=true      → Enables 'lite' mode
- * -Prelocate=false    → Adds 'no_relocate' modifier
- * -Prelease=true      → Removes commit/modifiers for release build
+ * Build Flags:
+ * -PshadePE=true   - Enables 'lite' mode
+ * -Prelocate=false - Adds 'no_relocate' modifier
+ * -Prelease=true   - Removes commit/modifiers for release build
  *
  * Logic in: buildSrc/versioning/BuildConfig.kt & VersionUtil.kt
  */
@@ -27,12 +25,12 @@ ext["git_commit"] = VersionUtil.getGitCommitHash(true)
 ext["git_org"] = System.getenv("GRIM_GIT_ORG") ?: VersionUtil.getGitUser()
 ext["git_repo"] = System.getenv("GRIM_GIT_REPO") ?: "Grim"
 
-println("⚙️  Build configuration:")
-println("     shadePE             = ${BuildConfig.shadePE}")
-println("     relocate            = ${BuildConfig.relocate}")
-println("     mavenLocalOverride  = ${BuildConfig.mavenLocalOverride}")
-println("     release             = ${BuildConfig.release}")
-println("     version             = $version")
+println("Build configuration:")
+println("    shadePE            = ${BuildConfig.shadePE}")
+println("    relocate           = ${BuildConfig.relocate}")
+println("    mavenLocalOverride = ${BuildConfig.mavenLocalOverride}")
+println("    release            = ${BuildConfig.release}")
+println("    version            = $version")
 
 tasks.register("printVersion") {
     group = "versioning"
