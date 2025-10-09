@@ -77,8 +77,8 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -271,7 +271,7 @@ public class GrimPlayer implements GrimUser {
     public boolean isJumping;
     public boolean lastJumping;
 
-    public GrimPlayer(@NonNull User user) {
+    public GrimPlayer(@NotNull User user) {
         this.user = user;
         this.uuid = user.getUUID();
         fireworks = new CompensatedFireworks(this); // Must be before checkmanager

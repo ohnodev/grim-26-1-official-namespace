@@ -13,10 +13,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -145,7 +145,7 @@ public class GrimVersion implements BuildableCommand {
         );
     }
 
-    private void handleVersion(@NonNull CommandContext<Sender> context) {
+    private void handleVersion(@NotNull CommandContext<Sender> context) {
         Sender sender = context.sender();
         checkForUpdatesAsync(sender);
     }

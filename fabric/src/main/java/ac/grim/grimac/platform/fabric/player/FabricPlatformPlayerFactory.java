@@ -7,7 +7,6 @@ import ac.grim.grimac.platform.fabric.GrimACFabricLoaderPlugin;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -36,7 +35,7 @@ public class FabricPlatformPlayerFactory extends AbstractPlatformPlayerFactory<S
     }
 
     @Override
-    protected ServerPlayerEntity getNativePlayer(@NonNull String name) {
+    protected ServerPlayerEntity getNativePlayer(@NotNull String name) {
         return GrimACFabricLoaderPlugin.FABRIC_SERVER.getPlayerManager().getPlayer(name);
     }
 
@@ -93,7 +92,7 @@ public class FabricPlatformPlayerFactory extends AbstractPlatformPlayerFactory<S
     }
 
     @Override
-    public void replaceNativePlayer(@NonNull UUID uuid, @NonNull ServerPlayerEntity serverPlayerEntity) {
+    public void replaceNativePlayer(@NotNull UUID uuid, @NotNull ServerPlayerEntity serverPlayerEntity) {
         super.cache.getPlayer(uuid).replaceNativePlayer(serverPlayerEntity);
     }
 

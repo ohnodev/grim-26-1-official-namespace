@@ -11,8 +11,8 @@ import ac.grim.grimac.platform.api.player.PlatformPlayer;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.anticheat.MessageUtil;
 import net.kyori.adventure.text.Component;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Caches toggle messages for performance.
  */
 public final class AlertManagerImpl implements AlertManager, ConfigReloadable, StartableInitable {
-    private static @NonNull PlatformServer platformServer;
+    private static @NotNull PlatformServer platformServer;
 
     private enum AlertType {
         NORMAL, VERBOSE, BRAND;
@@ -93,8 +93,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
      * @throws IllegalArgumentException if the user is not a GrimPlayer.
      * @throws NullPointerException if the GrimPlayer's platformPlayer is null.
      */
-    @NonNull
-    private PlatformPlayer requirePlatformPlayerFromUser(@NonNull GrimUser user) {
+    private @NotNull PlatformPlayer requirePlatformPlayerFromUser(@NotNull GrimUser user) {
         Objects.requireNonNull(user, "user cannot be null"); // Should be guaranteed by interface contract, but good practice
 
         if (!(user instanceof GrimPlayer grimPlayer)) {
@@ -111,7 +110,7 @@ public final class AlertManagerImpl implements AlertManager, ConfigReloadable, S
     }
 
     /** Gets the cached message, applies placeholders, and sends it to a PlatformPlayer. */
-    private static void sendToggleMessage(@NonNull PlatformPlayer player, boolean enabled, @NonNull AlertType type) {
+    private static void sendToggleMessage(@NotNull PlatformPlayer player, boolean enabled, @NotNull AlertType type) {
         String rawMessage = type.getToggleMessage(enabled);
         if (rawMessage.isEmpty()) return;
 

@@ -3,7 +3,6 @@ package ac.grim.grimac.command;
 import ac.grim.grimac.platform.api.sender.Sender;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 import org.incendo.cloud.suggestion.Suggestion;
@@ -30,7 +29,7 @@ public class CommandUtils {
         private final List<Suggestion> suggestions;
 
         @Override
-        public @NonNull CompletableFuture<? extends @NonNull Iterable<? extends @NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext context, @NonNull CommandInput input) {
+        public @NotNull CompletableFuture<? extends @NotNull Iterable<? extends @NotNull Suggestion>> suggestionsFuture(@NotNull CommandContext context, @NotNull CommandInput input) {
             return CompletableFuture.completedFuture(suggestions);
         }
     }

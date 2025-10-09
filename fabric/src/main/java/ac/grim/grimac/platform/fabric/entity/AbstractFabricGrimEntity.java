@@ -5,7 +5,7 @@ import ac.grim.grimac.platform.api.world.PlatformWorld;
 import ac.grim.grimac.utils.math.Location;
 import com.google.common.base.Preconditions;
 import net.minecraft.entity.Entity;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -32,8 +32,8 @@ public abstract class AbstractFabricGrimEntity implements GrimEntity {
         return false;
     }
 
-    @Override @NonNull
-    public Entity getNative() {
+    @Override
+    public @NotNull Entity getNative() {
         return this.entity;
     }
 
