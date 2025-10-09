@@ -31,6 +31,7 @@ public class BukkitPlatformPlayer extends BukkitGrimEntity implements PlatformPl
 
     @Getter
     private final Player bukkitPlayer;
+    @Getter
     private final PlatformInventory inventory;
 
     public BukkitPlatformPlayer(Player bukkitPlayer) {
@@ -93,11 +94,6 @@ public class BukkitPlatformPlayer extends BukkitGrimEntity implements PlatformPl
     public Vector3d getPosition() {
         org.bukkit.Location location = this.bukkitPlayer.getLocation();
         return new Vector3d(location.getX(), location.getY(), location.getZ());
-    }
-
-    @Override
-    public PlatformInventory getInventory() {
-        return inventory;
     }
 
     @Override
