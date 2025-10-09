@@ -156,9 +156,8 @@ public class GrimVersion implements BuildableCommand {
         AHEAD("ahead"),
         UPDATED("updated"),
         OUTDATED("outdated"),
-        UNKNOWN("unknown")
-        //
-        ;
+        UNKNOWN("unknown");
+
         private final String id;
 
         public static Status getStatus(String id) {
@@ -229,5 +228,4 @@ public class GrimVersion implements BuildableCommand {
             }
         }
     }
-
 }

@@ -24,15 +24,11 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class CommandRegister implements StartableInitable {
 
-    public static final CloudKey<Requirements<Sender, SenderRequirement>>
-            REQUIREMENT_KEY = CloudKey.of(
-            "requirements",
-            new TypeToken<>() {}
-    );
+    public static final CloudKey<Requirements<Sender, SenderRequirement>> REQUIREMENT_KEY
+            = CloudKey.of("requirements", new TypeToken<>() {});
 
-    public static final RequirementApplicable.RequirementApplicableFactory<Sender,
-            SenderRequirement> REQUIREMENT_FACTORY = RequirementApplicable.factory(REQUIREMENT_KEY);
-
+    public static final RequirementApplicableFactory<Sender, SenderRequirement> REQUIREMENT_FACTORY
+            = RequirementApplicable.factory(REQUIREMENT_KEY);
 
     private static boolean commandsRegistered = false;
     private final Supplier<CommandManager<Sender>> commandManagerSupplier;

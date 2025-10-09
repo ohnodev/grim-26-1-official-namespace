@@ -93,7 +93,7 @@ public class ViolationDatabaseManager implements StartableInitable, ReloadableIn
                 }
             }
 
-            default -> {                            // NOOP or invalid
+            default -> { // NOOP or invalid
                 if (!(database instanceof NoOpViolationDatabase)) {
                     database.disconnect();
                     database = NoOpViolationDatabase.INSTANCE;
