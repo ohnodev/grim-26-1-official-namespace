@@ -45,6 +45,7 @@ jobs:
             MODRINTH_ID: ${{ secrets.MODRINTH_ID }}
             MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
             GRIM_MAIN_BRANCH: ${{ github.event.repository.default_branch }}
+            BUILD_UPDATE_TOKEN: ${{ secrets.BUILD_UPDATE_TOKEN }}
 
         steps:
             - name: Checkout repository with full history
@@ -218,7 +219,7 @@ jobs:
                   dependencies: 'fabric-api'
 
             - name: Publish to API
-              if: ${{ inputs.publish-artifacts == true }}
+              if: ${{ inputs.publish-artifacts == true && env.BUILD_UPDATE_TOKEN != '' }}
               run: |
                   curl -X POST \
                     -H "Content-Type: application/json" \
