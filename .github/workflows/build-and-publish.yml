@@ -77,8 +77,19 @@ jobs:
                   echo "GRIM_GIT_REPO=${{ github.event.repository.name }}" >> $GITHUB_ENV
                   echo "GRIM_GIT_ORG=${{ github.repository_owner }}" >> $GITHUB_ENV
 
-            - name: Compute version and Build with Gradle
+            - name: Compute version
               id: build_with_version
+              run: |
+                  echo "Running: ./gradlew printVersion"
+                  
+                  # Use 'tee' to both display the output live and save it to a file for parsing
+                  VERSION=$(./gradlew printVersion | tee build-version.log | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
+                  
+                  echo "build_version=$VERSION" >> $GITHUB_OUTPUT
+                  echo "BUILD_VERSION=$VERSION" >> $GITHUB_ENV
+                  echo "Build version: $VERSION"
+
+            - name: Build with Gradle
               run: |
                   BUILD_ARGS="build"
                   if [[ "${{ inputs.is-release-build }}" == "true" ]]; then
@@ -89,14 +100,8 @@ jobs:
                     BUILD_ARGS="$BUILD_ARGS --scan"
                   fi
                   
-                  echo "Running: ./gradlew printVersion $BUILD_ARGS"
-                  
-                  # Use 'tee' to both display the output live and save it to a file for parsing
-                  VERSION=$(./gradlew printVersion $BUILD_ARGS | tee build-output.log | grep '^VERSION=' | tail -n1 | cut -d'=' -f2)
-                  
-                  echo "build_version=$VERSION" >> $GITHUB_OUTPUT
-                  echo "BUILD_VERSION=$VERSION" >> $GITHUB_ENV
-                  echo "Build version: $VERSION"
+                  echo "Running: ./gradlew $BUILD_ARGS"
+                  ./gradlew $BUILD_ARGS | tee build-output.log
 
             - name: Publish Build Scan URL
                 # Only run this step if a scan was requested
