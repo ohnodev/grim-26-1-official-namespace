@@ -22,13 +22,7 @@ public final class BoundingBoxSize {
 
     public static float getWidth(GrimPlayer player, PacketEntity packetEntity) {
         float width = getWidthMinusBaby(player, packetEntity);
-        if (packetEntity.type == EntityTypes.TURTLE) return width * (packetEntity.isBaby ? 0.3f : 1f);
-        if (packetEntity.type == EntityTypes.HAPPY_GHAST) return width * (packetEntity.isBaby ? 0.2375f : 1f);
-        if (packetEntity.type == EntityTypes.DOLPHIN) return width * (packetEntity.isBaby ? 0.65f : 1f);
-        if (packetEntity.type == EntityTypes.ARMADILLO) return width * (packetEntity.isBaby ? 0.6f : 1f);
-        if (packetEntity.type == EntityTypes.CAMEL) return width * (packetEntity.isBaby ? 0.45f : 1f);
-        // The rest of animals follow the * 0.5 rule
-        return width * (packetEntity.isBaby ? 0.5f : 1f);
+        return width * (packetEntity.isBaby ? getBabyScaleFactor(packetEntity) : 1f);
     }
 
     private static float getWidthMinusBaby(GrimPlayer player, PacketEntity packetEntity) {
@@ -192,13 +186,7 @@ public final class BoundingBoxSize {
 
     public static float getHeight(GrimPlayer player, PacketEntity packetEntity) {
         float height = getHeightMinusBaby(player, packetEntity);
-        if (packetEntity.type == EntityTypes.TURTLE) return height * (packetEntity.isBaby ? 0.3f : 1f);
-        if (packetEntity.type == EntityTypes.HAPPY_GHAST) return height * (packetEntity.isBaby ? 0.2375f : 1f);
-        if (packetEntity.type == EntityTypes.DOLPHIN) return height * (packetEntity.isBaby ? 0.65f : 1f);
-        if (packetEntity.type == EntityTypes.ARMADILLO) return height * (packetEntity.isBaby ? 0.6f : 1f);
-        if (packetEntity.type == EntityTypes.CAMEL) return height * (packetEntity.isBaby ? 0.45f : 1f);
-        // The rest of animals follow the * 0.5 rule
-        return height * (packetEntity.isBaby ? 0.5f : 1f);
+        return height * (packetEntity.isBaby ? getBabyScaleFactor(packetEntity) : 1f);
     }
 
     public static double getMyRidingOffset(PacketEntity packetEntity) {
@@ -419,5 +407,15 @@ public final class BoundingBoxSize {
             return 0.25F;
         }
         return 1.95f;
+    }
+
+    private static float getBabyScaleFactor(PacketEntity packetEntity) {
+        final EntityType type = packetEntity.type;
+        if (type == EntityTypes.TURTLE) return 0.3f;
+        if (type == EntityTypes.HAPPY_GHAST) return 0.2375f;
+        if (type == EntityTypes.DOLPHIN) return 0.65f;
+        if (type == EntityTypes.ARMADILLO) return 0.6f;
+        if (type == EntityTypes.CAMEL) return 0.45f;
+        return 0.5f;
     }
 }
