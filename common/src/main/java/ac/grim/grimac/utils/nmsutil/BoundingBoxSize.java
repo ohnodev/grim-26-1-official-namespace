@@ -21,9 +21,14 @@ import lombok.experimental.UtilityClass;
 public final class BoundingBoxSize {
 
     public static float getWidth(GrimPlayer player, PacketEntity packetEntity) {
-        // Turtles are the only baby animal that don't follow the * 0.5 rule
-        if (packetEntity.type == EntityTypes.TURTLE && packetEntity.isBaby) return 0.36f;
-        return getWidthMinusBaby(player, packetEntity) * (packetEntity.isBaby ? 0.5f : 1f);
+        float width = getWidthMinusBaby(player, packetEntity);
+        if (packetEntity.type == EntityTypes.TURTLE) return width * (packetEntity.isBaby ? 0.3f : 1f);
+        if (packetEntity.type == EntityTypes.HAPPY_GHAST) return width * (packetEntity.isBaby ? 0.2375f : 1f);
+        if (packetEntity.type == EntityTypes.DOLPHIN) return width * (packetEntity.isBaby ? 0.65f : 1f);
+        if (packetEntity.type == EntityTypes.ARMADILLO) return width * (packetEntity.isBaby ? 0.6f : 1f);
+        if (packetEntity.type == EntityTypes.CAMEL) return width * (packetEntity.isBaby ? 0.45f : 1f);
+        // The rest of animals follow the * 0.5 rule
+        return width * (packetEntity.isBaby ? 0.5f : 1f);
     }
 
     private static float getWidthMinusBaby(GrimPlayer player, PacketEntity packetEntity) {
@@ -186,9 +191,14 @@ public final class BoundingBoxSize {
     }
 
     public static float getHeight(GrimPlayer player, PacketEntity packetEntity) {
-        // Turtles are the only baby animal that don't follow the * 0.5 rule
-        if (packetEntity.type == EntityTypes.TURTLE && packetEntity.isBaby) return 0.12f;
-        return getHeightMinusBaby(player, packetEntity) * (packetEntity.isBaby ? 0.5f : 1f);
+        float height = getHeightMinusBaby(player, packetEntity);
+        if (packetEntity.type == EntityTypes.TURTLE) return height * (packetEntity.isBaby ? 0.3f : 1f);
+        if (packetEntity.type == EntityTypes.HAPPY_GHAST) return height * (packetEntity.isBaby ? 0.2375f : 1f);
+        if (packetEntity.type == EntityTypes.DOLPHIN) return height * (packetEntity.isBaby ? 0.65f : 1f);
+        if (packetEntity.type == EntityTypes.ARMADILLO) return height * (packetEntity.isBaby ? 0.6f : 1f);
+        if (packetEntity.type == EntityTypes.CAMEL) return height * (packetEntity.isBaby ? 0.45f : 1f);
+        // The rest of animals follow the * 0.5 rule
+        return height * (packetEntity.isBaby ? 0.5f : 1f);
     }
 
     public static double getMyRidingOffset(PacketEntity packetEntity) {
