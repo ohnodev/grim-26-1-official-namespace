@@ -181,7 +181,7 @@ public class PunishmentManager implements ConfigReloadable {
 
                 group.violations.put(currentTime, check);
                 // Remove violations older than the defined time in the config
-                group.violations.entrySet().removeIf(time -> currentTime - time.getKey() > group.removeViolationsAfter);
+                group.violations.long2ObjectEntrySet().removeIf(time -> currentTime - time.getLongKey() > group.removeViolationsAfter);
             }
         }
     }
