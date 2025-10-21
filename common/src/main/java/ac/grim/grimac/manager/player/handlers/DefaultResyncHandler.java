@@ -116,7 +116,7 @@ public class DefaultResyncHandler implements ResyncHandler {
         GrimAPI.INSTANCE.getScheduler().getRegionScheduler().execute(GrimAPI.INSTANCE.getGrimPlugin(), world, chunkX, chunkZ, () -> {
             if (!player.platformPlayer.isOnline() || !player.getSetbackTeleportUtil().hasAcceptedSpawnTeleport)
                 return;
-            if (player.platformPlayer.getPosition().distance(new Vector3d(x, y, z)) >= 64)
+            if (player.platformPlayer.distanceSquared(x, y, z) >= 64 * 64)
                 return;
             if (!world.isChunkLoaded(chunkX, chunkZ)) return; // Don't load chunks sync
 

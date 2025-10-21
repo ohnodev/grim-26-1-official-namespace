@@ -12,6 +12,7 @@ import ac.grim.grimac.platform.bukkit.utils.reflection.PaperUtils;
 import ac.grim.grimac.utils.common.arguments.CommonGrimArguments;
 import ac.grim.grimac.utils.math.Location;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.util.Vector3d;
@@ -112,8 +113,12 @@ public class BukkitPlatformPlayer extends BukkitGrimEntity implements PlatformPl
 
     @Override
     public Vector3d getPosition() {
-        org.bukkit.Location location = this.bukkitPlayer.getLocation();
-        return new Vector3d(location.getX(), location.getY(), location.getZ());
+        if (CAN_USE_DIRECT_GETTERS) {
+            return new Vector3d(this.bukkitPlayer.getX(), this.bukkitPlayer.getY(), this.bukkitPlayer.getZ());
+        } else {
+            org.bukkit.Location location = this.bukkitPlayer.getLocation();
+            return new Vector3d(location.getX(), location.getY(), location.getZ());
+        }
     }
 
     @Override
