@@ -31,7 +31,7 @@ public class PredictionEngineElytra extends PredictionEngine {
             recalculatedGravity = player.getClientVersion().isOlderThan(ClientVersion.V_1_20_5) ? 0.01 : Math.min(recalculatedGravity, 0.01);
         }
 
-        vector.add((0.0D, recalculatedGravity * (-1.0D + vertCosRotation * 0.75D), 0.0D);
+        vector.add(0.0D, recalculatedGravity * (-1.0D + vertCosRotation * 0.75D), 0.0D);
         double d5;
 
         // Handle slowing the player down when falling
