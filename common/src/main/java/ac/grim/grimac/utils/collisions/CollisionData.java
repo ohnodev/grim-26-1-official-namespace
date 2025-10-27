@@ -1033,6 +1033,15 @@ public enum CollisionData implements CollisionFactory {
         };
     }, BlockTags.WOODEN_SHELVES.getStates().toArray(new StateType[0])),
 
+    COPPER_GOLEM_STATUE((player, version, data, x, y, z) -> {
+        if (version.isOlderThan(ClientVersion.V_1_21_9)) {
+            // ViaVersion replacement block (copper block)
+            return new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true);
+        }
+
+        return new HexCollisionBox(3, 0, 3, 13, 14, 13);
+    }, BlockTags.COPPER_GOLEM_STATUES.getStates().toArray(new StateType[0])),
+
     DEFAULT(new SimpleCollisionBox(0, 0, 0, 1, 1, 1, true), StateTypes.STONE);
 
     // This should be an array... but a hashmap will do for now...
@@ -1161,7 +1170,11 @@ public enum CollisionData implements CollisionFactory {
     // Would pre-computing all states be worth the memory cost? I doubt it
     public static CollisionData getData(StateType state) { // TODO: Find a better hack for lava and scaffolding
         // What the fuck mojang, why put noCollision() and then give PITCHER_CROP collision?
-        return state.isSolid() || state == StateTypes.LAVA || state == StateTypes.SCAFFOLDING || state == StateTypes.PITCHER_CROP || state == StateTypes.HEAVY_CORE || state == StateTypes.PALE_MOSS_CARPET || BlockTags.WALL_HANGING_SIGNS.contains(state) ? rawLookupMap.getOrDefault(state, DEFAULT) : NO_COLLISION;
+        return state.isSolid() || state == StateTypes.LAVA || state == StateTypes.SCAFFOLDING
+                || state == StateTypes.PITCHER_CROP || state == StateTypes.HEAVY_CORE
+                || state == StateTypes.PALE_MOSS_CARPET || BlockTags.WALL_HANGING_SIGNS.contains(state)
+                || BlockTags.COPPER_GOLEM_STATUES.contains(state)
+                ? rawLookupMap.getOrDefault(state, DEFAULT) : NO_COLLISION;
     }
 
     // TODO: This is wrong if a block doesn't have any hitbox and isn't specified, light block?
