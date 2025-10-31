@@ -12,7 +12,7 @@ public abstract class AbstractFabricPlatformServer implements PlatformServer {
     @Override
     public String getPlatformImplementationString() {
         // Return the Fabric server version
-        return "Fabric " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString() + " (MC: " + GrimACFabricLoaderPlugin.FABRIC_SERVER.getServerVersion() + ")";
+        return "Fabric " + FabricLoader.getInstance().getModContainer("fabricloader").orElseThrow().getMetadata().getVersion().getFriendlyString() + " (MC: " + GrimACFabricLoaderPlugin.FABRIC_SERVER.getServerVersion() + ")";
     }
 
     @Override

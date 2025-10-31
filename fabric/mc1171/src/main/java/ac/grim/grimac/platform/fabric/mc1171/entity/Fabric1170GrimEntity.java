@@ -12,8 +12,6 @@ public class Fabric1170GrimEntity extends Fabric1161GrimEntity {
 
     @Override
     public boolean isDead() {
-        if (this.entity instanceof LivingEntity)
-            return ((LivingEntity) entity).isDeadOrDying();
-        return this.entity.isRemoved();
+        return this.entity instanceof LivingEntity living ? living.isDeadOrDying() : this.entity.isRemoved();
     }
 }

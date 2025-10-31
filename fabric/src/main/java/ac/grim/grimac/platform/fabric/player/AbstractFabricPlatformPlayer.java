@@ -52,6 +52,16 @@ public abstract class AbstractFabricPlatformPlayer extends AbstractFabricGrimEnt
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return getSender().hasPermission(permission);
+    }
+
+    @Override
+    public boolean hasPermission(String permission, boolean defaultIfUnset) {
+        return getSender().hasPermission(permission, defaultIfUnset);
+    }
+
+    @Override
     public void sendMessage(String message) {
         if (CommonGrimArguments.USE_CHAT_FAST_BYPASS.value() && user != null) {
             user.sendMessage(message);

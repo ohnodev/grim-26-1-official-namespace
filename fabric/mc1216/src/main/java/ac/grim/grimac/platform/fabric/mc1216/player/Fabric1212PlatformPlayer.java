@@ -17,16 +17,6 @@ public class Fabric1212PlatformPlayer extends Fabric1202PlatformPlayer {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
-        return GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory().map(fabricPlayer.createCommandSourceStack()).hasPermission(permission);
-    }
-
-    @Override
-    public boolean hasPermission(String s, boolean defaultIfUnset) {
-        return GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory().map(fabricPlayer.createCommandSourceStack()).hasPermission(s, defaultIfUnset);
-    }
-
-    @Override
     public Sender getSender() {
         return GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory().map(fabricPlayer.createCommandSourceStack());
     }
