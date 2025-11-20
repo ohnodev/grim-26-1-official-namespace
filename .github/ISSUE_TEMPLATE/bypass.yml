@@ -18,7 +18,7 @@ body:
       label: Grim version
       description: |
         Provide the version of Grim running on the server. You can run `/grim version` to check.
-      placeholder: Examples include 2.3.73-8ddd7f1, 2.3.72, etc
+      placeholder: Examples include 2.3.73-8ddd7f1, 2.3.72, etc.
     validations:
       required: true
 
@@ -32,11 +32,11 @@ body:
 
   - type: input
     attributes:
-        label: Client version
-        description: |
-            Provide the version of your Minecraft client. Also provide the protocol version if changed.
+      label: Client version
+      description: |
+        Provide the version of your Minecraft client. Also provide the protocol version if changed.
     validations:
-        required: true
+      required: true
 
   - type: textarea
     attributes:
