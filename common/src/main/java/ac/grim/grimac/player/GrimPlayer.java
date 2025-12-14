@@ -765,8 +765,8 @@ public class GrimPlayer implements GrimUser {
                 || PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_21_2)) return false;
 
         // PacketEvents mappings are wrong
-        return isGlider(inventory.getHelmet(), EquipmentSlot.CHEST_PLATE)
-                || isGlider(inventory.getChestplate(), EquipmentSlot.LEGGINGS)
+        return isGlider(inventory.getHelmet(), EquipmentSlot.HELMET)
+                || isGlider(inventory.getChestplate(), EquipmentSlot.CHEST_PLATE)
                 || isGlider(inventory.getLeggings(), EquipmentSlot.BOOTS)
                 || isGlider(inventory.getBoots(), EquipmentSlot.OFF_HAND);
     }
