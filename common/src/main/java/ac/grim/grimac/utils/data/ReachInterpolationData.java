@@ -37,7 +37,7 @@ public class ReachInterpolationData {
     private int interpolationStepsHighBound = 0;
     private int interpolationSteps = 1;
     private boolean expandNonRelative = false;
-    private int cancelledLerpInterpolationStepsLowBound = Integer.MAX_VALUE;
+    private boolean isLerpCancelled = false;
 
     public ReachInterpolationData(GrimPlayer player, SimpleCollisionBox startingLocation, TrackedPosition position, PacketEntity entity) {
         final boolean unreliableTicking = !player.inVehicle() && player.canSkipTicks();
@@ -141,7 +141,7 @@ public class ReachInterpolationData {
     public SimpleCollisionBox getPossibleLocationCombined() {
         int interpSteps = getInterpolationSteps();
 
-        int interpolationStepsLowBound = Math.min(this.interpolationStepsLowBound, this.cancelledLerpInterpolationStepsLowBound);
+//        int interpolationStepsLowBound = Math.min(this.interpolationStepsLowBound, this.cancelledLerpInterpolationStepsLowBound); // Temp test
 
 
         double stepMinX = (targetLocation.minX - startingLocation.minX) / (double) interpSteps;
@@ -208,10 +208,14 @@ public class ReachInterpolationData {
     }
 
     public void tickMovement(boolean incrementLowBound, boolean tickingReliably) {
-        if (!tickingReliably) this.interpolationStepsHighBound = getInterpolationSteps();
-        if (incrementLowBound)
-            this.interpolationStepsLowBound = Math.min(interpolationStepsLowBound + 1, getInterpolationSteps());
-        this.interpolationStepsHighBound = Math.min(interpolationStepsHighBound + 1, getInterpolationSteps());
+        if (isLerpCancelled)  {
+
+        } else {
+            if (!tickingReliably) this.interpolationStepsHighBound = getInterpolationSteps();
+            if (incrementLowBound)
+                this.interpolationStepsLowBound = Math.min(interpolationStepsLowBound + 1, getInterpolationSteps());
+            this.interpolationStepsHighBound = Math.min(interpolationStepsHighBound + 1, getInterpolationSteps());
+        }
     }
 
     @Override
@@ -229,6 +233,6 @@ public class ReachInterpolationData {
     }
 
     public void cancelLerp() {
-        cancelledLerpInterpolationStepsLowBound = interpolationStepsLowBound;
+        this.isLerpCancelled = true;
     }
 }
