@@ -1,5 +1,7 @@
 package ac.grim.grimac.platform.bukkit;
 
+import ac.grim.grimac.GrimAPI;
+import ac.grim.grimac.platform.api.Platform;
 import ac.grim.grimac.platform.api.PlatformServer;
 import ac.grim.grimac.platform.api.sender.Sender;
 import io.github.retrooper.packetevents.util.SpigotReflectionUtil;
@@ -34,12 +36,10 @@ public class BukkitPlatformServer implements PlatformServer {
 
     @Override
     public double getTPS() {
-        try {
-            return SpigotReflectionUtil.getTPS();
-        } catch (Throwable e) { // Catch RuntimeException (which wraps the underlying error)
-            // Folia throws UnsupportedOperationException -> Wrapped in ITE -> Wrapped in RuntimeException
-            // Or simple reflection failures
+        // Folia throws UnsupportedOperationException on calling getTPS(), there is no API for getting TPS on Folia
+        if (GrimAPI.INSTANCE.getPlatform() == Platform.FOLIA) {
             return Double.NaN;
         }
+        return SpigotReflectionUtil.getTPS();
     }
 }
