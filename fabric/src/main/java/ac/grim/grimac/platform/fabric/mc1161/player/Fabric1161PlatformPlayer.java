@@ -25,6 +25,9 @@ public class Fabric1161PlatformPlayer extends AbstractFabricPlatformPlayer {
 
     @Override
     public CompletableFuture<Boolean> teleportAsync(Location location) {
+        if (location == null) {
+            return CompletableFuture.completedFuture(false);
+        }
         PlatformWorld world = location.getWorld();
         if (world == null || !(world instanceof ServerLevel targetLevel)) {
             return CompletableFuture.completedFuture(false);
