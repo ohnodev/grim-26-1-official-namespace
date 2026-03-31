@@ -1,8 +1,10 @@
-# Grim + PacketEvents Fabric Harness
+# Grim + PacketEvents Harness
 
-This harness validates Grim Fabric startup with PacketEvents for:
+This harness validates Grim + PacketEvents startup across:
 
 - `grim-pe-official-261` -> MC `26.1` (official PacketEvents path, Java 25)
+- `grim-pe-paper-1206` -> Paper `1.20.6` (older-version Bukkit path)
+- `grim-pe-spigot-1211` -> Spigot `1.21.1` (Bukkit path)
 
 Note: this PR branch targets MC 26.1 only (`minecraft >= 26.1` in mod metadata), so 1.21.x startup is intentionally out of scope here.
 
@@ -27,6 +29,18 @@ From this repository root:
 ./tests/scripts/run-all-grim-pe-harnesses.sh
 ```
 
+Run Bukkit-only cases:
+
+```bash
+./tests/scripts/run-all-grim-pe-bukkit-harnesses.sh
+```
+
+Run full stack (Fabric + Bukkit):
+
+```bash
+./tests/scripts/run-all-grim-pe-stack-harnesses.sh
+```
+
 ## Individual Cases
 
 Intermediary 1.21.6:
@@ -41,6 +55,20 @@ Official 26.1:
 ```bash
 ./tests/scripts/bootstrap-grim-pe-official-261.sh
 ./tests/scripts/run-server.sh --server-dir tests/runs/grim-pe-26.1 --java-bin /path/to/java25
+```
+
+Bukkit Paper older-version (1.20.6):
+
+```bash
+./tests/scripts/bootstrap-grim-pe-bukkit-paper-1206.sh
+./tests/scripts/run-bukkit-server.sh --server-dir tests/runs/grim-pe-paper-1.20.6
+```
+
+Bukkit Spigot (1.21.1):
+
+```bash
+./tests/scripts/bootstrap-grim-pe-bukkit-spigot-1211.sh
+./tests/scripts/run-bukkit-server.sh --server-dir tests/runs/grim-pe-spigot-1.21.1
 ```
 
 ## Notes
