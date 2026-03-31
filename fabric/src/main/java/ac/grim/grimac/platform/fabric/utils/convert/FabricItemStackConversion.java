@@ -17,7 +17,7 @@ public final class FabricItemStackConversion {
     private FabricItemStackConversion() {}
 
     public static ItemStack peItemStackFromNative(net.minecraft.world.item.ItemStack fabricStack) {
-        if (fabricStack.isEmpty()) {
+        if (fabricStack == null || fabricStack.isEmpty()) {
             return ItemStack.EMPTY;
         }
         ByteBuf buffer = PooledByteBufAllocator.DEFAULT.buffer();

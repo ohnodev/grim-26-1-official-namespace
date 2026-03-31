@@ -14,9 +14,9 @@ dependencies {
 
     compileOnly("me.lucko:fabric-permissions-api:0.7.0")
 
-    // cloud-fabric 2.0.0-SNAPSHOT (26.1 / official mappings): Sonatype snapshots below, or publish
-    // Incendo cloud-minecraft-modded to mavenLocal — see fabric/README-26.1-dependencies.md
-    implementation("org.incendo:cloud-fabric:2.0.0-SNAPSHOT") {
+    // cloud-fabric snapshot for 26.1 is catalog-managed in libs.versions.toml.
+    // Resolve via Sonatype snapshots below or publish cloud-minecraft-modded locally.
+    implementation(libs.cloud.fabric) {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "net.fabricmc", module = "fabric-loader")
     }
@@ -85,11 +85,10 @@ repositories {
 
     mavenCentral()
 
-    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+    exclusive("https://central.sonatype.com/repository/maven-snapshots/", {
         mavenContent { snapshotsOnly() }
-        content {
-            includeGroup("org.incendo")
-        }
+    }) {
+        includeGroup("org.incendo")
     }
 
     // Last: local publish (e.g. ./gradlew publishToMavenLocal in packetevents) when remotes lack the jar
@@ -97,6 +96,8 @@ repositories {
 }
 
 java {
+    // Base conventions keep a lower default for cross-platform compatibility.
+    // Fabric 26.1 runs on Java 25, so this module explicitly targets 25.
     toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 

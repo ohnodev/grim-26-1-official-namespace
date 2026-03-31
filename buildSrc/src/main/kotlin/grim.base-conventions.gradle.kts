@@ -12,6 +12,8 @@ description = rootProject.description
 
 // Java compilation settings
 java {
+    // Cross-platform baseline for shared modules. Version-specific modules can override this
+    // when a newer runtime is required (e.g. Fabric 26.1 targeting Java 25).
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     disableAutoTargetJvm()
     withSourcesJar()
@@ -38,6 +40,7 @@ spotless {
 tasks {
     withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
+        // Keep a conservative default bytecode target unless a module overrides it explicitly.
         options.release.set(17)
     }
 

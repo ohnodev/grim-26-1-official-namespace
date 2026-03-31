@@ -16,13 +16,9 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
         super(player);
     }
 
-    // TODO
-    // I don't understand why we do this on Bukkit, so I'm replicating the behaviour without high-level understanding of purpose
-    // This method is only used to check if the inventory matches one of the following
-    //     private static final Set<String> SUPPORTED_INVENTORIES = new HashSet<>(
-    //            Arrays.asList("CHEST", "DISPENSER", "DROPPER", "PLAYER", "ENDER_CHEST", "SHULKER_BOX", "BARREL", "CRAFTING", "CREATIVE")
-    //    );
-    // And is slated to be replaced by packet based behaviour, this should do for now
+    // This key is used only for inventory support gating against the canonical
+    // uppercase constants in SUPPORTED_INVENTORIES (e.g. CHEST, SHULKER_BOX).
+    // We therefore normalize all fallback paths to the same uppercase key style.
     @Override
     public String getOpenInventoryKey() {
         AbstractContainerMenu handler = fabricPlatformPlayer.getNative().containerMenu;
@@ -33,11 +29,10 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
             // 4x4 CRAFTING -> CRAFTING
             if (handler instanceof InventoryMenu) {
                 return "CRAFTING";
-                // Not sure if creative mode check here is correct
             } else if (this.isPlayerCreative()) {
                 return "CREATIVE";
             }
-            return handler.getClass().getSimpleName();
+            return normalizeFallbackKey(handler);
         }
 
         // should we handle crafters here also??
@@ -56,15 +51,20 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
         } else {
             // Registry handles:
             // SHULKER_BOX -> SHULKER_BOX
-            // CRAFTIING -> CRAFTING
+            // CRAFTING -> CRAFTING
 
             Identifier registryKey = (Identifier) this.getScreenID(type);
             if (registryKey != null) {
                 return registryKey.getPath().toUpperCase(Locale.ROOT).replace('.', '_');
             }
 
-            return handler.getClass().getSimpleName(); // Default fallback
+            return normalizeFallbackKey(handler); // Default fallback
         }
+    }
+
+    protected String normalizeFallbackKey(AbstractContainerMenu handler) {
+        String simpleName = handler.getClass().getSimpleName().replace('$', '_');
+        return simpleName.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toUpperCase(Locale.ROOT);
     }
 
     // returns Identifier in > 1.21.11, and ResourceLocation in 1.21.10-, which both map to class_2960
