@@ -9,6 +9,8 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory {
     public Fabric1161PlatformInventory(AbstractFabricPlatformPlayer player) {
         super(player);
@@ -35,6 +37,7 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
             } else if (this.isPlayerCreative()) {
                 return "CREATIVE";
             }
+            return handler.getClass().getSimpleName();
         }
 
         // should we handle crafters here also??
@@ -57,7 +60,7 @@ public class Fabric1161PlatformInventory extends AbstractFabricPlatformInventory
 
             Identifier registryKey = (Identifier) this.getScreenID(type);
             if (registryKey != null) {
-                return registryKey.getPath();
+                return registryKey.getPath().toUpperCase(Locale.ROOT).replace('.', '_');
             }
 
             return handler.getClass().getSimpleName(); // Default fallback

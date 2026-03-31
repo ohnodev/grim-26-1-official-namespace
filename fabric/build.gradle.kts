@@ -1,5 +1,3 @@
-import versioning.BuildConfig
-
 val minecraft_version: String by project
 val fabric_version: String by project
 
@@ -16,7 +14,8 @@ dependencies {
 
     compileOnly("me.lucko:fabric-permissions-api:0.7.0")
 
-    // cloud-fabric from local maven (26.1-compatible build)
+    // cloud-fabric 2.0.0-SNAPSHOT (26.1 / official mappings): Sonatype snapshots below, or publish
+    // Incendo cloud-minecraft-modded to mavenLocal — see fabric/README-26.1-dependencies.md
     implementation("org.incendo:cloud-fabric:2.0.0-SNAPSHOT") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "net.fabricmc", module = "fabric-loader")
@@ -24,7 +23,7 @@ dependencies {
 
     implementation(libs.fabric.loader)
 
-    // PacketEvents from local maven (26.1-compatible build)
+    // PacketEvents 2.12.x for MC 26.1: repo.grim.ac/snapshots and/or mavenLocal — see README
     implementation("com.github.retrooper:packetevents-fabric:2.12.0-SNAPSHOT") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "net.fabricmc", module = "fabric-loader")
@@ -41,9 +40,9 @@ dependencies {
     implementation(project(":common"))
 }
 
+// Remote-first resolution; mavenLocal last (or only when MAVEN_LOCAL_OVERRIDE) so CI/dev machines
+// don’t silently pick stale local artifacts. PacketEvents/cloud snapshot sources: README-26.1-dependencies.md
 repositories {
-    mavenLocal()
-
     exclusive("https://maven.fabricmc.net/") {
         includeGroup("net.fabricmc")
         includeGroup("net.fabricmc.fabric-api")
@@ -51,6 +50,12 @@ repositories {
 
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.grim.grimac")
+    }
+    maven("https://repo.grim.ac/snapshots") {
+        mavenContent { snapshotsOnly() }
+        content {
+            includeGroup("com.github.retrooper")
+        }
     }
 
     exclusive("https://jitpack.io", { mavenContent { releasesOnly() } }) {
@@ -79,6 +84,16 @@ repositories {
     exclusive(mavenCentral()) { includeGroup("me.lucko") }
 
     mavenCentral()
+
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+        mavenContent { snapshotsOnly() }
+        content {
+            includeGroup("org.incendo")
+        }
+    }
+
+    // Last: local publish (e.g. ./gradlew publishToMavenLocal in packetevents) when remotes lack the jar
+    mavenLocal()
 }
 
 java {

@@ -12,6 +12,7 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
+# PE 2.12.x required for MC 26.1; Grim snapshot repo; no stable fabric artifact on Maven Central yet
 packetevents = "2.12.0-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
@@ -25,7 +26,7 @@ snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
 
 # --- Build & Tooling ---
-fabric-loader = "0.18.4"
+fabric-loader = "0.18.5"
 fabric-loom = "1.15-SNAPSHOT"
 lombok = "9.0.0"
 shadow = "9.3.0"

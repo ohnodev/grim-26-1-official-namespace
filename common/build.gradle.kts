@@ -6,11 +6,15 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
-
-    // Grim API & PacketEvents
     exclusive("https://repo.grim.ac/snapshots") {
         includeGroup("ac.grim.grimac")
+    }
+    // PacketEvents snapshots: same host but not exclusiveContent-locked so mavenLocal() can still resolve
+    maven("https://repo.grim.ac/snapshots") {
+        mavenContent { snapshotsOnly() }
+        content {
+            includeGroup("com.github.retrooper")
+        }
     }
 
     // ViaVersion
@@ -37,6 +41,9 @@ repositories {
     }
 
     mavenCentral()
+
+    // After all remotes: local fallback for PacketEvents 2.12+ until repo.grim.ac hosts matching snapshots
+    mavenLocal()
 }
 
 

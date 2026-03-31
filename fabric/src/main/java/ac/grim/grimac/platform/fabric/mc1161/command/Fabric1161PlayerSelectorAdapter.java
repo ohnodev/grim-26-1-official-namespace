@@ -28,7 +28,7 @@ public class Fabric1161PlayerSelectorAdapter implements PlayerSelector {
 
     @Override
     public Collection<Sender> getPlayers() {
-        return Collections.singletonList(getSinglePlayer()); // Assuming your ServerPlayer can be cast to Player
+        return Collections.singletonList(getSinglePlayer());
     }
 
     @Override
