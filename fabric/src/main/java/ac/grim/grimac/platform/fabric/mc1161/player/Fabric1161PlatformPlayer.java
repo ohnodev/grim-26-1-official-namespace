@@ -32,28 +32,33 @@ public class Fabric1161PlatformPlayer extends AbstractFabricPlatformPlayer {
         if (world == null || !(world instanceof ServerLevel targetLevel)) {
             return CompletableFuture.completedFuture(false);
         }
+        final double targetX = location.getX();
+        final double targetY = location.getY();
+        final double targetZ = location.getZ();
+        final float targetYaw = location.getYaw();
+        final float targetPitch = location.getPitch();
         return FabricFutureUtil.supplySync(() -> {
             try {
                 fabricPlayer.teleportTo(
                         targetLevel,
-                        location.getX(),
-                        location.getY(),
-                        location.getZ(),
+                        targetX,
+                        targetY,
+                        targetZ,
                         EnumSet.noneOf(Relative.class),
-                        location.getYaw(),
-                        location.getPitch(),
+                        targetYaw,
+                        targetPitch,
                         false
                 );
                 if (fabricPlayer.level() != targetLevel) {
                     return false;
                 }
                 double epsilon = 1e-3;
-                float yawDelta = wrappedAngleDelta(fabricPlayer.getYRot(), location.getYaw());
-                if (Math.abs(fabricPlayer.getX() - location.getX()) > epsilon
-                        || Math.abs(fabricPlayer.getY() - location.getY()) > epsilon
-                        || Math.abs(fabricPlayer.getZ() - location.getZ()) > epsilon
+                float yawDelta = wrappedAngleDelta(fabricPlayer.getYRot(), targetYaw);
+                if (Math.abs(fabricPlayer.getX() - targetX) > epsilon
+                        || Math.abs(fabricPlayer.getY() - targetY) > epsilon
+                        || Math.abs(fabricPlayer.getZ() - targetZ) > epsilon
                         || yawDelta > 0.01f
-                        || Math.abs(fabricPlayer.getXRot() - location.getPitch()) > 0.01f) {
+                        || Math.abs(fabricPlayer.getXRot() - targetPitch) > 0.01f) {
                     return false;
                 }
                 return true;
