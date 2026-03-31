@@ -2,10 +2,13 @@
 
 The Fabric module targets **Minecraft 26.1** with **official** mappings. Some artifacts are **snapshots** or built from source.
 
-## PacketEvents (`com.github.retrooper:packetevents-*:2.12.0-SNAPSHOT`)
+## PacketEvents (`com.github.retrooper:packetevents-api:2.12.0+7d7c846-SNAPSHOT`)
 
 - Gradle tries **`https://repo.grim.ac/snapshots`**, then **`mavenLocal()`** last so unpublished versions can be resolved after `publishToMavenLocal` in the PacketEvents tree.
 - Optional: **`./gradlew -PMAVEN_LOCAL_OVERRIDE=true`** also prepends `mavenLocal()` inside `exclusive()` helpers (see `buildSrc/exclusive.kt`) for other modules.
+- Default builds pin exact snapshot coordinates for reproducibility; override behavior is opt-in via local properties/`MAVEN_LOCAL_OVERRIDE`.
+- The Fabric module compiles against `packetevents-api` by default.
+- Full PE Fabric runtime jars are validated via harness scripts in `tests/scripts` so defaults stay stable while local testing remains explicit.
 - To populate local cache only:
 
   ```bash
@@ -15,8 +18,8 @@ The Fabric module targets **Minecraft 26.1** with **official** mappings. Some ar
 
 ## cloud-fabric (`org.incendo:cloud-fabric:2.0.0-SNAPSHOT`)
 
-- Resolved from **Sonatype Maven Snapshots** (`https://central.sonatype.com/repository/maven-snapshots/`) for group `org.incendo`, and/or
-- Publish locally from [cloud-minecraft-modded](https://github.com/Incendo/cloud-minecraft-modded): `./gradlew :cloud-fabric:publishToMavenLocal`, then build Grim with **`-PMAVEN_LOCAL_OVERRIDE=true`**.
+- Resolved from Sonatype snapshots and/or local publish.
+- For deterministic local validation, publish your own cloud-fabric build and enable **`-PMAVEN_LOCAL_OVERRIDE=true`**.
 
 ## Loader
 

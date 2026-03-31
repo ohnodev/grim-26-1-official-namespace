@@ -12,8 +12,8 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# PE 2.12.x required for MC 26.1; snapshot is intentional until stable Fabric artifact is published.
-packetevents = "2.12.0-SNAPSHOT"
+# Pin PE to an exact snapshot build for reproducibility.
+packetevents = "2.12.0+7d7c846-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
 
@@ -57,6 +57,8 @@ grim-bukkit-internal = { group = "ac.grim.grimac", name = "grim-bukkit-internal"
 grim-fabric-internal = { group = "ac.grim.grimac", name = "grim-fabric-internal", version.ref = "grim-api" }
 packetevents-api = { group = "com.github.retrooper", name = "packetevents-api", version.ref = "packetevents" }
 packetevents-fabric = { group  = "com.github.retrooper", name = "packetevents-fabric", version.ref = "packetevents" }
+packetevents-fabric-common = { group  = "com.github.retrooper", name = "packetevents-fabric-common", version.ref = "packetevents" }
+packetevents-fabric-official = { group  = "com.github.retrooper", name = "packetevents-fabric-official", version.ref = "packetevents" }
 packetevents-spigot = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents"}
 viaversion = { group = "com.viaversion", name = "viaversion", version.ref = "viaversion" }
 

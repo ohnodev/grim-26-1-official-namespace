@@ -16,8 +16,7 @@ dependencies {
 
     compileOnly("me.lucko:fabric-permissions-api:0.7.0")
 
-    // cloud-fabric snapshot for 26.1 is catalog-managed in libs.versions.toml.
-    // Resolve via Sonatype snapshots below or publish cloud-minecraft-modded locally.
+    // cloud-fabric is catalog-managed and pinned for reproducible builds.
     implementation(libs.cloud.fabric) {
         exclude(group = "net.fabricmc.fabric-api")
         exclude(group = "net.fabricmc", module = "fabric-loader")
@@ -25,16 +24,8 @@ dependencies {
 
     implementation(libs.fabric.loader)
 
-    // PacketEvents 2.12.x for MC 26.1: repo.grim.ac/snapshots and/or mavenLocal — see README
-    implementation("com.github.retrooper:packetevents-fabric:2.12.0-SNAPSHOT") {
-        exclude(group = "net.fabricmc.fabric-api")
-        exclude(group = "net.fabricmc", module = "fabric-loader")
-    }
-    compileOnly("com.github.retrooper:packetevents-fabric-common:2.12.0-SNAPSHOT")
-    compileOnly("com.github.retrooper:packetevents-fabric-official:2.12.0-SNAPSHOT") {
-        exclude(group = "net.fabricmc.fabric-api")
-        exclude(group = "net.fabricmc", module = "fabric-loader")
-    }
+    // Keep default builds reproducible and mapping-agnostic: compile against PE API.
+    compileOnly(libs.packetevents.api)
 
     compileOnly("org.slf4j:slf4j-api:2.0.17")
     compileOnly("org.apache.logging.log4j:log4j-api:2.24.3")
@@ -87,10 +78,12 @@ repositories {
 
     mavenCentral()
 
-    exclusive("https://central.sonatype.com/repository/maven-snapshots/", {
+    // Non-exclusive snapshot repo so pinned releases can still resolve from Maven Central.
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
         mavenContent { snapshotsOnly() }
-    }) {
-        includeGroup("org.incendo")
+        content {
+            includeGroup("org.incendo")
+        }
     }
 
     // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
