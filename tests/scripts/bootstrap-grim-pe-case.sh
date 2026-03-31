@@ -7,6 +7,7 @@ SERVER_DIR=""
 PROFILE=""
 PACKETEVENTS_REPO="/root/packetevents-grim-restructure"
 JAVA25_HOME="${JAVA25_HOME:-/root/.gradle/jdks/eclipse_adoptium-25-amd64-linux.2}"
+SKIP_CLEAN="${SKIP_CLEAN:-false}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -56,12 +57,16 @@ echo "[bootstrap:${CASE_NAME}] Building Grim fabric artifact (local override ena
 ./gradlew -PmavenLocalOverride=true :fabric:jar
 
 echo "[bootstrap:${CASE_NAME}] Building PacketEvents fabric artifacts..."
+clean_arg=()
+if [[ "${SKIP_CLEAN}" != "true" ]]; then
+  clean_arg=("clean")
+fi
 case "${PROFILE}" in
   official-261)
-    ./gradlew -p "${PACKETEVENTS_REPO}" -Dorg.gradle.java.home="${JAVA25_HOME}" clean :fabric:build :fabric-common:build :fabric-official:build
+    ./gradlew -p "${PACKETEVENTS_REPO}" -Dorg.gradle.java.home="${JAVA25_HOME}" "${clean_arg[@]}" :fabric:build :fabric-common:build :fabric-official:build
     ;;
   intermediary-1216)
-    ./gradlew -p "${PACKETEVENTS_REPO}" clean :fabric:build :fabric-intermediary:build
+    ./gradlew -p "${PACKETEVENTS_REPO}" "${clean_arg[@]}" :fabric:build :fabric-intermediary:build
     ;;
   *)
     echo "[bootstrap:${CASE_NAME}] Unknown profile: ${PROFILE}" >&2

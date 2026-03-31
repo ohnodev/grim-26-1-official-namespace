@@ -60,6 +60,27 @@ latest_non_doc_jar() {
   [[ -n "${newest}" ]] && printf '%s\n' "${newest}"
 }
 
+latest_main_pe_jar() {
+  local dir="$1"
+  local newest=""
+  shopt -s nullglob
+  local files=( "${dir}"/packetevents-fabric-*.jar )
+  shopt -u nullglob
+  local f
+  for f in "${files[@]}"; do
+    [[ -e "${f}" ]] || continue
+    local base
+    base="$(basename "${f}")"
+    case "${base}" in
+      *-sources.jar|*-javadoc.jar|*fabric-common-*|*fabric-intermediary-*|*fabric-official-*|*fabric-mc*) continue ;;
+    esac
+    if [[ -z "${newest}" || "${f}" -nt "${newest}" ]]; then
+      newest="${f}"
+    fi
+  done
+  [[ -n "${newest}" ]] && printf '%s\n' "${newest}"
+}
+
 copy_required() {
   local file="$1"
   local label="$2"
@@ -104,7 +125,7 @@ copy_required "${pe_common}" "packetevents-fabric-common"
 
 case "${PROFILE}" in
   official-261)
-    pe_main="$(latest_non_doc_jar "${PE_LIBS}" "packetevents-fabric-*.jar" | awk '!/fabric-common|fabric-intermediary|fabric-official|fabric-mc/' | head -n 1 || true)"
+    pe_main="$(latest_main_pe_jar "${PE_LIBS}" || true)"
     if [[ -z "${pe_main}" ]]; then
       echo "[install] Missing required jar: packetevents-fabric main" >&2
       exit 1
@@ -114,7 +135,7 @@ case "${PROFILE}" in
     copy_required "${pe_official}" "packetevents-fabric-official"
     ;;
   intermediary-1216)
-    pe_main="$(latest_non_doc_jar "${PE_LIBS}" "packetevents-fabric-*.jar" | awk '!/fabric-common|fabric-intermediary|fabric-official|fabric-mc/' | head -n 1 || true)"
+    pe_main="$(latest_main_pe_jar "${PE_LIBS}" || true)"
     if [[ -z "${pe_main}" ]]; then
       echo "[install] Missing required jar: packetevents-fabric main" >&2
       exit 1

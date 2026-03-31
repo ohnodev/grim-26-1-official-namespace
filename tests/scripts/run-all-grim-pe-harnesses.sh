@@ -24,8 +24,8 @@ smoke_start() {
   log_file="$(mktemp)"
 
   set +e
-  "${TIMEOUT_CMD}" 60s "$@" > >(tee "${log_file}") 2>&1
-  local rc=$?
+  "${TIMEOUT_CMD}" 60s "$@" 2>&1 | tee "${log_file}"
+  local rc=${PIPESTATUS[0]}
   set -e
 
   if [[ ${rc} -ne 0 && ${rc} -ne 124 ]]; then
