@@ -6,6 +6,7 @@ import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.utils.data.packetentity.PacketEntity;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCamera;
 import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
@@ -21,15 +22,23 @@ public class CompensatedCameraEntity extends Check implements PacketCheck {
         entities.add(player.compensatedEntities.self);
     }
 
+    private static boolean isCameraPacket(PacketTypeCommon packetType) {
+        if (packetType == null) return false;
+        if (packetType == PacketType.Play.Server.CAMERA) return true;
+        String name = packetType.getName();
+        return "CAMERA".equals(name) || "SET_CAMERA".equals(name);
+    }
+
     @Override
     public void onPacketSend(PacketSendEvent event) {
-        if (event.getPacketType() != PacketType.Play.Server.CAMERA) return;
-        if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.CAMERA)) return;
+        PacketTypeCommon packetType = event.getPacketType();
+        if (!isCameraPacket(packetType)) return;
+        if (!PacketCapabilityGuard.isSafe(packetType)) return;
         int camera;
         try {
             camera = new WrapperPlayServerCamera(event).getCameraId();
         } catch (Exception e) {
-            PacketCapabilityGuard.logParseFailure(PacketType.Play.Server.CAMERA, e);
+            PacketCapabilityGuard.logParseFailure(packetType, e);
             return;
         }
         player.sendTransaction();
