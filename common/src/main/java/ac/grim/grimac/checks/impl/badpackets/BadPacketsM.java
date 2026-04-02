@@ -57,9 +57,13 @@ public class BadPacketsM extends Check implements PacketCheck {
 
         if (event.getPacketType() == PacketType.Play.Server.COMBAT_EVENT && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)
                 && PacketCapabilityGuard.isSafe(PacketType.Play.Server.COMBAT_EVENT)) {
-            WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
-            if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {
-                player.addRealTimeTaskNow(() -> exempt++);
+            try {
+                WrapperPlayServerCombatEvent packet = new WrapperPlayServerCombatEvent(event);
+                if (packet.getCombat() == Combat.ENTITY_DEAD && packet.getPlayerId() == player.entityID) {
+                    player.addRealTimeTaskNow(() -> exempt++);
+                }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("BadPacketsM", event.getPacketType(), e);
             }
         }
     }

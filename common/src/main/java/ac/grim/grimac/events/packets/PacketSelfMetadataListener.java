@@ -219,15 +219,19 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Server.USE_BED && PacketCapabilityGuard.isSafe(PacketType.Play.Server.USE_BED)) {
-            WrapperPlayServerUseBed bed = new WrapperPlayServerUseBed(event);
+            try {
+                WrapperPlayServerUseBed bed = new WrapperPlayServerUseBed(event);
 
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player != null && player.entityID == bed.getEntityId()) {
-                // Split so packet received after transaction
-                player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
-                    player.isInBed = true;
-                    player.bedPosition = new Vector3d(bed.getPosition().getX() + 0.5, bed.getPosition().getY(), bed.getPosition().getZ() + 0.5);
-                });
+                GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
+                if (player != null && player.entityID == bed.getEntityId()) {
+                    // Split so packet received after transaction
+                    player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
+                        player.isInBed = true;
+                        player.bedPosition = new Vector3d(bed.getPosition().getX() + 0.5, bed.getPosition().getY(), bed.getPosition().getZ() + 0.5);
+                    });
+                }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("PacketSelfMetadataListener", event.getPacketType(), e);
             }
         }
 

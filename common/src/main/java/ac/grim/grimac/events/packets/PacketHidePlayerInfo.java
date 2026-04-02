@@ -39,7 +39,13 @@ public class PacketHidePlayerInfo extends PacketListenerAbstract {
                 return;
             }
 
-            WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo(event);
+            WrapperPlayServerPlayerInfo info;
+            try {
+                info = new WrapperPlayServerPlayerInfo(event);
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("PacketHidePlayerInfo", event.getPacketType(), e);
+                return;
+            }
 
             if (info.getAction() == WrapperPlayServerPlayerInfo.Action.UPDATE_GAME_MODE || info.getAction() == WrapperPlayServerPlayerInfo.Action.ADD_PLAYER) {
                 List<WrapperPlayServerPlayerInfo.PlayerData> nmsPlayerInfoDataList = info.getPlayerDataList();

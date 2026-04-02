@@ -412,10 +412,11 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             }
         }
         } catch (RuntimeException ex) {
-            if (!PacketDecodeUtils.isPacketDecodeDesync(ex)) {
-                throw ex;
+            if (PacketDecodeUtils.isPacketDecodeDesync(ex)) {
+                PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
+                return;
             }
-            PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
+            PacketCapabilityGuard.logBranchFailure("PacketEntityReplication", event.getPacketType(), ex);
         }
     }
 

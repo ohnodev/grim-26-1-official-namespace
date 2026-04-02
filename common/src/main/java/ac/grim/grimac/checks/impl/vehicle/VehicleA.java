@@ -19,13 +19,17 @@ public class VehicleA extends Check implements PacketCheck {
     public void onPacketReceive(final PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
             if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.STEER_VEHICLE)) return;
-            final WrapperPlayClientSteerVehicle packet = new WrapperPlayClientSteerVehicle(event);
+            try {
+                final WrapperPlayClientSteerVehicle packet = new WrapperPlayClientSteerVehicle(event);
 
-            if (Math.abs(packet.getForward()) > 0.98f || Math.abs(packet.getSideways()) > 0.98f) {
-                if (flagAndAlert("forwards=" + packet.getForward() + ", sideways=" + packet.getSideways()) && shouldModifyPackets()) {
-                    event.setCancelled(true);
-                    player.onPacketCancel();
+                if (Math.abs(packet.getForward()) > 0.98f || Math.abs(packet.getSideways()) > 0.98f) {
+                    if (flagAndAlert("forwards=" + packet.getForward() + ", sideways=" + packet.getSideways()) && shouldModifyPackets()) {
+                        event.setCancelled(true);
+                        player.onPacketCancel();
+                    }
                 }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("VehicleA", event.getPacketType(), e);
             }
         }
     }

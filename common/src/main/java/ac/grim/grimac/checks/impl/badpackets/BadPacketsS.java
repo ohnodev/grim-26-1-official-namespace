@@ -19,10 +19,16 @@ public class BadPacketsS extends Check implements PacketCheck {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION
                 && PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)
-                && !new WrapperPlayClientWindowConfirmation(event).isAccepted()
-                && flagAndAlert() && shouldModifyPackets()) {
-            event.setCancelled(true);
-            player.onPacketCancel();
+                ) {
+            try {
+                if (!new WrapperPlayClientWindowConfirmation(event).isAccepted()
+                        && flagAndAlert() && shouldModifyPackets()) {
+                    event.setCancelled(true);
+                    player.onPacketCancel();
+                }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("BadPacketsS", event.getPacketType(), e);
+            }
         }
     }
 }

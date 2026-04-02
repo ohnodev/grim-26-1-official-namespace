@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * throttled warning instead of allowing a potentially crashing parse.
  */
 public final class PacketCapabilityGuard {
+    private static final boolean ENFORCE_GUARDS = false;
 
     private static final Set<PacketTypeCommon> UNCONFIRMED = ConcurrentHashMap.newKeySet();
     private static final AtomicLong LAST_WARN_MS = new AtomicLong(0);
@@ -56,6 +57,7 @@ public final class PacketCapabilityGuard {
      */
     public static boolean isSafe(PacketTypeCommon packetType) {
         if (packetType == null) return false;
+        if (!ENFORCE_GUARDS) return true;
         if (!UNCONFIRMED.contains(packetType)) return true;
 
         long now = System.currentTimeMillis();
@@ -89,6 +91,18 @@ public final class PacketCapabilityGuard {
         if (now - last > WARN_THROTTLE_MS && LAST_PARSE_WARN_MS.compareAndSet(last, now)) {
             LogUtil.warn("[26.1-guard] Wrapper parse failed for " + packetType.getName()
                     + ": " + e.getClass().getSimpleName() + " — branch skipped.");
+        }
+    }
+
+    public static void logBranchFailure(String source, PacketTypeCommon packetType, Throwable throwable) {
+        long now = System.currentTimeMillis();
+        long last = LAST_PARSE_WARN_MS.get();
+        if (now - last > WARN_THROTTLE_MS && LAST_PARSE_WARN_MS.compareAndSet(last, now)) {
+            String packetName = packetType == null ? "unknown" : packetType.getName();
+            LogUtil.warn("[26.1-guard] Branch failed in " + source
+                    + " packet=" + packetName
+                    + " cause=" + throwable.getClass().getSimpleName()
+                    + ": " + throwable.getMessage());
         }
     }
 }

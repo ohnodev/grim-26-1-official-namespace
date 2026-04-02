@@ -26,18 +26,22 @@ public class PacketPingListener extends PacketListenerAbstract {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
             if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)) return;
-            WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
-            short id = transaction.getActionId();
+            try {
+                WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
+                short id = transaction.getActionId();
 
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null) return;
-            player.packetStateData.lastTransactionPacketWasValid = false;
+                GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
+                if (player == null) return;
+                player.packetStateData.lastTransactionPacketWasValid = false;
 
-            // Vanilla always uses an ID starting from 1
-            // Check if we sent this packet before cancelling it
-            if (id <= 0 && player.addTransactionResponse(id)) {
-                player.packetStateData.lastTransactionPacketWasValid = true;
-                event.setCancelled(true);
+                // Vanilla always uses an ID starting from 1
+                // Check if we sent this packet before cancelling it
+                if (id <= 0 && player.addTransactionResponse(id)) {
+                    player.packetStateData.lastTransactionPacketWasValid = true;
+                    event.setCancelled(true);
+                }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("PacketPingListener(receive)", event.getPacketType(), e);
             }
         }
 
@@ -65,19 +69,23 @@ public class PacketPingListener extends PacketListenerAbstract {
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
             if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.WINDOW_CONFIRMATION)) return;
-            WrapperPlayServerWindowConfirmation confirmation = new WrapperPlayServerWindowConfirmation(event);
-            short id = confirmation.getActionId();
-            //
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-            if (player == null) return;
-            player.packetStateData.lastServerTransWasValid = false;
-            // Vanilla always uses an ID starting from 1
-            if (id <= 0) {
-                if (player.didWeSendThatTrans.remove(id)) {
-                    player.packetStateData.lastServerTransWasValid = true;
-                    player.transactionsSent.add(new Pair<>(id, System.nanoTime()));
-                    player.lastTransactionSent.getAndIncrement();
+            try {
+                WrapperPlayServerWindowConfirmation confirmation = new WrapperPlayServerWindowConfirmation(event);
+                short id = confirmation.getActionId();
+                //
+                GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
+                if (player == null) return;
+                player.packetStateData.lastServerTransWasValid = false;
+                // Vanilla always uses an ID starting from 1
+                if (id <= 0) {
+                    if (player.didWeSendThatTrans.remove(id)) {
+                        player.packetStateData.lastServerTransWasValid = true;
+                        player.transactionsSent.add(new Pair<>(id, System.nanoTime()));
+                        player.lastTransactionSent.getAndIncrement();
+                    }
                 }
+            } catch (Exception e) {
+                PacketCapabilityGuard.logBranchFailure("PacketPingListener(send)", event.getPacketType(), e);
             }
         }
 
