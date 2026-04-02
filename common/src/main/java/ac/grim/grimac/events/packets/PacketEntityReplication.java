@@ -56,6 +56,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PacketEntityReplication extends Check implements PacketCheck {
+    private static final long PACKET_DECODE_WARN_INTERVAL_MS = 10_000L;
+    private static volatile long lastPacketDecodeWarnAt = 0L;
 
     private final AtomicBoolean hasSentPreWavePacket = new AtomicBoolean(true);
 
@@ -106,6 +108,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        try {
         // ensure grim is the one that sent the transaction
         if ((event.getPacketType() == PacketType.Play.Server.PING || event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) && player.packetStateData.lastServerTransWasValid) {
             despawnedEntitiesThisTransaction.clear();
@@ -403,6 +406,31 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 }, maxFireworkBoostPing);
             }
         }
+        } catch (RuntimeException ex) {
+            if (!isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            final long now = System.currentTimeMillis();
+            if (now - lastPacketDecodeWarnAt >= PACKET_DECODE_WARN_INTERVAL_MS) {
+                lastPacketDecodeWarnAt = now;
+                LogUtil.warn("Suppressed PacketEvents decode exception in PacketEntityReplication"
+                        + " packet=" + event.getPacketType() + " cause=" + ex.getClass().getSimpleName()
+                        + ": " + ex.getMessage());
+            }
+        }
+    }
+
+    private static boolean isPacketDecodeDesync(Throwable throwable) {
+        if (!(throwable instanceof IllegalStateException
+                || throwable instanceof IndexOutOfBoundsException
+                || throwable instanceof ArrayIndexOutOfBoundsException)) {
+            return false;
+        }
+        final String message = String.valueOf(throwable.getMessage());
+        return message.contains("Unknown entity metadata type id")
+                || message.contains("readerIndex(")
+                || message.contains("writerIndex(")
+                || message.contains("Can't find mapped entity");
     }
 
     private void handleMountVehicle(PacketSendEvent event, int vehicleID, int[] passengers) {

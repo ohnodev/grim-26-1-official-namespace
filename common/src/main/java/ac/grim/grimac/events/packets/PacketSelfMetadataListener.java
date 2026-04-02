@@ -2,6 +2,7 @@ package ac.grim.grimac.events.packets;
 
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.nmsutil.WatchableIndexUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class PacketSelfMetadataListener extends PacketListenerAbstract {
+    private static final long PACKET_DECODE_WARN_INTERVAL_MS = 10_000L;
+    private static volatile long lastPacketDecodeWarnAt = 0L;
 
     public PacketSelfMetadataListener() {
         super(PacketListenerPriority.HIGH);
@@ -29,6 +32,7 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
+        try {
         if (event.getPacketType() == PacketType.Play.Server.ENTITY_METADATA) {
             WrapperPlayServerEntityMetadata entityMetadata = new WrapperPlayServerEntityMetadata(event);
 
@@ -241,5 +245,30 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                 event.getTasksAfterSend().add(player::sendTransaction);
             }
         }
+        } catch (RuntimeException ex) {
+            if (!isPacketDecodeDesync(ex)) {
+                throw ex;
+            }
+            final long now = System.currentTimeMillis();
+            if (now - lastPacketDecodeWarnAt >= PACKET_DECODE_WARN_INTERVAL_MS) {
+                lastPacketDecodeWarnAt = now;
+                LogUtil.warn("Suppressed PacketEvents decode exception in PacketSelfMetadataListener"
+                        + " packet=" + event.getPacketType() + " cause=" + ex.getClass().getSimpleName()
+                        + ": " + ex.getMessage());
+            }
+        }
+    }
+
+    private static boolean isPacketDecodeDesync(Throwable throwable) {
+        if (!(throwable instanceof IllegalStateException
+                || throwable instanceof IndexOutOfBoundsException
+                || throwable instanceof ArrayIndexOutOfBoundsException)) {
+            return false;
+        }
+        final String message = String.valueOf(throwable.getMessage());
+        return message.contains("Unknown entity metadata type id")
+                || message.contains("readerIndex(")
+                || message.contains("writerIndex(")
+                || message.contains("Can't find mapped entity");
     }
 }
