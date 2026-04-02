@@ -26,13 +26,12 @@ public class PacketPingListener extends PacketListenerAbstract {
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
             if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)) return;
+            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
+            if (player == null) return;
+            player.packetStateData.lastTransactionPacketWasValid = false;
             try {
                 WrapperPlayClientWindowConfirmation transaction = new WrapperPlayClientWindowConfirmation(event);
                 short id = transaction.getActionId();
-
-                GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
-                if (player == null) return;
-                player.packetStateData.lastTransactionPacketWasValid = false;
 
                 // Vanilla always uses an ID starting from 1
                 // Check if we sent this packet before cancelling it
@@ -78,9 +77,9 @@ public class PacketPingListener extends PacketListenerAbstract {
                 // Vanilla always uses an ID starting from 1
                 if (id <= 0) {
                     if (player.didWeSendThatTrans.remove(id)) {
-                        player.packetStateData.lastServerTransWasValid = true;
                         player.transactionsSent.add(new Pair<>(id, System.nanoTime()));
                         player.lastTransactionSent.getAndIncrement();
+                        player.packetStateData.lastServerTransWasValid = true;
                     }
                 }
             } catch (Exception e) {

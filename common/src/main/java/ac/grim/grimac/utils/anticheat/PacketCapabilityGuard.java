@@ -78,7 +78,14 @@ public final class PacketCapabilityGuard {
         UNCONFIRMED.remove(packetType);
     }
 
-    private static final AtomicLong LAST_PARSE_WARN_MS = new AtomicLong(0);
+    private static final ConcurrentHashMap<String, AtomicLong> LAST_PARSE_WARN_MS_BY_KEY = new ConcurrentHashMap<>();
+
+    private static boolean shouldLogParseKey(String key) {
+        AtomicLong lastRef = LAST_PARSE_WARN_MS_BY_KEY.computeIfAbsent(key, ignored -> new AtomicLong(0));
+        long now = System.currentTimeMillis();
+        long last = lastRef.get();
+        return now - last > WARN_THROTTLE_MS && lastRef.compareAndSet(last, now);
+    }
 
     /**
      * Logs a throttled warning when wrapper construction fails for an
@@ -87,20 +94,18 @@ public final class PacketCapabilityGuard {
      * wire-format issues.
      */
     public static void logParseFailure(PacketTypeCommon packetType, Exception e) {
-        long now = System.currentTimeMillis();
-        long last = LAST_PARSE_WARN_MS.get();
-        if (now - last > WARN_THROTTLE_MS && LAST_PARSE_WARN_MS.compareAndSet(last, now)) {
-            LogUtil.warn("[26.1-guard] Wrapper parse failed for " + packetType.getName()
+        String packetName = packetType == null ? "unknown" : packetType.getName();
+        if (shouldLogParseKey("parse:" + packetName)) {
+            LogUtil.warn("[26.1-guard] Wrapper parse failed for " + packetName
                     + ": " + e.getClass().getSimpleName() + " — branch skipped.");
         }
     }
 
     public static void logBranchFailure(String source, PacketTypeCommon packetType, Throwable throwable) {
-        long now = System.currentTimeMillis();
-        long last = LAST_PARSE_WARN_MS.get();
-        if (now - last > WARN_THROTTLE_MS && LAST_PARSE_WARN_MS.compareAndSet(last, now)) {
-            String packetName = packetType == null ? "unknown" : packetType.getName();
-            LogUtil.warn("[26.1-guard] Branch failed in " + source
+        String packetName = packetType == null ? "unknown" : packetType.getName();
+        String normalizedSource = source == null ? "unknown" : source;
+        if (shouldLogParseKey("branch:" + normalizedSource + ":" + packetName)) {
+            LogUtil.warn("[26.1-guard] Branch failed in " + normalizedSource
                     + " packet=" + packetName
                     + " cause=" + throwable.getClass().getSimpleName()
                     + ": " + throwable.getMessage());
