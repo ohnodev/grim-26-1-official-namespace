@@ -428,13 +428,29 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             return false;
         }
         final String message = String.valueOf(throwable.getMessage());
-        return message.contains("Unknown entity metadata type id")
+        if (message.contains("Unknown entity metadata type id")
                 || message.contains("readerIndex(")
                 || message.contains("writerIndex(")
                 || message.contains("Can't find mapped entity")
                 || message.contains("Can't resolve #")
                 || message.contains("Unknown nbt type id")
-                || message.contains("expected: range(");
+                || message.contains("expected: range(")
+                || message.contains("out of bounds for length")) {
+            return true;
+        }
+
+        for (StackTraceElement element : throwable.getStackTrace()) {
+            final String className = element.getClassName();
+            if (className.startsWith("com.github.retrooper.packetevents.wrapper.")
+                    || className.startsWith("com.github.retrooper.packetevents.protocol.entity.")
+                    || className.startsWith("com.github.retrooper.packetevents.protocol.nbt.")
+                    || className.startsWith("com.github.retrooper.packetevents.util.mappings.")
+                    || className.startsWith("com.github.retrooper.packetevents.netty.buffer.")
+                    || className.startsWith("io.github.retrooper.packetevents.impl.netty.buffer.")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void handleMountVehicle(PacketSendEvent event, int vehicleID, int[] passengers) {

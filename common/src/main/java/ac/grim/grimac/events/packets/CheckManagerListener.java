@@ -660,16 +660,21 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 || message.contains("expected: range(")
                 || message.contains("Can't find mapped entity")
                 || message.contains("Can't resolve #")
-                || message.contains("Unknown nbt type id")) {
+                || message.contains("Unknown nbt type id")
+                || message.contains("out of bounds for length")
+                || message.contains("dimensionType")
+                || message.contains("is null")) {
             return true;
         }
 
         for (StackTraceElement element : throwable.getStackTrace()) {
             final String className = element.getClassName();
             if (className.startsWith("com.github.retrooper.packetevents.wrapper.")
+                    || className.startsWith("com.github.retrooper.packetevents.protocol.entity.")
                     || className.startsWith("com.github.retrooper.packetevents.netty.buffer.")
                     || className.startsWith("com.github.retrooper.packetevents.util.mappings.")
                     || className.startsWith("com.github.retrooper.packetevents.protocol.nbt.")
+                    || className.startsWith("ac.grim.grimac.predictionengine.")
                     || className.startsWith("io.github.retrooper.packetevents.impl.netty.buffer.")) {
                 return true;
             }
@@ -815,6 +820,11 @@ public class CheckManagerListener extends PacketListenerAbstract {
                 player.y = clampVector.getY();
                 player.z = clampVector.getZ();
 
+                // During Via/Fabric transition windows, dimension may be unset briefly.
+                // Skip this movement evaluation instead of crashing the packet pipeline.
+                if (player.dimensionType == null) {
+                    return;
+                }
                 player.checkManager.onPositionUpdate(update);
             } else if (update.isTeleport()) { // Mojang doesn't use their own exit vehicle field to leave vehicles, manually call the setback handler
                 player.getSetbackTeleportUtil().onPredictionComplete(new PredictionComplete(0, update, true));
