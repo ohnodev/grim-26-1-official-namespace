@@ -52,13 +52,11 @@ final class PacketDecodeUtils {
         return message.contains("Unknown entity metadata type id")
                 || message.contains("readerIndex(")
                 || message.contains("writerIndex(")
-                || message.contains("index:")
                 || message.contains("expected: range(")
                 || message.contains("Can't find mapped entity")
                 || message.contains("Can't resolve #")
                 || message.contains("Unknown nbt type id")
                 || message.contains("readableBytes()")
-                || message.contains("Missing")
                 || message.contains("unexpected EOF")
                 || message.contains("out of bounds for length")
                 || message.contains("dimensionType is null");
