@@ -14,7 +14,7 @@ floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
 # Locked to local 26.1-only PacketEvents fork build with 26.1 item container codec fix.
-packetevents = "2.12.0+33886c9fe-SNAPSHOT"
+packetevents = "2.12.0+8506f3a3b-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
 
