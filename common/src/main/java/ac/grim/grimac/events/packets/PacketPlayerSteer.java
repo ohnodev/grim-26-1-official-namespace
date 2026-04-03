@@ -29,18 +29,24 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
         if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
+            boolean decoded = false;
+            float forwards = 0.0F;
+            float sideways = 0.0F;
             try {
                 WrapperPlayClientSteerVehicle steer = new WrapperPlayClientSteerVehicle(event);
+                forwards = steer.getForward();
+                sideways = steer.getSideways();
+                decoded = true;
+            } catch (Exception ex) {
+                PacketDecodeUtils.logSuppressedDecode("PacketPlayerSteer(STEER_VEHICLE)", event.getPacketType(), ex);
+            }
 
-                float forwards = steer.getForward();
-                float sideways = steer.getSideways();
-
+            if (decoded) {
                 player.vehicleData.nextVehicleForward = forwards;
                 player.vehicleData.nextVehicleHorizontal = sideways;
-
-                this.tickPlayerWorld(player);
-            } catch (Exception e) {
             }
+
+            this.tickPlayerWorld(player);
         } else if (event.getPacketType() == PacketType.Play.Client.PLAYER_INPUT) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;

@@ -143,6 +143,7 @@ public class PacketServerTeleport extends PacketListenerAbstract {
             try {
                 packet = new WrapperPlayServerPlayerRotation(event);
             } catch (Exception e) {
+                PacketDecodeUtils.logSuppressedDecode("PacketServerTeleport(PLAYER_ROTATION)", event.getPacketType(), e);
                 return;
             }
 
