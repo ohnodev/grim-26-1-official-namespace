@@ -11,7 +11,6 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommand;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommandUnsigned;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatMessage;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -38,12 +37,10 @@ public class ChatC extends Check implements PacketCheck {
         }
 
         if (event.getPacketType() == PacketType.Play.Client.CHAT_COMMAND) {
-            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.CHAT_COMMAND)) return;
             String command;
             try {
                 command = "/" + new WrapperPlayClientChatCommand(event).getCommand();
             } catch (Exception e) {
-                PacketCapabilityGuard.logParseFailure(PacketType.Play.Client.CHAT_COMMAND, e);
                 return;
             }
             check(command, event);

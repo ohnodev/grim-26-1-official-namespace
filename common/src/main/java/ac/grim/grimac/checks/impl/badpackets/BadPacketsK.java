@@ -7,7 +7,6 @@ import ac.grim.grimac.player.GrimPlayer;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 @CheckData(name = "BadPacketsK", description = "Sent spectate packets while not in spectator mode")
 public class BadPacketsK extends Check implements PacketCheck {
@@ -18,7 +17,6 @@ public class BadPacketsK extends Check implements PacketCheck {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.SPECTATE
-                && PacketCapabilityGuard.isSafe(PacketType.Play.Client.SPECTATE)
                 && player.gamemode != GameMode.SPECTATOR
                 && flagAndAlert() && shouldModifyPackets()) {
             event.setCancelled(true);

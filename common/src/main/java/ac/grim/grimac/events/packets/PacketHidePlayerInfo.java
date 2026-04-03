@@ -13,7 +13,6 @@ import com.github.retrooper.packetevents.protocol.player.UserProfile;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfoUpdate;
 
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -28,7 +27,6 @@ public class PacketHidePlayerInfo extends PacketListenerAbstract {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO) {
-            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.PLAYER_INFO)) return;
             //iterate through players and fake their game mode if they are spectating via grim spectate
             if (PacketEvents.getAPI().getServerManager().getVersion().isOlderThanOrEquals(ServerVersion.V_1_12_2))
                 return;
@@ -43,7 +41,6 @@ public class PacketHidePlayerInfo extends PacketListenerAbstract {
             try {
                 info = new WrapperPlayServerPlayerInfo(event);
             } catch (Exception e) {
-                PacketCapabilityGuard.logBranchFailure("PacketHidePlayerInfo", event.getPacketType(), e);
                 return;
             }
 

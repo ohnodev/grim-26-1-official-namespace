@@ -12,7 +12,6 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPo
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 public class PacketPingListener extends PacketListenerAbstract {
 
@@ -25,7 +24,6 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketReceive(PacketReceiveEvent event) {
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
-            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Client.WINDOW_CONFIRMATION)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
             player.packetStateData.lastTransactionPacketWasValid = false;
@@ -40,7 +38,6 @@ public class PacketPingListener extends PacketListenerAbstract {
                     event.setCancelled(true);
                 }
             } catch (Exception e) {
-                PacketCapabilityGuard.logBranchFailure("PacketPingListener(receive)", event.getPacketType(), e);
             }
         }
 
@@ -67,7 +64,6 @@ public class PacketPingListener extends PacketListenerAbstract {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
-            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.WINDOW_CONFIRMATION)) return;
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null) return;
             player.packetStateData.lastServerTransWasValid = false;
@@ -83,7 +79,6 @@ public class PacketPingListener extends PacketListenerAbstract {
                     }
                 }
             } catch (Exception e) {
-                PacketCapabilityGuard.logBranchFailure("PacketPingListener(send)", event.getPacketType(), e);
             }
         }
 

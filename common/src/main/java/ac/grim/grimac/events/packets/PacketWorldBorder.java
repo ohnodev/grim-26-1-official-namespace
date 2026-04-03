@@ -17,7 +17,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWo
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWorldBorderCenter;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWorldBorderSize;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayWorldBorderLerpSize;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 
@@ -63,12 +62,10 @@ public class PacketWorldBorder extends Check implements PacketCheck {
     @Override
     public void onPacketSend(PacketSendEvent event) {
         if (event.getPacketType() == PacketType.Play.Server.WORLD_BORDER) {
-            if (!PacketCapabilityGuard.isSafe(PacketType.Play.Server.WORLD_BORDER)) return;
             WrapperPlayServerWorldBorder packet;
             try {
                 packet = new WrapperPlayServerWorldBorder(event);
             } catch (Exception e) {
-                PacketCapabilityGuard.logBranchFailure("PacketWorldBorder", event.getPacketType(), e);
                 return;
             }
 

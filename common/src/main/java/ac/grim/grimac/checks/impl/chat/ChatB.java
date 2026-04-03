@@ -11,7 +11,6 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommand;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommandUnsigned;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatMessage;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 // this can false from click events, but I doubt this would actually
 // happen unless they're trying to flag, or if the server is set up badly
@@ -40,13 +39,11 @@ public class ChatB extends Check implements PacketCheck {
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.CHAT_COMMAND
-                && PacketCapabilityGuard.isSafe(PacketType.Play.Client.CHAT_COMMAND)) {
+        if (event.getPacketType() == PacketType.Play.Client.CHAT_COMMAND) {
             String command;
             try {
                 command = "/" + new WrapperPlayClientChatCommand(event).getCommand();
             } catch (Exception e) {
-                PacketCapabilityGuard.logParseFailure(PacketType.Play.Client.CHAT_COMMAND, e);
                 return;
             }
             if (!command.trim().equals(command)) {

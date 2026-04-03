@@ -50,7 +50,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSp
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
 
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,18 +108,18 @@ public class PacketEntityReplication extends Check implements PacketCheck {
     public void onPacketSend(PacketSendEvent event) {
         try {
         // ensure grim is the one that sent the transaction
-        if ((event.getPacketType() == PacketType.Play.Server.PING || (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION && PacketCapabilityGuard.isSafe(PacketType.Play.Server.WINDOW_CONFIRMATION))) && player.packetStateData.lastServerTransWasValid) {
+        if ((event.getPacketType() == PacketType.Play.Server.PING || (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION)) && player.packetStateData.lastServerTransWasValid) {
             despawnedEntitiesThisTransaction.clear();
-        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY && PacketCapabilityGuard.isSafe(PacketType.Play.Server.SPAWN_LIVING_ENTITY)) {
+        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
             WrapperPlayServerSpawnLivingEntity packetOutEntity = new WrapperPlayServerSpawnLivingEntity(event);
             addEntity(packetOutEntity.getEntityId(), packetOutEntity.getEntityUUID(), packetOutEntity.getEntityType(), packetOutEntity.getPosition(), packetOutEntity.getYaw(), packetOutEntity.getPitch(), packetOutEntity.getEntityMetadata(), 0);
         } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_ENTITY) {
             WrapperPlayServerSpawnEntity packetOutEntity = new WrapperPlayServerSpawnEntity(event);
             addEntity(packetOutEntity.getEntityId(), packetOutEntity.getUUID().orElse(null), packetOutEntity.getEntityType(), packetOutEntity.getPosition(), packetOutEntity.getYaw(), packetOutEntity.getPitch(), null, packetOutEntity.getData());
-        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_PLAYER && PacketCapabilityGuard.isSafe(PacketType.Play.Server.SPAWN_PLAYER)) {
+        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_PLAYER) {
             WrapperPlayServerSpawnPlayer packetOutEntity = new WrapperPlayServerSpawnPlayer(event);
             addEntity(packetOutEntity.getEntityId(), packetOutEntity.getUUID(), EntityTypes.PLAYER, packetOutEntity.getPosition(), packetOutEntity.getYaw(), packetOutEntity.getPitch(), packetOutEntity.getEntityMetadata(), 0);
-        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_PAINTING && PacketCapabilityGuard.isSafe(PacketType.Play.Server.SPAWN_PAINTING)) {
+        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_PAINTING) {
             WrapperPlayServerSpawnPainting packetOutEntity = new WrapperPlayServerSpawnPainting(event);
             addEntity(packetOutEntity.getEntityId(), packetOutEntity.getUUID(), EntityTypes.PAINTING, packetOutEntity.getPosition().toVector3d(), 0, 0f, null, packetOutEntity.getDirection().getHorizontalIndex());
         } else if (event.getPacketType() == PacketType.Play.Server.ENTITY_RELATIVE_MOVE) {
@@ -164,16 +163,15 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                     }
                 });
             }
-        } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO_REMOVE && PacketCapabilityGuard.isSafe(PacketType.Play.Server.PLAYER_INFO_REMOVE)) {
+        } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO_REMOVE) {
             WrapperPlayServerPlayerInfoRemove remove;
             try {
                 remove = new WrapperPlayServerPlayerInfoRemove(event);
             } catch (Exception e) {
-                PacketCapabilityGuard.logParseFailure(PacketType.Play.Server.PLAYER_INFO_REMOVE, e);
                 return;
             }
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> remove.getProfileIds().forEach(player.compensatedEntities.profiles::remove));
-        } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO && PacketCapabilityGuard.isSafe(PacketType.Play.Server.PLAYER_INFO)) {
+        } else if (event.getPacketType() == PacketType.Play.Server.PLAYER_INFO) {
             WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo(event);
             player.latencyUtils.addRealTimeTask(player.lastTransactionSent.get(), () -> {
                 if (info.getAction() == WrapperPlayServerPlayerInfo.Action.ADD_PLAYER) {
@@ -416,7 +414,6 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 PacketDecodeUtils.logSuppressedDecode("PacketEntityReplication", event.getPacketType(), ex);
                 return;
             }
-            PacketCapabilityGuard.logBranchFailure("PacketEntityReplication", event.getPacketType(), ex);
         }
     }
 

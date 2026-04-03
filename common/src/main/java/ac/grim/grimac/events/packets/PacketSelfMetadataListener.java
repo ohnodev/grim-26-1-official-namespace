@@ -17,7 +17,6 @@ import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUseBed;
-import ac.grim.grimac.utils.anticheat.PacketCapabilityGuard;
 
 import java.util.List;
 import java.util.Optional;
@@ -218,7 +217,7 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
             }
         }
 
-        if (event.getPacketType() == PacketType.Play.Server.USE_BED && PacketCapabilityGuard.isSafe(PacketType.Play.Server.USE_BED)) {
+        if (event.getPacketType() == PacketType.Play.Server.USE_BED) {
             try {
                 WrapperPlayServerUseBed bed = new WrapperPlayServerUseBed(event);
 
@@ -231,7 +230,6 @@ public class PacketSelfMetadataListener extends PacketListenerAbstract {
                     });
                 }
             } catch (Exception e) {
-                PacketCapabilityGuard.logBranchFailure("PacketSelfMetadataListener", event.getPacketType(), e);
             }
         }
 
