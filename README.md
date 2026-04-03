@@ -84,14 +84,14 @@ These commands intentionally target only the Fabric module in this 26.1 fork.
 - Fabric runtime jar: `fabric/build/libs/grimac-fabric-<version>.jar`
 - Extra artifacts (sources/javadocs): `fabric/build/libs/`
 
-## Artifact Distribution
+## Prebuilt Artifact In This Repo
 
-Prebuilt binaries are not committed to this repository. Use artifact storage instead:
+This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deployment.
 
-- GitHub Actions artifacts from CI runs (short-term download):
-  - https://github.com/ohnodev/grim-26-1-official-namespace/actions/workflows/gradle-publish.yml
-- Releases/nightly distribution for downloadable binaries:
-  - https://github.com/ohnodev/grim-26-1-official-namespace/releases
+Current prebuilt files:
+
+- `prebuilt/grimac-fabric-2.3.74-5a60b62.jar`
+- `prebuilt/grimac-fabric-2.3.74-5a60b62.zip`
 
 To inspect locally produced files after a build:
 

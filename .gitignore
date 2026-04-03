@@ -76,6 +76,8 @@ fabric/run/
 
 .ignored/
 
-# Keep folder placeholder only; publish build artifacts via CI/release storage.
+# Keep placeholder and track committed prebuilt artifacts in this fork.
 prebuilt/*
 !prebuilt/.gitkeep
+!prebuilt/*.jar
+!prebuilt/*.zip
