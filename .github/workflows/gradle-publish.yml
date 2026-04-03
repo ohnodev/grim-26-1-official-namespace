@@ -25,7 +25,6 @@ on:
             - 'release'
             - 'release/**'
         paths:
-            - 'bukkit/**'
             - 'common/**'
             - 'fabric/**'
             - '**.java'
