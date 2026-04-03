@@ -168,4 +168,3 @@ public final class PacketDecodeAuditListener extends PacketListenerAbstract {
         audit(event);
     }
 }
-

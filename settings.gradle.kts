@@ -63,5 +63,4 @@ if (gradle.startParameter.isBuildScan) {
 
 rootProject.name = "grimac"
 include("common")
-include("bukkit")
 include("fabric")

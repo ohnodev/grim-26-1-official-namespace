@@ -1,0 +1,813 @@
+{
+  "meta": {
+    "title": "Grim 99 packet crosswalk to Mojang 26.1 play registry",
+    "generated_at": "2026-04-02T23:42:05.854945+00:00",
+    "grim_unique_constants": 99,
+    "decompiled_source": "/root/decompiled-minecraft/server-26.1-src",
+    "id_index_definition": "Zero-based order of addPacket(...) registration in net.minecraft.network.protocol.game.GameProtocols",
+    "confidence_levels": {
+      "exact": "Direct key match in decompiled 26.1 protocol registry",
+      "high": "Strong rename/split inference from decompiled packet classes/registry naming",
+      "needs_capture": "Ambiguous or one-to-many migration; verify with live capture/decode"
+    }
+  },
+  "summary": {
+    "exact": 23,
+    "high": 67,
+    "needs_capture": 9
+  },
+  "entries": [
+    {
+      "grim_constant": "Client.ANIMATION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_SWING",
+      "inferred_play_id_index": 63,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.CHAT_COMMAND",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CHAT_COMMAND",
+      "inferred_play_id_index": 7,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.CHAT_COMMAND_UNSIGNED",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CHAT_COMMAND_SIGNED",
+      "inferred_play_id_index": 8,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.CHAT_MESSAGE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CHAT",
+      "inferred_play_id_index": 9,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.CHUNK_BATCH_ACK",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CHUNK_BATCH_RECEIVED",
+      "inferred_play_id_index": 11,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed in 26.1"
+    },
+    {
+      "grim_constant": "Client.CLICK_WINDOW",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CONTAINER_CLICK",
+      "inferred_play_id_index": 18,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "window -> container rename"
+    },
+    {
+      "grim_constant": "Client.CLIENT_SETTINGS",
+      "mojang_26_1_key": "CommonPacketTypes.SERVERBOUND_CLIENT_INFORMATION",
+      "inferred_play_id_index": 14,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "client settings lives in common protocol"
+    },
+    {
+      "grim_constant": "Client.CLIENT_STATUS",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CLIENT_COMMAND",
+      "inferred_play_id_index": 12,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "status action packet renamed"
+    },
+    {
+      "grim_constant": "Client.CLIENT_TICK_END",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CLIENT_TICK_END",
+      "inferred_play_id_index": 13,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.CLOSE_WINDOW",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CONTAINER_CLOSE",
+      "inferred_play_id_index": 19,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "window -> container rename"
+    },
+    {
+      "grim_constant": "Client.CREATIVE_INVENTORY_ACTION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_SET_CREATIVE_MODE_SLOT",
+      "inferred_play_id_index": 56,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.EDIT_BOOK",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_EDIT_BOOK",
+      "inferred_play_id_index": 24,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.ENTITY_ACTION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PLAYER_COMMAND",
+      "inferred_play_id_index": 42,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "entity action folded into player command"
+    },
+    {
+      "grim_constant": "Client.HELD_ITEM_CHANGE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_SET_CARRIED_ITEM",
+      "inferred_play_id_index": 53,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.INTERACT_ENTITY",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_INTERACT",
+      "inferred_play_id_index": 26,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.KEEP_ALIVE",
+      "mojang_26_1_key": "CommonPacketTypes.SERVERBOUND_KEEP_ALIVE",
+      "inferred_play_id_index": 28,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.NAME_ITEM",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_RENAME_ITEM",
+      "inferred_play_id_index": 48,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.PICK_ITEM",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PICK_ITEM_FROM_BLOCK",
+      "inferred_play_id_index": 36,
+      "flow": "serverbound",
+      "confidence": "needs_capture",
+      "notes": "legacy PICK_ITEM split into block/entity variants"
+    },
+    {
+      "grim_constant": "Client.PLAYER_ABILITIES",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PLAYER_ABILITIES",
+      "inferred_play_id_index": 40,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.PLAYER_BLOCK_PLACEMENT",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_USE_ITEM_ON",
+      "inferred_play_id_index": 66,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "legacy placement renamed use_item_on"
+    },
+    {
+      "grim_constant": "Client.PLAYER_DIGGING",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PLAYER_ACTION",
+      "inferred_play_id_index": 41,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.PLAYER_FLYING",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_MOVE_PLAYER_STATUS_ONLY",
+      "inferred_play_id_index": 33,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "flying/no-pos packet is status-only variant"
+    },
+    {
+      "grim_constant": "Client.PLAYER_INPUT",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PLAYER_INPUT",
+      "inferred_play_id_index": 43,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.PLAYER_POSITION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_MOVE_PLAYER_POS",
+      "inferred_play_id_index": 30,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Client.PLAYER_POSITION_AND_ROTATION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_MOVE_PLAYER_POS_ROT",
+      "inferred_play_id_index": 31,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Client.PLAYER_ROTATION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_MOVE_PLAYER_ROT",
+      "inferred_play_id_index": 32,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Client.PLUGIN_MESSAGE",
+      "mojang_26_1_key": "CommonPacketTypes.SERVERBOUND_CUSTOM_PAYLOAD",
+      "inferred_play_id_index": 22,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "plugin message is custom_payload"
+    },
+    {
+      "grim_constant": "Client.PONG",
+      "mojang_26_1_key": "CommonPacketTypes.SERVERBOUND_PONG",
+      "inferred_play_id_index": 45,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.SELECT_BUNDLE_ITEM",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_BUNDLE_ITEM_SELECTED",
+      "inferred_play_id_index": 3,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.SPECTATE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_SPECTATE_ENTITY",
+      "inferred_play_id_index": 62,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.STEER_BOAT",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PADDLE_BOAT",
+      "inferred_play_id_index": 35,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "legacy steer_boat renamed paddle_boat"
+    },
+    {
+      "grim_constant": "Client.STEER_VEHICLE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_PLAYER_INPUT",
+      "inferred_play_id_index": 43,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "vehicle input packet now player_input"
+    },
+    {
+      "grim_constant": "Client.TAB_COMPLETE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_COMMAND_SUGGESTION",
+      "inferred_play_id_index": 15,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed command completion packet"
+    },
+    {
+      "grim_constant": "Client.USE_ITEM",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_USE_ITEM",
+      "inferred_play_id_index": 67,
+      "flow": "serverbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Client.VEHICLE_MOVE",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_MOVE_VEHICLE",
+      "inferred_play_id_index": 34,
+      "flow": "serverbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Client.WINDOW_CONFIRMATION",
+      "mojang_26_1_key": "GamePacketTypes.SERVERBOUND_CONTAINER_SLOT_STATE_CHANGED",
+      "inferred_play_id_index": 20,
+      "flow": "serverbound",
+      "confidence": "needs_capture",
+      "notes": "no direct WINDOW_CONFIRMATION key in 26.1; likely container state path"
+    },
+    {
+      "grim_constant": "Server.ACKNOWLEDGE_BLOCK_CHANGES",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_BLOCK_CHANGED_ACK",
+      "inferred_play_id_index": 3,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed ack packet"
+    },
+    {
+      "grim_constant": "Server.ACKNOWLEDGE_PLAYER_DIGGING",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_BLOCK_CHANGED_ACK",
+      "inferred_play_id_index": 3,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "no dedicated ACKNOWLEDGE_PLAYER_DIGGING key in 26.1"
+    },
+    {
+      "grim_constant": "Server.ATTACH_ENTITY",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_ENTITY_LINK",
+      "inferred_play_id_index": 99,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.BLOCK_ACTION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_BLOCK_EVENT",
+      "inferred_play_id_index": 6,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.BLOCK_CHANGE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_BLOCK_UPDATE",
+      "inferred_play_id_index": 7,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.BUNDLE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_BUNDLE",
+      "inferred_play_id_index": null,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "bundle uses withBundlePacket path; addPacket index is not directly exposed for ID inference"
+    },
+    {
+      "grim_constant": "Server.CAMERA",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_CAMERA",
+      "inferred_play_id_index": 92,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.CHANGE_GAME_STATE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_GAME_EVENT",
+      "inferred_play_id_index": 37,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.CHUNK_BATCH_END",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_CHUNK_BATCH_FINISHED",
+      "inferred_play_id_index": 10,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.CHUNK_DATA",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_LEVEL_CHUNK_WITH_LIGHT",
+      "inferred_play_id_index": 44,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "chunk data packet renamed/reworked"
+    },
+    {
+      "grim_constant": "Server.CLOSE_WINDOW",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_CONTAINER_CLOSE",
+      "inferred_play_id_index": 16,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "window -> container rename"
+    },
+    {
+      "grim_constant": "Server.COMBAT_EVENT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_COMBAT_ENTER",
+      "inferred_play_id_index": 66,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "legacy combat event split into enter/end/kill"
+    },
+    {
+      "grim_constant": "Server.DEATH_COMBAT_EVENT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_COMBAT_KILL",
+      "inferred_play_id_index": 67,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "death combat event maps to combat_kill"
+    },
+    {
+      "grim_constant": "Server.DESTROY_ENTITIES",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_REMOVE_ENTITIES",
+      "inferred_play_id_index": 76,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_ANIMATION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ANIMATE",
+      "inferred_play_id_index": 1,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_EFFECT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_UPDATE_MOB_EFFECT",
+      "inferred_play_id_index": 131,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_EQUIPMENT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_EQUIPMENT",
+      "inferred_play_id_index": 101,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_METADATA",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_ENTITY_DATA",
+      "inferred_play_id_index": 98,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_POSITION_SYNC",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ENTITY_POSITION_SYNC",
+      "inferred_play_id_index": 34,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.ENTITY_RELATIVE_MOVE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_POS",
+      "inferred_play_id_index": 52,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Server.ENTITY_RELATIVE_MOVE_AND_ROTATION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_POS_ROT",
+      "inferred_play_id_index": 53,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Server.ENTITY_ROTATION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_MOVE_ENTITY_ROT",
+      "inferred_play_id_index": 55,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "split move packet variants"
+    },
+    {
+      "grim_constant": "Server.ENTITY_STATUS",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ENTITY_EVENT",
+      "inferred_play_id_index": 33,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_TELEPORT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_TELEPORT_ENTITY",
+      "inferred_play_id_index": 124,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.ENTITY_VELOCITY",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_ENTITY_MOTION",
+      "inferred_play_id_index": 100,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.EXPLOSION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_EXPLODE",
+      "inferred_play_id_index": 35,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.INITIALIZE_WORLD_BORDER",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_INITIALIZE_BORDER",
+      "inferred_play_id_index": 42,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.JOIN_GAME",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_LOGIN",
+      "inferred_play_id_index": 48,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.KEEP_ALIVE",
+      "mojang_26_1_key": "CommonPacketTypes.CLIENTBOUND_KEEP_ALIVE",
+      "inferred_play_id_index": 43,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.MAP_CHUNK_BULK",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_LEVEL_CHUNK_WITH_LIGHT",
+      "inferred_play_id_index": 44,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "legacy bulk chunk packet replaced by chunk-with-light + batch packets"
+    },
+    {
+      "grim_constant": "Server.MULTI_BLOCK_CHANGE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SECTION_BLOCKS_UPDATE",
+      "inferred_play_id_index": 83,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.OPEN_HORSE_WINDOW",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_MOUNT_SCREEN_OPEN",
+      "inferred_play_id_index": 40,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.OPEN_WINDOW",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_OPEN_SCREEN",
+      "inferred_play_id_index": 58,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.PING",
+      "mojang_26_1_key": "CommonPacketTypes.CLIENTBOUND_PING",
+      "inferred_play_id_index": 60,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.PLAYER_ABILITIES",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_ABILITIES",
+      "inferred_play_id_index": 63,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.PLAYER_INFO",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_INFO_UPDATE",
+      "inferred_play_id_index": 69,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "legacy player_info split/update path"
+    },
+    {
+      "grim_constant": "Server.PLAYER_INFO_REMOVE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_INFO_REMOVE",
+      "inferred_play_id_index": 68,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.PLAYER_INFO_UPDATE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_INFO_UPDATE",
+      "inferred_play_id_index": 69,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.PLAYER_POSITION_AND_LOOK",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_POSITION",
+      "inferred_play_id_index": 71,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "position+look represented via player_position + player_rotation"
+    },
+    {
+      "grim_constant": "Server.PLAYER_ROTATION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_ROTATION",
+      "inferred_play_id_index": 72,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.REMOVE_ENTITY_EFFECT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_REMOVE_MOB_EFFECT",
+      "inferred_play_id_index": 77,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.RESPAWN",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_RESPAWN",
+      "inferred_play_id_index": 81,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.SET_COOLDOWN",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_COOLDOWN",
+      "inferred_play_id_index": 21,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.SET_PASSENGERS",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_PASSENGERS",
+      "inferred_play_id_index": 106,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.SET_PLAYER_INVENTORY",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_PLAYER_INVENTORY",
+      "inferred_play_id_index": 107,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.SET_SLOT",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_CONTAINER_SET_SLOT",
+      "inferred_play_id_index": 19,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.SPAWN_ENTITY",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ADD_ENTITY",
+      "inferred_play_id_index": 0,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "spawn packet consolidated to add_entity"
+    },
+    {
+      "grim_constant": "Server.SPAWN_LIVING_ENTITY",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ADD_ENTITY",
+      "inferred_play_id_index": 0,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "spawn packet consolidated to add_entity"
+    },
+    {
+      "grim_constant": "Server.SPAWN_PAINTING",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ADD_ENTITY",
+      "inferred_play_id_index": 0,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "spawn packet consolidated to add_entity"
+    },
+    {
+      "grim_constant": "Server.SPAWN_PLAYER",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_ADD_ENTITY",
+      "inferred_play_id_index": 0,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "spawn packet consolidated to add_entity"
+    },
+    {
+      "grim_constant": "Server.TAGS",
+      "mojang_26_1_key": "CommonPacketTypes.CLIENTBOUND_UPDATE_TAGS",
+      "inferred_play_id_index": 133,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "tags moved under common protocol"
+    },
+    {
+      "grim_constant": "Server.TEAMS",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_PLAYER_TEAM",
+      "inferred_play_id_index": 108,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.UNLOAD_CHUNK",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_FORGET_LEVEL_CHUNK",
+      "inferred_play_id_index": 36,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.UPDATE_ATTRIBUTES",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_UPDATE_ATTRIBUTES",
+      "inferred_play_id_index": 130,
+      "flow": "clientbound",
+      "confidence": "exact",
+      "notes": "direct registration key match"
+    },
+    {
+      "grim_constant": "Server.UPDATE_HEALTH",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_HEALTH",
+      "inferred_play_id_index": 103,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.USE_BED",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_PLAYER_POSITION",
+      "inferred_play_id_index": 71,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "no dedicated use_bed packet key in 26.1"
+    },
+    {
+      "grim_constant": "Server.VEHICLE_MOVE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_MOVE_VEHICLE",
+      "inferred_play_id_index": 56,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.WINDOW_CONFIRMATION",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_CONTAINER_SET_DATA",
+      "inferred_play_id_index": 18,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "no direct WINDOW_CONFIRMATION key in 26.1"
+    },
+    {
+      "grim_constant": "Server.WINDOW_ITEMS",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_CONTAINER_SET_CONTENT",
+      "inferred_play_id_index": 17,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.WORLD_BORDER",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_INITIALIZE_BORDER",
+      "inferred_play_id_index": 42,
+      "flow": "clientbound",
+      "confidence": "needs_capture",
+      "notes": "world border now split across initialize/set* packets"
+    },
+    {
+      "grim_constant": "Server.WORLD_BORDER_CENTER",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_BORDER_CENTER",
+      "inferred_play_id_index": 87,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.WORLD_BORDER_LERP_SIZE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_BORDER_LERP_SIZE",
+      "inferred_play_id_index": 88,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    },
+    {
+      "grim_constant": "Server.WORLD_BORDER_SIZE",
+      "mojang_26_1_key": "GamePacketTypes.CLIENTBOUND_SET_BORDER_SIZE",
+      "inferred_play_id_index": 89,
+      "flow": "clientbound",
+      "confidence": "high",
+      "notes": "renamed packet"
+    }
+  ]
+}

@@ -76,7 +76,6 @@ fabric/run/
 
 .ignored/
 
-# Track prebuilt artifacts committed to this repository.
-!prebuilt/
-!prebuilt/*.jar
-!prebuilt/*.zip
+# Keep folder placeholder only; publish build artifacts via CI/release storage.
+prebuilt/*
+!prebuilt/.gitkeep
