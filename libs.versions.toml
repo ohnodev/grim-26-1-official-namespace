@@ -13,8 +13,8 @@ cloud-processors-requirements = "1.0.0-rc.1"
 floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
-# Locked to local 26.1-only PacketEvents fork build with 26.1 item container codec fix.
-packetevents = "2.12.0+8506f3a3b-SNAPSHOT"
+# Locked to local 26.1-only PacketEvents fork build with 26.1 item/container component sync fixes.
+packetevents = "2.12.0+3b7bf9c8d-SNAPSHOT"
 placeholderapi = "2.11.6"
 viaversion = "5.7.1"
 
