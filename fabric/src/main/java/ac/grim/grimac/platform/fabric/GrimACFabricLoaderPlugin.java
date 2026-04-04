@@ -32,9 +32,6 @@ import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.fabric.FabricServerCommandManager;
 import org.jetbrains.annotations.NotNull;
-import me.lucko.fabric.api.permissions.v0.Permissions;
-
-import static ac.grim.grimac.platform.fabric.sender.FabricSenderFactory.HAS_PERMISSIONS_API;
 
 public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     public static MinecraftServer FABRIC_SERVER;
@@ -178,9 +175,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
 
     private void registerPermission(String node, PermissionDefaultValue defaultValue) {
         getFabricSenderFactory().registerPermissionDefault(node, defaultValue);
-        if (HAS_PERMISSIONS_API && FABRIC_SERVER != null) {
-            Permissions.check(FABRIC_SERVER.createCommandSourceStack(), node);
-        }
     }
 
     public abstract ServerVersion getNativeVersion();
