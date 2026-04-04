@@ -18,7 +18,6 @@ import ac.grim.grimac.platform.api.PlatformServer;
 import ac.grim.grimac.platform.api.command.CommandService;
 import ac.grim.grimac.platform.api.manager.ItemResetHandler;
 import ac.grim.grimac.platform.api.manager.MessagePlaceHolderManager;
-import ac.grim.grimac.platform.api.manager.PermissionRegistrationManager;
 import ac.grim.grimac.platform.api.manager.PlatformPluginManager;
 import ac.grim.grimac.platform.api.player.PlatformPlayerFactory;
 import ac.grim.grimac.platform.api.scheduler.PlatformScheduler;
@@ -131,10 +130,6 @@ public final class GrimAPI {
         if (!initialized) {
             throw new IllegalStateException("GrimAPI has not been initialized!");
         }
-    }
-
-    public PermissionRegistrationManager getPermissionManager() {
-        return loader.getPermissionManager();
     }
 
     public GrimExtensionManager getExtensionManager() {

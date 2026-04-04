@@ -1,6 +1,5 @@
 package ac.grim.grimac.manager;
 
-import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.api.AbstractCheck;
 import ac.grim.grimac.checks.impl.aim.AimDuplicateLook;
 import ac.grim.grimac.checks.impl.aim.AimModulo360;
@@ -43,7 +42,6 @@ import ac.grim.grimac.events.packets.PacketEntityReplication;
 import ac.grim.grimac.events.packets.PacketPlayerAbilities;
 import ac.grim.grimac.events.packets.PacketWorldBorder;
 import ac.grim.grimac.manager.init.start.SuperDebug;
-import ac.grim.grimac.platform.api.permissions.PermissionDefaultValue;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.predictionengine.GhostBlockDetector;
 import ac.grim.grimac.predictionengine.SneakingEstimator;
@@ -459,19 +457,6 @@ public class CheckManager {
         if (inited || initedAtomic.getAndSet(true)) return;
         inited = true;
 
-        final String[] permissions = {
-                "grim.exempt.",
-                "grim.nosetback.",
-                "grim.nomodifypacket.",
-        };
-
-        for (final AbstractCheck check : allChecks.values()) {
-            if (check.getConfigName() == null) continue;
-            final String id = check.getConfigName().toLowerCase();
-            for (String permissionName : permissions) {
-                permissionName += id;
-                GrimAPI.INSTANCE.getPermissionManager().registerPermission(permissionName, PermissionDefaultValue.FALSE);
-            }
-        }
+        // Check-specific bypass permissions are intentionally disabled.
     }
 }

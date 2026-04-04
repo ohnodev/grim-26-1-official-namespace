@@ -35,9 +35,6 @@ public class Check extends GrimProcessor implements AbstractCheck {
     private boolean experimental;
     private @Setter boolean isEnabled;
 
-    private boolean exemptPermission;
-    private boolean noSetbackPermission;
-    private boolean noModifyPacketPermission;
     private long lastViolationTime;
 
     public Check(final @NotNull GrimPlayer player) {
@@ -61,19 +58,11 @@ public class Check extends GrimProcessor implements AbstractCheck {
     }
 
     public boolean shouldModifyPackets() {
-        return isEnabled
-                && !player.disableGrim
-                && !player.noModifyPacketPermission
-                && !noModifyPacketPermission
-                && !exemptPermission;
+        return isEnabled && !player.disableGrim;
     }
 
     public final void updatePermissions() {
-        if (configName == null || player.platformPlayer == null) return;
-        final String id = configName.toLowerCase();
-        exemptPermission = player.platformPlayer.hasPermission("grim.exempt." + id);
-        noSetbackPermission = player.platformPlayer.hasPermission("grim.nosetback." + id);
-        noModifyPacketPermission = player.platformPlayer.hasPermission("grim.nomodifypacket." + id);
+        // Bypass permissions are intentionally disabled.
     }
 
     public final boolean flagAndAlert(String verbose) {
@@ -93,7 +82,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
     }
 
     public final boolean flag(String verbose) {
-        if (player.disableGrim || (experimental && !player.isExperimentalChecks()) || exemptPermission)
+        if (player.disableGrim || (experimental && !player.isExperimentalChecks()))
             return false; // Avoid calling event if disabled
 
         FlagEvent event = new FlagEvent(player, this, verbose);
@@ -162,7 +151,7 @@ public class Check extends GrimProcessor implements AbstractCheck {
     }
 
     public boolean shouldSetback() {
-        return !noSetbackPermission && violations > setbackVL;
+        return violations > setbackVL;
     }
 
     public String formatOffset(double offset) {

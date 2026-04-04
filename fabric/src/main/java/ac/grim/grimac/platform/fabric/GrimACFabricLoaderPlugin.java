@@ -9,6 +9,7 @@ import ac.grim.grimac.platform.api.PlatformLoader;
 import ac.grim.grimac.platform.api.command.CommandService;
 import ac.grim.grimac.platform.api.manager.*;
 import ac.grim.grimac.platform.api.manager.cloud.CloudCommandAdapter;
+import ac.grim.grimac.platform.api.permissions.PermissionDefaultValue;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.platform.api.sender.SenderFactory;
 import ac.grim.grimac.platform.fabric.manager.*;
@@ -47,7 +48,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     protected final PlatformPluginManager pluginManager = new FabricPlatformPluginManager();
     @Getter
     protected final MessagePlaceHolderManager messagePlaceHolderManager = new FabricMessagePlaceHolderManager();
-    protected final LazyHolder<FabricPermissionRegistrationManager> fabricPermissionRegistrationManager = LazyHolder.simple(FabricPermissionRegistrationManager::new);
 
     protected final LazyHolder<CommandAdapter> commandAdapter;
     protected final FabricPlatformPlayerFactory playerFactory;
@@ -111,11 +111,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
         GrimAPIProvider.init(GrimAPI.INSTANCE.getExternalAPI());
     }
 
-    @Override
-    public PermissionRegistrationManager getPermissionManager() {
-        return fabricPermissionRegistrationManager.get();
-    }
-
     private CommandService createCommandService() {
         try {
             // Accessing CloudHelper triggers the JVM to load CloudCommandService and Cloud classes.
@@ -167,6 +162,19 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
 
     public IFabricMessageUtil getFabricMessageUtils() {
         return fabricMessageUtil;
+    }
+
+    public void registerPermissionDefaults() {
+        registerPermission("grim.alerts.enable-on-join", PermissionDefaultValue.FALSE);
+        registerPermission("grim.verbose.enable-on-join", PermissionDefaultValue.FALSE);
+        registerPermission("grim.brand.enable-on-join", PermissionDefaultValue.FALSE);
+        registerPermission("grim.alerts.enable-on-join.silent", PermissionDefaultValue.FALSE);
+        registerPermission("grim.verbose.enable-on-join.silent", PermissionDefaultValue.FALSE);
+        registerPermission("grim.brand.enable-on-join.silent", PermissionDefaultValue.FALSE);
+    }
+
+    private void registerPermission(String node, PermissionDefaultValue defaultValue) {
+        getFabricSenderFactory().registerPermissionDefault(node, defaultValue);
     }
 
     public abstract ServerVersion getNativeVersion();

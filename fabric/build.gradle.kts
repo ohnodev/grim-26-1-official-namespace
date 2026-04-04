@@ -14,7 +14,8 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     implementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
 
-    compileOnly("me.lucko:fabric-permissions-api:0.7.0")
+    // Bundle permissions API so Fabric permission resolution is available at runtime.
+    implementation("me.lucko:fabric-permissions-api:0.7.0")
 
     // cloud-fabric is catalog-managed and pinned for reproducible builds.
     implementation(libs.cloud.fabric) {
