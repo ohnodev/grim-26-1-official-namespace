@@ -39,6 +39,7 @@ public class GrimACFabricEntryPoint implements PreLaunchEntrypoint, ModInitializ
 
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             GrimACFabricLoaderPlugin.FABRIC_SERVER = server;
+            platformLoader.registerPermissionDefaults();
             GrimAPI.INSTANCE.start();
         });
 
