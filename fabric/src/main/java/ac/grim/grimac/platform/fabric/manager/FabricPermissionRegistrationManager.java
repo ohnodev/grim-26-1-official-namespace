@@ -13,10 +13,6 @@ public class FabricPermissionRegistrationManager implements PermissionRegistrati
     private final FabricSenderFactory fabricSenderFactory = GrimACFabricLoaderPlugin.LOADER.getFabricSenderFactory();
 
     public FabricPermissionRegistrationManager() {
-        registerPermission("grim.exempt", PermissionDefaultValue.FALSE);
-        registerPermission("grim.nosetback", PermissionDefaultValue.FALSE);
-        registerPermission("grim.nomodifypacket", PermissionDefaultValue.FALSE);
-        registerPermission("grim.nosetback", PermissionDefaultValue.FALSE);
         registerPermission("grim.alerts.enable-on-join", PermissionDefaultValue.FALSE);
         registerPermission("grim.verbose.enable-on-join", PermissionDefaultValue.FALSE);
         registerPermission("grim.brand.enable-on-join", PermissionDefaultValue.FALSE);

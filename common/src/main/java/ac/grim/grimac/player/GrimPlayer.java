@@ -266,8 +266,6 @@ public class GrimPlayer implements GrimUser {
     @Getter private boolean resetItemUsageOnSlotChange;
     @Getter private boolean resetItemUsageOnItemUse;
     // end config
-    public boolean noModifyPacketPermission = false;
-    public boolean noSetbackPermission = false;
     // This variable is for support with test servers that want to be able to disable grim
     // Grim disabler 2022 still working!
     public boolean disableGrim = false;
@@ -601,8 +599,6 @@ public class GrimPlayer implements GrimUser {
         if (platformPlayer == null) return;
         try {
             GrimAPI.INSTANCE.getScheduler().getEntityScheduler().execute(platformPlayer, GrimAPI.INSTANCE.getGrimPlugin(), () -> {
-                this.noModifyPacketPermission = platformPlayer.hasPermission("grim.nomodifypacket");
-                this.noSetbackPermission = platformPlayer.hasPermission("grim.nosetback");
                 for (AbstractCheck check : checkManager.allChecks.values()) {
                     if (check instanceof Check c) {
                         c.updatePermissions();
