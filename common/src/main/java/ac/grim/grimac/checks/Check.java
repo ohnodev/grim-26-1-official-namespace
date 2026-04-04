@@ -35,9 +35,6 @@ public class Check extends GrimProcessor implements AbstractCheck {
     private boolean experimental;
     private @Setter boolean isEnabled;
 
-    // Bypass permissions are disabled; keep fields to preserve existing check call-sites.
-    private boolean noSetbackPermission;
-    private boolean noModifyPacketPermission;
     private long lastViolationTime;
 
     public Check(final @NotNull GrimPlayer player) {

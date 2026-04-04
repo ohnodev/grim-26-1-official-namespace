@@ -65,7 +65,6 @@ public class OffsetHandler extends Check implements PostPredictionCheck {
                     }
 
                     if ((advantageGained >= maxAdvantage || offset >= immediateSetbackThreshold)
-                            && !isNoSetbackPermission()
                             && violations >= setbackViolationThreshold) {
                         player.getSetbackTeleportUtil().executeViolationSetback();
                     }
