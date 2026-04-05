@@ -20,13 +20,14 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class GrimUpdateCheckService {
 
     private static final AtomicReference<Component> updateMessage = new AtomicReference<>();
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
-    private static long lastCheck;
+    private static final AtomicLong lastCheck = new AtomicLong(0);
 
     private GrimUpdateCheckService() {
     }
@@ -39,19 +40,24 @@ public final class GrimUpdateCheckService {
                 .build());
 
         final long now = System.currentTimeMillis();
-        if (now - lastCheck < 60000) {
-            Component message = updateMessage.get();
-            if (message != null) {
-                sender.sendMessage(message);
+        while (true) {
+            long previous = lastCheck.get();
+            if (now - previous < 60000) {
+                Component message = updateMessage.get();
+                if (message != null) {
+                    sender.sendMessage(message);
+                }
+                return;
             }
-            return;
+
+            if (lastCheck.compareAndSet(previous, now)) {
+                break;
+            }
         }
 
-        lastCheck = now;
         GrimAPI.INSTANCE.getScheduler().getAsyncScheduler().runNow(GrimAPI.INSTANCE.getGrimPlugin(), () -> checkForUpdates(sender));
     }
 
-    @SuppressWarnings("deprecation")
     private static void checkForUpdates(Sender sender) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -77,7 +83,7 @@ public final class GrimUpdateCheckService {
                 return;
             }
 
-            JsonObject object = new JsonParser().parse(response.body()).getAsJsonObject();
+            JsonObject object = JsonParser.parseString(response.body()).getAsJsonObject();
             String downloadPage = getJsonString(object, "download_page", "Unknown");
             String latest = getJsonString(object, "latest_version", "Unknown");
             @Nullable String warning = getJsonString(object, "warning", null);
@@ -200,7 +206,9 @@ public final class GrimUpdateCheckService {
             public static int compareSemver(String a, String b) {
                 int[] pa = parseVersion(a);
                 int[] pb = parseVersion(b);
-                if (pa == null || pb == null) return 0;
+                if (pa == null || pb == null) {
+                    throw new IllegalArgumentException("Invalid semver inputs: a=" + a + ", b=" + b);
+                }
 
                 for (int i = 0; i < 3; i++) {
                     if (pa[i] < pb[i]) return -1;

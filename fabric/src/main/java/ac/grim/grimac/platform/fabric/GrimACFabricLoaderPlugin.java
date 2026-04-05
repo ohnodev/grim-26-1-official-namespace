@@ -16,6 +16,7 @@ import ac.grim.grimac.platform.fabric.scheduler.FabricPlatformScheduler;
 import ac.grim.grimac.platform.fabric.sender.FabricSenderFactory;
 import ac.grim.grimac.platform.fabric.utils.convert.IFabricConversionUtil;
 import ac.grim.grimac.platform.fabric.utils.message.IFabricMessageUtil;
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.lazy.LazyHolder;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
@@ -47,7 +48,6 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     protected final IFabricMessageUtil fabricMessageUtil;
 
     public GrimACFabricLoaderPlugin(
-            LazyHolder<CommandAdapter> ignoredCommandAdapter,
             FabricPlatformPlayerFactory playerFactory,
             AbstractFabricPlatformServer platformServer,
             IFabricMessageUtil fabricMessageUtil,
@@ -101,7 +101,7 @@ public abstract class GrimACFabricLoaderPlugin implements PlatformLoader {
     }
 
     private CommandService createCommandService() {
-        return () -> {};
+        return () -> LogUtil.warn("Grim command registration is disabled on Fabric; skipping command registration.");
     }
 
     public FabricSenderFactory getFabricSenderFactory() {
