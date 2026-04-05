@@ -559,7 +559,7 @@ public final class PlayerBaseTick {
             }
 
             if (inLava) {
-                final boolean fastLava = SERVER_SUPPORT_ENVIRONMENT_ATTRIBUTES
+                final boolean fastLava = SERVER_SUPPORT_ENVIRONMENT_ATTRIBUTES && player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_21_11)
                         ? player.dimensionType.getAttributes().getOrDefault(EnvironmentAttributes.GAMEPLAY_FAST_LAVA)
                         : player.dimensionType.isUltraWarm();
 
