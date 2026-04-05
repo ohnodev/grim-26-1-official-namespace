@@ -546,6 +546,9 @@ public final class PlayerBaseTick {
         player.fluidInteraction.update(player, !player.isPushedByFluid());
         boolean inWater = player.fluidInteraction.isInFluid(FluidTag.WATER);
         boolean inLava = player.fluidInteraction.isInFluid(FluidTag.LAVA);
+        if (inWater) {
+            player.fallDistance = 0;
+        }
 
         player.wasWasTouchingWater = player.wasTouchingWater;
         player.wasTouchingWater = inWater;
