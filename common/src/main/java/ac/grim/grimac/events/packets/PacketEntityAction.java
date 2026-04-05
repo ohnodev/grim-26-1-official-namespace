@@ -12,7 +12,6 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.manager.server.ServerVersion;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 
 public class PacketEntityAction extends PacketListenerAbstract {
@@ -57,8 +56,6 @@ public class PacketEntityAction extends PacketListenerAbstract {
                         player.onPacketCancel();
                         break;
                     }
-                    // Starting fall flying is server sided on 1.14 and below
-                    if (player.getClientVersion().isOlderThan(ClientVersion.V_1_15)) return;
                     player.checkManager.getPostPredictionCheck(ElytraA.class).onStartGliding(event);
 
                     // This shouldn't be needed with latency compensated inventories
