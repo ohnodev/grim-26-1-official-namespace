@@ -81,3 +81,4 @@ prebuilt/*
 !prebuilt/.gitkeep
 !prebuilt/*.jar
 !prebuilt/*.zip
+!prebuilt/*.sha256
