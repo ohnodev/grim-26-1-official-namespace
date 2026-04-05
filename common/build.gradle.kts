@@ -55,8 +55,6 @@ dependencies {
     } else {
         compileOnly(libs.packetevents.api)
     }
-    api(libs.cloud.core)
-    api(libs.cloud.processors.requirements)
     api(libs.configuralize) {
         artifact {
             classifier = "slim"

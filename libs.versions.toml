@@ -1,10 +1,6 @@
 [versions]
 # --- Platform Dependencies ---
 adventure = "4.23.0"
-cloud = "2.0.0"
-# Pin cloud-fabric to an exact unique snapshot for reproducibility.
-cloud-fabric = "2.0.0-20260329.011531-42"
-cloud-processors-requirements = "1.0.0-rc.1"
 
 # --- Minecraft-Specific APIs ---
 floodgate-api = "2.0-SNAPSHOT"
@@ -31,11 +27,8 @@ shadow = "9.3.0"
 spotless = "6.25.0"
 
 [libraries]
-# --- Core Frameworks: Adventure (Text) & Cloud (Commands) ---
+# --- Core Frameworks: Adventure (Text) ---
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
-cloud-core = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" }
-cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud-fabric" }
-cloud-processors-requirements = { group = "org.incendo", name = "cloud-processors-requirements", version.ref = "cloud-processors-requirements" }
 
 # --- Minecraft Server APIs ---
 
@@ -72,10 +65,6 @@ gradle-spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gra
 spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 lombok = { group = "io.freefair.gradle", name = "lombok-plugin", version.ref = "lombok" }
 shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow"}
-
-[bundles]
-# Bundles group common dependencies together for cleaner build scripts
-cloud-api = ["cloud-core", "cloud-processors-requirements"]
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }

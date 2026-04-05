@@ -2,9 +2,7 @@ package ac.grim.grimac.platform.fabric.mc1194;
 
 import ac.grim.grimac.platform.fabric.AbstractFabricPlatformServer;
 import ac.grim.grimac.platform.api.manager.CommandAdapter;
-import ac.grim.grimac.platform.fabric.mc1161.command.Fabric1161PlayerSelectorAdapter;
-import ac.grim.grimac.platform.fabric.command.FabricPlayerSelectorParser;
-import ac.grim.grimac.platform.fabric.manager.FabricParserDescriptorFactory;
+import ac.grim.grimac.platform.fabric.manager.NoOpCommandAdapter;
 import ac.grim.grimac.platform.fabric.mc1171.GrimACFabric1170LoaderPlugin;
 import ac.grim.grimac.platform.fabric.mc1171.player.Fabric1170PlatformPlayer;
 import ac.grim.grimac.platform.fabric.mc1194.convert.Fabric1190MessageUtil;
@@ -24,9 +22,7 @@ public class GrimACFabric1190LoaderPlugin extends GrimACFabric1170LoaderPlugin {
 
     public GrimACFabric1190LoaderPlugin() {
         this(
-                () -> new FabricParserDescriptorFactory(
-                    new FabricPlayerSelectorParser<>(Fabric1161PlayerSelectorAdapter::new)
-            ),
+            LazyHolder.simple(NoOpCommandAdapter::new),
             new FabricPlatformPlayerFactory(
                     Fabric1170PlatformPlayer::new,
                     Fabric1194GrimEntity::new,
