@@ -6,7 +6,7 @@ adventure = "4.23.0"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
 # Locked to PacketEvents built from local 26.1-only fork (publishToMavenLocal).
-packetevents = "2.12.0+6ff455cb7-SNAPSHOT"
+packetevents = "2.12.0+adb798e-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
