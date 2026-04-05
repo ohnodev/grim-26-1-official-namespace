@@ -17,12 +17,6 @@ dependencies {
     // Bundle permissions API so Fabric permission resolution is available at runtime.
     implementation("me.lucko:fabric-permissions-api:0.7.0")
 
-    // cloud-fabric is catalog-managed and pinned for reproducible builds.
-    implementation(libs.cloud.fabric) {
-        exclude(group = "net.fabricmc.fabric-api")
-        exclude(group = "net.fabricmc", module = "fabric-loader")
-    }
-
     implementation(libs.fabric.loader)
 
     // Keep default builds reproducible and mapping-agnostic: compile against PE API.
@@ -68,23 +62,9 @@ repositories {
         includeGroup("org.geysermc.api")
     }
 
-    exclusive("https://repo.opencollab.dev/maven-snapshots/", { mavenContent { snapshotsOnly() } }) {
-        includeGroup("org.geysermc.floodgate")
-        includeGroup("org.geysermc.cumulus")
-        includeModule("org.geysermc", "common")
-        includeModule("org.geysermc", "geyser-parent")
-    }
-
     exclusive(mavenCentral()) { includeGroup("me.lucko") }
 
     mavenCentral()
-
-    // Non-exclusive Sonatype snapshots repo for exact cloud-fabric snapshot coordinates.
-    maven("https://central.sonatype.com/repository/maven-snapshots/") {
-        content {
-            includeGroup("org.incendo")
-        }
-    }
 
     // Optional local publish fallback when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
     if (BuildConfig.mavenLocalOverride) {

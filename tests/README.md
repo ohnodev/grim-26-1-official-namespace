@@ -11,13 +11,6 @@ Note: this PR branch targets MC 26.1 only (`minecraft >= 26.1` in mod metadata),
 - `bash`, `curl`, `python3`
 - Java 21+ (and Java 25 for 26.1 official case)
 - PacketEvents repo available locally at `/root/packetevents-grim-restructure` or pass `--packetevents-repo`
-- cloud-fabric published locally once:
-
-```bash
-git clone https://github.com/Incendo/cloud-minecraft-modded.git
-cd cloud-minecraft-modded
-./gradlew :cloud-fabric:publishToMavenLocal
-```
 
 ## Run All Cases
 

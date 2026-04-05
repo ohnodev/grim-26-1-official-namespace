@@ -32,14 +32,6 @@ repositories {
         includeGroup("org.geysermc.api")
     }
 
-    // Floodgate
-    exclusive("https://repo.opencollab.dev/maven-snapshots/", { mavenContent { snapshotsOnly() } }) {
-        includeGroup("org.geysermc.floodgate")
-        includeGroup("org.geysermc.cumulus")
-        includeModule("org.geysermc", "common")
-        includeModule("org.geysermc", "geyser-parent")
-    }
-
     mavenCentral()
 
     // Optional local fallback: only when explicitly enabled via MAVEN_LOCAL_OVERRIDE.
@@ -55,14 +47,14 @@ dependencies {
     } else {
         compileOnly(libs.packetevents.api)
     }
-    api(libs.cloud.core)
-    api(libs.cloud.processors.requirements)
     api(libs.configuralize) {
         artifact {
             classifier = "slim"
         }
         exclude(group = "org.yaml", module = "snakeyaml")
     }
+    api(libs.guava)
+    api(libs.gson)
     // Bump snakeyaml (transitive dep of configuralize) 1.29 -> 2.2+ for geyser-fabric
     api(libs.snakeyaml)
     api(libs.fastutil)
@@ -78,7 +70,8 @@ dependencies {
         isTransitive = false // messes with guava otherwise
     }
 
-    compileOnly(libs.floodgate.api)
+    compileOnly(libs.checker.qual)
+    compileOnly(libs.jsr305)
     compileOnly(libs.viaversion)
     compileOnly(libs.netty)
 }

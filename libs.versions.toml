@@ -1,13 +1,8 @@
 [versions]
 # --- Platform Dependencies ---
 adventure = "4.23.0"
-cloud = "2.0.0"
-# Pin cloud-fabric to an exact unique snapshot for reproducibility.
-cloud-fabric = "2.0.0-20260329.011531-42"
-cloud-processors-requirements = "1.0.0-rc.1"
 
 # --- Minecraft-Specific APIs ---
-floodgate-api = "2.0-SNAPSHOT"
 geyser-base-api = "1.0.2"
 grim-api = "1.2.4.0"
 # Locked to PacketEvents built from local 26.1-only fork (publishToMavenLocal).
@@ -15,9 +10,13 @@ packetevents = "2.12.0+6ff455cb7-SNAPSHOT"
 viaversion = "5.7.1"
 
 # --- General Java Utilities ---
+gson = "2.13.2"
+guava = "33.4.8-jre"
 fastutil = "8.5.15"
 hikaricp = "7.0.2"
 jetbrains-annotations = "24.1.0"
+checker-qual = "3.49.2"
+jsr305 = "3.0.2"
 netty = "4.1.85.Final"
 snakeyaml = "2.2"
 configuralize = "1.4.1" # :slim classifier is applied in build.gradle.kts
@@ -31,17 +30,13 @@ shadow = "9.3.0"
 spotless = "6.25.0"
 
 [libraries]
-# --- Core Frameworks: Adventure (Text) & Cloud (Commands) ---
+# --- Core Frameworks: Adventure (Text) ---
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
-cloud-core = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" }
-cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud-fabric" }
-cloud-processors-requirements = { group = "org.incendo", name = "cloud-processors-requirements", version.ref = "cloud-processors-requirements" }
 
 # --- Minecraft Server APIs ---
 
 # --- Minecraft-Specific Libraries ---
 configuralize = { group = "github.scarsz", name = "configuralize", version.ref = "configuralize" }
-floodgate-api = { group = "org.geysermc.floodgate", name = "api", version.ref = "floodgate-api"}
 geyser-base-api = { group = "org.geysermc.api", name = "base-api", version.ref = "geyser-base-api" }
 grim-api = { group = "ac.grim.grimac", name = "GrimAPI", version.ref = "grim-api" }
 grim-internal = { group = "ac.grim.grimac", name = "grim-internal", version.ref = "grim-api" }
@@ -55,8 +50,12 @@ viaversion = { group = "com.viaversion", name = "viaversion", version.ref = "via
 
 # --- General Java Utilities ---
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil"}
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikaricp" }
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+checker-qual = { group = "org.checkerframework", name = "checker-qual", version.ref = "checker-qual" }
+jsr305 = { group = "com.google.code.findbugs", name = "jsr305", version.ref = "jsr305" }
 netty = { group = "io.netty", name = "netty-all", version.ref = "netty" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
 
@@ -72,10 +71,6 @@ gradle-spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gra
 spotless = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 lombok = { group = "io.freefair.gradle", name = "lombok-plugin", version.ref = "lombok" }
 shadow = { "group" = "com.gradleup.shadow", name = "shadow-gradle-plugin", version.ref = "shadow"}
-
-[bundles]
-# Bundles group common dependencies together for cleaner build scripts
-cloud-api = ["cloud-core", "cloud-processors-requirements"]
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
