@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PacketSpawnerSanitizer extends PacketListenerAbstract {
+    // 26.1-only fork: use the server's latest mapping id path by design.
+    // We intentionally do not support legacy/multi-version client id remapping here.
     private static final ClientVersion SERVER_CLIENT_VERSION =
             PacketEvents.getAPI().getServerManager().getVersion().toClientVersion();
     private static final int MOB_SPAWNER_TYPE_ID = BlockEntityTypes.MOB_SPAWNER.getId(SERVER_CLIENT_VERSION);
