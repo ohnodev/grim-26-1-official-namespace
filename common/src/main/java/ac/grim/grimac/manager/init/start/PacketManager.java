@@ -36,6 +36,7 @@ public class PacketManager implements StartableInitable {
         } else {
             PacketEvents.getAPI().getEventManager().registerListener(new BasePacketWorldReader());
         }
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketSpawnerSanitizer());
 
         PacketEvents.getAPI().getEventManager().registerListener(new ProxyAlertMessenger());
         PacketEvents.getAPI().getEventManager().registerListener(new PacketHidePlayerInfo());

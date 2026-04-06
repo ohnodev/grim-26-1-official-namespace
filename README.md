@@ -90,16 +90,16 @@ This fork includes prebuilt Fabric artifacts in `prebuilt/` for direct deploymen
 
 Current prebuilt files:
 
-- `prebuilt/grimac-fabric-2.3.74-e9d7901.jar`
-- `prebuilt/grimac-fabric-2.3.74-e9d7901.zip`
-- `prebuilt/grimac-fabric-2.3.74-e9d7901.jar.sha256`
-- `prebuilt/grimac-fabric-2.3.74-e9d7901.zip.sha256`
+- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar`
+- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip`
+- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar.sha256`
+- `prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip.sha256`
 
 Verify integrity:
 
 ```bash
-sha256sum -c prebuilt/grimac-fabric-2.3.74-e9d7901.jar.sha256
-sha256sum -c prebuilt/grimac-fabric-2.3.74-e9d7901.zip.sha256
+sha256sum -c prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.jar.sha256
+sha256sum -c prebuilt/grimac-fabric-2.3.74-feat_spawner-detection-sanitizer-c82baf0.zip.sha256
 ```
 
 To inspect locally produced files after a build:
